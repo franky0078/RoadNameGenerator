@@ -1,0 +1,97 @@
+﻿<Publish>
+	<!-- Bei der ersten Veröffentlichung leer lassen.
+       Nach dem ersten Upload wird hier die Mod-ID eingetragen. -->
+	<ModId Value="152722" />
+
+	<!-- Name der Mod -->
+	<DisplayName Value="Road Name Generator" />
+
+	<!-- Kurze Beschreibung -->
+	<ShortDescription Value="Automatically generates American, British and German road names." />
+
+	<!-- Ausführliche Beschreibung -->
+	<LongDescription>
+		Road Name Generator automatically assigns road names based on the selected naming style.
+
+		## Supported naming styles
+
+		- American road names
+		- British road names
+		- German road names
+
+		## Features
+
+		- Automatically names newly created roads
+		- Can rename existing roads
+		- Several naming styles and road categories
+		- Avoids duplicate road names
+		- Optional logging for troubleshooting
+		- Lightweight and runs automatically in the background
+
+		The naming style and other options can be configured in the game settings.
+
+		## Important notice
+
+		Road names are only generated or updated while the game simulation is running and game time is advancing.
+
+		If the game is paused, newly created or changed roads will be processed after the simulation is resumed.
+
+		## Compatibility notice
+
+		**Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
+
+		Improved compatibility is planned for a future update.
+	</LongDescription>
+
+	<!-- Vorschaubild -->
+	<Thumbnail Value="Properties/Thumbnail.png" />
+
+	<!-- Optionale zusätzliche Bilder -->
+	<!--
+  <Screenshot Value="Properties/Screenshot01.png" />
+  <Screenshot Value="Properties/Screenshot02.png" />
+  -->
+
+	<!-- Optionale Schlagwörter -->
+	<Tag Value="Code Mod" />
+
+
+	<!-- Optionaler Diskussionslink -->
+	<ForumLink Value="" />
+
+	<!-- Versionsnummer der Mod -->
+	<ModVersion Value="1.1.0" />
+
+	<!-- Empfohlene Spielversion -->
+	<GameVersion Value="1.6.*" />
+
+	<!-- Nur eintragen, wenn deine Mod eine andere Mod benötigt -->
+	<!-- <Dependency Id="" /> -->
+
+	<!-- Keine DLC-Abhängigkeit -->
+	<!-- <RequiredDLC Value="" /> -->
+
+	<!-- Änderungen dieser Version -->
+	<ChangeLog>
+		Version: 1.1.0
+
+		Changes:
+
+		* Significantly expanded the American, British, and German road name pools.
+		* Added more names for residential roads, standard roads, avenues, alleys, dirt roads, and highways.
+		* Added additional American and British road suffixes.
+		* American alleys can now use suffixes such as Alley, Lane, Way, Court, Place, Row, Walk, Passage, Plaza, and Arcade.
+		* Added more region-specific names for American highways and rural roads.
+		* Added additional British special road names, rural tracks, mews, passages, and named major roads.
+		* Expanded the German road name generator with additional residential streets, alleys, rural roads, avenues, city streets, and named highways.
+		* German road names can now also be generated dynamically by combining suitable base names and suffixes.
+		* Added duplicate-ending prevention for dynamically generated road names.
+		* Prevented invalid or repetitive names such as “Mountain View View”, “Oak Ridge Ridge”, and “Waldwegweg”.
+		* Improved the overall variety and regional authenticity of generated road names.
+	</ChangeLog>
+
+	<!-- Später möglich, wenn du ein GitHub-Projekt hast -->
+	<!-- <ExternalLink Type="github" Url="https://github.com/..." /> -->
+
+	<AccessLevel Value="Public" />
+</Publish>

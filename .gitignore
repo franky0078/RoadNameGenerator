@@ -1,0 +1,36 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build-Ausgaben aller Projekte
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+
+# Lokale Bibliotheken und Spiel-DLLs
+**/Library/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Logs und temporäre Dateien
+*.log
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Lokale Veröffentlichungsordner
+Publish/
+Published/
+Staging/

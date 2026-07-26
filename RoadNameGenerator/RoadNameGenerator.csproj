@@ -2,61 +2,77 @@
 
 	<PropertyGroup>
 		<Configurations>Debug;Release</Configurations>
-		
+
 		<AssemblyName>RoadNameGenerator</AssemblyName>
 		<RootNamespace>RoadNameGenerator</RootNamespace>
-		
-		<!--The file where mod information which is required for publishing mod on PDX mods are stored-->
-		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
+
+		<!--
+        The file where mod information required for publishing
+        the mod on PDX Mods is stored.
+        -->
+		<PublishConfigurationPath>
+			Properties\PublishConfiguration.xml
+		</PublishConfigurationPath>
 	</PropertyGroup>
-	
-	<!--Imports must be after PropertyGroup block-->
+
+	<!-- Imports must be after the PropertyGroup block -->
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+
 	<ItemGroup>
-	  <None Remove="Properties\PublishProfiles\Thumbnail.png" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Content Include="Properties\PublishProfiles\Thumbnail.png" />
+		<None Remove="Properties\Thumbnail.png" />
+		<Content Include="Properties\Thumbnail.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="Game">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Colossal.Core">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Colossal.Logging">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Colossal.IO.AssetDatabase">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Colossal.UI">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Colossal.UI.Binding">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Colossal.Localization">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Unity.InputSystem">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="UnityEngine.CoreModule">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Unity.Burst">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Unity.Collections">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Unity.Entities">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Include="Unity.Mathematics">
 			<Private>false</Private>
 		</Reference>
@@ -66,17 +82,22 @@
 		<Reference Update="System">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Update="System.Core">
 			<Private>false</Private>
 		</Reference>
+
 		<Reference Update="System.Data">
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="$(ModPropsFile)" Link="Properties\Mod.props" />
-		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
+		<None Include="$(ModPropsFile)"
+              Link="Properties\Mod.props" />
+
+		<None Include="$(ModTargetsFile)"
+              Link="Properties\Mod.targets" />
 	</ItemGroup>
 
 </Project>

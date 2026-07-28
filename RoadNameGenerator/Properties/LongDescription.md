@@ -5,7 +5,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - American road names
 - British road names
 - German road names
-- Italina road names
+- Italian road names
 
 ## Features
 

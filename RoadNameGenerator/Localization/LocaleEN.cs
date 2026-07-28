@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Colossal;
-using RoadNameGenerator.Naming;
 
 namespace RoadNameGenerator.Localization
 {
@@ -20,11 +19,17 @@ namespace RoadNameGenerator.Localization
         {
             return new Dictionary<string, string>
             {
+                /*
+                 * Mod name.
+                 */
                 {
                     m_Setting.GetSettingsLocaleID(),
                     "Road Name Generator"
                 },
 
+                /*
+                 * Main tab.
+                 */
                 {
                     m_Setting.GetOptionTabLocaleID(
                         Setting.kMainSection
@@ -32,6 +37,9 @@ namespace RoadNameGenerator.Localization
                     "General"
                 },
 
+                /*
+                 * Option groups.
+                 */
                 {
                     m_Setting.GetOptionGroupLocaleID(
                         Setting.kAutomaticNamingGroup
@@ -44,7 +52,16 @@ namespace RoadNameGenerator.Localization
                     ),
                     "Existing roads"
                 },
+                {
+                    m_Setting.GetOptionGroupLocaleID(
+                        Setting.kDiagnosticsGroup
+                    ),
+                    "Version 1.2.0"
+                },
 
+                /*
+                 * Naming style setting.
+                 */
                 {
                     m_Setting.GetOptionLabelLocaleID(
                         nameof(Setting.SelectedNamingStyle)
@@ -58,6 +75,9 @@ namespace RoadNameGenerator.Localization
                     "Selects the regional name portfolio used for generated road names."
                 },
 
+                /*
+                 * Automatic naming setting.
+                 */
                 {
                     m_Setting.GetOptionLabelLocaleID(
                         nameof(
@@ -75,6 +95,9 @@ namespace RoadNameGenerator.Localization
                     "Newly built roads automatically receive a name from the selected naming style."
                 },
 
+                /*
+                 * Existing-road check mode.
+                 */
                 {
                     m_Setting.GetOptionLabelLocaleID(
                         nameof(
@@ -92,6 +115,9 @@ namespace RoadNameGenerator.Localization
                     "Determines which existing road names are replaced during a manual scan."
                 },
 
+                /*
+                 * Manual existing-road scan.
+                 */
                 {
                     m_Setting.GetOptionLabelLocaleID(
                         nameof(Setting.CheckExistingRoads)
@@ -104,16 +130,10 @@ namespace RoadNameGenerator.Localization
                     ),
                     "Runs a one-time check of existing road names using the selected check mode."
                 },
-                {
-                    m_Setting.GetOptionGroupLocaleID(
-                        Setting.kDiagnosticsGroup
-                    ),
-                    "Version 1.2.0"
-                },
 
                 /*
-                * Naming style values.
-                */
+                 * Naming style values.
+                 */
                 {
                     "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[American]",
                     "American"
@@ -122,10 +142,18 @@ namespace RoadNameGenerator.Localization
                     "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[British]",
                     "British"
                 },
+                {
+                    "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[German]",
+                    "German"
+                },
+                {
+                    "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Italian]",
+                    "Italian"
+                },
 
                 /*
-                    * Existing-road mode values.
-                    */
+                 * Existing-road mode values.
+                 */
                 {
                     "Options.RoadNameGenerator.RoadNameGenerator.Mod.EXISTINGROADMODE[GameGeneratedOnly]",
                     "Game-generated names only"
@@ -137,14 +165,6 @@ namespace RoadNameGenerator.Localization
                 {
                     "Options.RoadNameGenerator.RoadNameGenerator.Mod.EXISTINGROADMODE[AllRoads]",
                     "Rename all roads"
-                },
-                {
-                    "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[German]",
-                    "German"
-                },
-                {
-                    "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[German]",
-                    "German"
                 },
 
                 /*
@@ -162,8 +182,8 @@ namespace RoadNameGenerator.Localization
                     ),
                     "Writes detailed information about detected, checked and renamed roads to the log file. This option can remain disabled during normal use."
                 }
-                            };
-                }
+            };
+        }
 
         public void Unload()
         {

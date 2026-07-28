@@ -11,7 +11,8 @@ namespace RoadNameGenerator.Naming
     {
         American,
         British,
-        Italian,
-        German
+        German,
+        Italian
+        
     }
 }

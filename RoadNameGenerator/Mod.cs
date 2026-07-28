@@ -11,7 +11,7 @@ using Game;
 using Game.Modding;
 using Game.SceneFlow;
 using RoadNameGenerator.Localization;
-using RoadNameGenerator.Naming;
+using RoadNameGenerator.Systems;
 
 namespace RoadNameGenerator
 {
@@ -32,7 +32,9 @@ namespace RoadNameGenerator
 
         public void OnLoad(UpdateSystem updateSystem)
         {
-            Log.Info("Road Name Generator wird geladen.");
+            Log.Info(
+                "Road Name Generator wird geladen."
+            );
 
             if (GameManager.instance.modManager
                 .TryGetExecutableAsset(
@@ -46,7 +48,6 @@ namespace RoadNameGenerator
 
             Settings = new Setting(this);
             Settings.RegisterInOptionsUI();
-
 
             GameManager.instance.localizationManager.AddSource(
                 "de-DE",
@@ -78,7 +79,8 @@ namespace RoadNameGenerator
             s_ExistingRoadScanRequested = true;
 
             LogDetailed(
-                "Prüfung bestehender Straßen wurde im Optionsmenü angefordert."
+                "Prüfung bestehender Straßen wurde " +
+                "im Optionsmenü angefordert."
             );
         }
 
@@ -99,11 +101,8 @@ namespace RoadNameGenerator
                 "Road Name Generator wird beendet."
             );
 
-            if (Settings != null)
-            {
-                Settings.UnregisterInOptionsUI();
-                Settings = null;
-            }
+            Settings?.UnregisterInOptionsUI();
+            Settings = null;
 
             s_ExistingRoadScanRequested = false;
         }
@@ -115,6 +114,7 @@ namespace RoadNameGenerator
                 Log.Info(message);
             }
         }
+
         public static void LogDiagnosticWarning(
             string message)
         {

@@ -18,6 +18,7 @@
 		- American road names
 		- British road names
 		- German road names
+		- Italina road names
 
 		## Features
 
@@ -41,6 +42,12 @@
 		**Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
 
 		Improved compatibility is planned for a future update.
+
+		Additional naming styles are also planned for future updates, including:
+
+		- French road names
+		- Swedish road names
+		- Norwegian road names
 	</LongDescription>
 
 	<!-- Vorschaubild -->
@@ -60,7 +67,7 @@
 	<ForumLink Value="" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.1.0" />
+	<ModVersion Value="1.2.0" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -73,21 +80,12 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version: 1.1.0
+		## Version 1.2.0
 
-		Changes:
+		* Added Italian road names as a new selectable naming style.
+		* Separated American, British, German, and Italian road name data into individual classes.
+		* Improved the internal structure for easier maintenance and future naming-style expansions.
 
-		* Significantly expanded the American, British, and German road name pools.
-		* Added more names for residential roads, standard roads, avenues, alleys, dirt roads, and highways.
-		* Added additional American and British road suffixes.
-		* American alleys can now use suffixes such as Alley, Lane, Way, Court, Place, Row, Walk, Passage, Plaza, and Arcade.
-		* Added more region-specific names for American highways and rural roads.
-		* Added additional British special road names, rural tracks, mews, passages, and named major roads.
-		* Expanded the German road name generator with additional residential streets, alleys, rural roads, avenues, city streets, and named highways.
-		* German road names can now also be generated dynamically by combining suitable base names and suffixes.
-		* Added duplicate-ending prevention for dynamically generated road names.
-		* Prevented invalid or repetitive names such as “Mountain View View”, “Oak Ridge Ridge”, and “Waldwegweg”.
-		* Improved the overall variety and regional authenticity of generated road names.
 	</ChangeLog>
 
 	<!-- Später möglich, wenn du ein GitHub-Projekt hast -->

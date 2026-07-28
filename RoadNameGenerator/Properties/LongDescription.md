@@ -5,6 +5,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - American road names
 - British road names
 - German road names
+- Italina road names
 
 ## Features
 
@@ -28,3 +29,9 @@ If the game is paused, newly created or changed roads will be processed after th
 **Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
 
 Improved compatibility is planned for a future update.
+
+Additional naming styles are also planned for future updates, including:
+
+- French road names
+- Swedish road names
+- Norwegian road names

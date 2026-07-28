@@ -41,7 +41,7 @@ The recommended installation method is through Paradox Mods.
 
 ## Development
 
-The project was developed using Visual Studio 2022 and the Cities: Skylines II modding toolchain.
+The project was developed using Visual Studio 2026 and the Cities: Skylines II modding toolchain.
 
 References to local Cities: Skylines II assemblies may need to be adjusted depending on the installation directory.
 

@@ -18,600 +18,6 @@ namespace RoadNameGenerator.Naming
         private readonly HashSet<string> m_UsedNames =
             new(StringComparer.OrdinalIgnoreCase);
 
-        private static readonly string[] s_GeneralBaseNames =
-        {
-            // Bäume und Pflanzen
-            "Aspen",
-            "Oak",
-            "Maple",
-            "Pine",
-            "Cedar",
-            "Willow",
-            "Birch",
-            "Elm",
-            "Hickory",
-            "Sycamore",
-            "Chestnut",
-            "Walnut",
-            "Magnolia",
-            "Cypress",
-            "Juniper",
-            "Redwood",
-            "Dogwood",
-            "Laurel",
-            "Poplar",
-            "Cottonwood",
-            "Alder",
-            "Ash",
-            "Beech",
-            "Buckeye",
-            "Hawthorn",
-            "Hemlock",
-            "Holly",
-            "Locust",
-            "Mulberry",
-            "Spruce",
-            "Sequoia",
-            "Tamarack",
-            "Palm",
-            "Palmetto",
-
-            // Natur und Landschaft
-            "Mountain View",
-            "Eagle Ridge",
-            "Silver Creek",
-            "Clearwater",
-            "Canyon Ridge",
-            "Bear Creek",
-            "Pine Valley",
-            "Hidden Valley",
-            "Crystal Lake",
-            "Sunset",
-            "Highland",
-            "Meadow",
-            "Riverside",
-            "Lakeside",
-            "Southridge",
-            "Fairview",
-            "Greenwood",
-            "Riverbend",
-            "Spring Creek",
-            "Blue Ridge",
-            "Rocky Point",
-            "Pleasant Valley",
-            "Rolling Hills",
-            "Cedar Grove",
-            "Oak Ridge",
-            "Pine Ridge",
-            "Lakeview",
-            "Brookside",
-            "Hillcrest",
-            "Woodland",
-            "Forest Hill",
-            "Deer Creek",
-            "Fox Hollow",
-            "Golden Valley",
-            "Red Rock",
-            "Stone Creek",
-            "Timber Ridge",
-            "Wildflower",
-            "Clear Lake",
-            "Silver Lake",
-            "Autumn Ridge",
-            "Beaver Creek",
-            "Blackwater",
-            "Boulder Creek",
-            "Briarwood",
-            "Cedar Hill",
-            "Copper Ridge",
-            "Eagle Point",
-            "Elk Creek",
-            "Evergreen",
-            "Grandview",
-            "Lone Pine",
-            "Misty Hollow",
-            "Morning Star",
-            "North Ridge",
-            "Prairie View",
-            "Ravenwood",
-            "Rock Creek",
-            "Sagebrush",
-            "Sandstone",
-            "Shadow Creek",
-            "Sierra Vista",
-            "Spring Valley",
-            "Summit",
-            "Sunset Ridge",
-            "Twin Lakes",
-            "Valley View",
-            "Whispering Pines",
-            "White Oak",
-            "Windy Hill",
-            "Wolf Creek",
-
-            // Klassische amerikanische Namen
-            "Washington",
-            "Jefferson",
-            "Lincoln",
-            "Franklin",
-            "Madison",
-            "Monroe",
-            "Jackson",
-            "Hamilton",
-            "Roosevelt",
-            "Adams",
-            "Grant",
-            "Sherman",
-            "Harrison",
-            "Wilson",
-            "Kennedy",
-            "Eisenhower",
-            "Truman",
-            "Cleveland",
-            "Clinton",
-            "Taylor",
-            "Pierce",
-            "Douglas",
-            "Clay",
-            "Marshall",
-            "Carson",
-            "Benton",
-            "Fremont",
-            "Morgan",
-            "Parker",
-            "Miller",
-            "Anderson",
-            "Baker",
-            "Carter",
-            "Clark",
-            "Cooper",
-            "Davis",
-            "Edwards",
-            "Foster",
-            "Harris",
-            "Hayes",
-            "Johnson",
-            "Lewis",
-            "Mitchell",
-            "Nelson",
-            "Reed",
-            "Roberts",
-            "Robinson",
-            "Scott",
-            "Smith",
-            "Thompson",
-            "Turner",
-            "Walker",
-            "Williams",
-            "Wright",
-
-            // Orte und Regionen
-            "Pacific",
-            "Atlantic",
-            "Western",
-            "Eastern",
-            "Northern",
-            "Southern",
-            "Colorado",
-            "Nevada",
-            "Arizona",
-            "Montana",
-            "Dakota",
-            "Virginia",
-            "Carolina",
-            "California",
-            "Texas",
-            "Utah",
-            "Oregon",
-            "Alaska",
-            "Denver",
-            "Austin",
-            "Boston",
-            "Savannah",
-            "Charleston",
-            "Springfield",
-            "Westwood",
-            "Northwood",
-            "Eastwood",
-            "Westfield",
-            "Northfield",
-            "Brookfield",
-
-            // Typische Siedlungsnamen
-            "Liberty",
-            "Union",
-            "Independence",
-            "Constitution",
-            "Freedom",
-            "Heritage",
-            "Prospect",
-            "Central",
-            "Market",
-            "Church",
-            "School",
-            "College",
-            "Park",
-            "Main",
-            "Mill",
-            "Station",
-            "Depot",
-            "Harbor",
-            "Frontier",
-            "Pioneer",
-            
-            // Stadtzentrum, Gewerbe und öffentliche Einrichtungen
-            "Broadway",
-            "Center",
-            "Commerce",
-            "Courthouse",
-            "Grand",
-            "State",
-            "Water",
-            "Railroad",
-            "Canal",
-            "Bridge",
-            "Foundry",
-            "Orchard",
-            "Farm",
-            "Ranch",
-            "Mission",
-            "Capitol",
-            "Veterans",
-            "Memorial",
-
-            // Amerikanische Regionen, Landschaften und Orte
-            "Appalachian",
-            "Cascade",
-            "Sierra",
-            "Ozark",
-            "Prairie",
-            "Shenandoah",
-            "Hudson",
-            "Potomac",
-            "Columbia",
-            "Rio Grande",
-            "Yellowstone",
-            "Yosemite",
-            "Tahoe",
-            "Santa Fe",
-            "Monterey",
-            "Richmond",
-            "Lexington",
-            "Arlington",
-            "Phoenix",
-            "Dallas",
-            "Houston",
-            "Nashville",
-            "Memphis",
-            "Portland",
-            "Seattle",
-            "Atlanta",
-            "Raleigh"
-        };
-
-        private static readonly string[] s_DirtBaseNames =
-        {
-            "Aspen",
-            "Pine",
-            "Cedar",
-            "Willow",
-            "Birch",
-            "Juniper",
-            "Redwood",
-            "Cottonwood",
-            "Bear Creek",
-            "Deer Creek",
-            "Silver Creek",
-            "Spring Creek",
-            "Clearwater",
-            "Pine Valley",
-            "Hidden Valley",
-            "Canyon Ridge",
-            "Eagle Ridge",
-            "Timber Ridge",
-            "Rocky Point",
-            "Red Rock",
-            "Fox Hollow",
-            "Riverbend",
-            "Wildflower",
-            "Mountain View",
-            "Pleasant Valley",
-            "Rolling Hills",
-            "Forest Hill",
-            "Oak Ridge",
-            "Pine Ridge",
-            "Crystal Lake",
-            "Silver Lake",
-            "Clear Lake",
-            "Blue Ridge",
-            "Meadow",
-            "Highland",
-            "Woodland",
-            "Brookside",
-            "Stone Creek",
-            "Golden Valley",
-            "Southridge",
-            "Beaver Creek",
-            "Boulder Creek",
-            "Copper Ridge",
-            "Dry Creek",
-            "Elk Creek",
-            "Lost Creek",
-            "Rock Creek",
-            "Shadow Creek",
-            "White River",
-            "Wolf Creek",
-
-            // Ländliche und westliche Namen
-            "Coyote",
-            "Mustang",
-            "Buffalo",
-            "Mesquite",
-            "Sagebrush",
-            "Prairie View",
-            "Lone Pine",
-            "Twin Lakes",
-            "Whispering Pines",
-            "White Oak",
-            "Cedar Hollow",
-            "Long Hollow",
-            "Red Canyon",
-            "Eagle Pass",
-            "Cottonwood Creek",
-            "Black Bear",
-
-            // Farm-, Ranch- und Pioniernamen
-            "Old Mill",
-            "Old Ranch",
-            "Homestead",
-            "Wagon Wheel",
-            "Lone Star",
-            "Dusty",
-            "Rustic",
-            "Settlers",
-            "Frontier"
-        };
-
-        private static readonly string[] s_AlleyBaseNames =
-        {
-            "Market",
-            "Mill",
-            "Church",
-            "Station",
-            "Depot",
-            "Harbor",
-            "Union",
-            "Liberty",
-            "Franklin",
-            "Lincoln",
-            "Madison",
-            "Monroe",
-            "Jackson",
-            "Hamilton",
-            "Adams",
-            "Grant",
-            "Marshall",
-            "Parker",
-            "Miller",
-            "Morgan",
-            "Oak",
-            "Maple",
-            "Pine",
-            "Cedar",
-            "Willow",
-            "Birch",
-            "Elm",
-            "Hickory",
-            "Sycamore",
-            "Chestnut",
-
-            // Innenstadt und Gewerbe
-            "Broadway",
-            "Commerce",
-            "Center",
-            "Water",
-            "Railroad",
-            "Canal",
-            "Bridge",
-            "Foundry",
-            "Warehouse",
-            "Orchard",
-
-            // Weitere klassische Familiennamen
-            "Mason",
-            "Baker",
-            "Carter",
-            "Clark",
-            "Cooper",
-            "Davis",
-            "Foster",
-            "Harris",
-            "Lewis",
-            "Reed",
-            "Scott",
-            "Smith",
-            "Turner",
-            "Walker",
-            "Wright",
-
-            // Pflanzen und Bäume
-            "Laurel",
-            "Holly",
-            "Poplar",
-            "Walnut",
-            "Spruce"
-        };
-
-        private static readonly string[] s_HighwayBaseNames =
-        {
-            "Lincoln",
-            "Washington",
-            "Jefferson",
-            "Franklin",
-            "Roosevelt",
-            "Eisenhower",
-            "Kennedy",
-            "Truman",
-            "Grant",
-            "Sherman",
-            "Hamilton",
-            "Madison",
-            "Monroe",
-            "Jackson",
-            "Pacific",
-            "Atlantic",
-            "Western",
-            "Eastern",
-            "Northern",
-            "Southern",
-            "Mountain",
-            "Frontier",
-            "Pioneer",
-            "Liberty",
-            "Freedom",
-            "Independence",
-            "Constitution",
-            "Heritage",
-            "Veterans Memorial",
-            "Blue Ridge",
-            "Red Rock",
-            "Silver Creek",
-            "Golden Valley",
-            "Canyon Ridge",
-            "Rocky Mountain",
-            "Great Plains",
-            "Lakeside",
-            "Riverside",
-            "Clearwater",
-            "Eagle Ridge",
-
-            // Große amerikanische Landschaften
-            "Appalachian",
-            "Cascade",
-            "Sierra",
-            "Ozark",
-            "Prairie",
-            "Columbia",
-            "Hudson",
-            "Potomac",
-            "Rio Grande",
-            "Yellowstone",
-            "Yosemite",
-            "Santa Fe",
-            "Lone Star",
-
-            // Regionen und Küsten
-            "Gulf Coast",
-            "Atlantic Coast",
-            "Pacific Coast",
-            "Great Lakes",
-            "Desert",
-            "Coastal",
-            "Valley",
-            "Summit",
-
-            // Nationale und staatliche Namen
-            "National",
-            "Capital",
-            "Veterans",
-            "Purple Heart",
-            "Gold Star",
-            "Blue Star",
-            "Memorial",
-            "Patriot",
-            "Victory",
-
-            // Weitere Landschaftsnamen
-            "Evergreen",
-            "Sunset",
-            "Pioneer Memorial"
-        };
-
-        private static readonly string[] s_DirtSuffixes =
-        {
-            "Trail",
-            "Trail",
-            "Track",
-            "Path",
-            "Road",
-            "Road",
-            "Route",
-            "Trace",
-            "Pike",
-            "Cutoff"
-        };
-
-        private static readonly string[] s_AlleySuffixes =
-        {
-            "Alley",
-            "Alley",
-            "Lane",
-            "Way",
-            "Court",
-            "Place",
-            "Row",
-            "Walk",
-            "Passage",
-            "Plaza",
-            "Arcade"
-        };
-
-        private static readonly string[] s_ResidentialSuffixes =
-        {
-            "Street",
-            "Lane",
-            "Way",
-            "Court",
-            "Place",
-            "Circle",
-            "Terrace",
-            "Drive",
-            "Road",
-            "Loop",
-            "Bend",
-            "Glen",
-            "Green",
-            "Ridge",
-            "View",
-            "Crossing",
-            "Hollow",
-            "Run"
-        };
-
-        private static readonly string[] s_StandardSuffixes =
-        {
-            "Street",
-            "Street",
-            "Road",
-            "Road",
-            "Drive",
-            "Way",
-            "Lane",
-            "Route"
-        };
-
-        private static readonly string[] s_AvenueSuffixes =
-        {
-            "Avenue",
-            "Avenue",
-            "Boulevard",
-            "Boulevard",
-            "Parkway",
-            "Promenade",
-            "Esplanade",
-            "Causeway"
-        };
-
-        private static readonly string[] s_HighwaySuffixes =
-        {
-            "Highway",
-            "Highway",
-            "Expressway",
-            "Tollway",
-            "Turnpike",
-            "Freeway"
-        };
-
         private static bool HasDuplicateEnding(
             string baseName,
             string suffix)
@@ -772,13 +178,13 @@ namespace RoadNameGenerator.Naming
                     // Benannte Autobahn.
 
                     string baseName =
-                        s_HighwayBaseNames[
-                            m_Random.Next(s_HighwayBaseNames.Length)
+                        AmericanRoadNames.HighwayBaseNames[
+                            m_Random.Next(AmericanRoadNames.HighwayBaseNames.Length)
                         ];
 
                     string suffix = GetCompatibleSuffix(
                         baseName,
-                        s_HighwaySuffixes,
+                        AmericanRoadNames.HighwaySuffixes,
                         m_Random
                     );
 
@@ -798,9 +204,9 @@ namespace RoadNameGenerator.Naming
         {
             return category switch
             {
-                RoadCategory.Dirt => s_DirtBaseNames,
-                RoadCategory.Alley => s_AlleyBaseNames,
-                _ => s_GeneralBaseNames
+                RoadCategory.Dirt => AmericanRoadNames.DirtBaseNames,
+                RoadCategory.Alley => AmericanRoadNames.AlleyBaseNames,
+                _ => AmericanRoadNames.GeneralBaseNames
             };
         }
 
@@ -808,13 +214,13 @@ namespace RoadNameGenerator.Naming
         {
             return category switch
             {
-                RoadCategory.Dirt => s_DirtSuffixes,
-                RoadCategory.Alley => s_AlleySuffixes,
-                RoadCategory.Residential => s_ResidentialSuffixes,
-                RoadCategory.Standard => s_StandardSuffixes,
-                RoadCategory.Avenue => s_AvenueSuffixes,
-                RoadCategory.Highway => s_HighwaySuffixes,
-                _ => s_StandardSuffixes
+                RoadCategory.Dirt => AmericanRoadNames.DirtSuffixes,
+                RoadCategory.Alley => AmericanRoadNames.AlleySuffixes,
+                RoadCategory.Residential => AmericanRoadNames.ResidentialSuffixes,
+                RoadCategory.Standard => AmericanRoadNames.StandardSuffixes,
+                RoadCategory.Avenue => AmericanRoadNames.AvenueSuffixes,
+                RoadCategory.Highway => AmericanRoadNames.HighwaySuffixes,
+                _ => AmericanRoadNames.StandardSuffixes
             };
         }
 
@@ -847,16 +253,16 @@ namespace RoadNameGenerator.Naming
 
                 if (MatchesBaseAndSuffix(
                         trimmedName,
-                        s_HighwayBaseNames,
-                        s_HighwaySuffixes))
+                        AmericanRoadNames.HighwayBaseNames,
+                        AmericanRoadNames.HighwaySuffixes))
                 {
                     return true;
                 }
 
                 return MatchesBaseAndSuffix(
                     trimmedName,
-                    s_GeneralBaseNames,
-                    s_HighwaySuffixes
+                    AmericanRoadNames.GeneralBaseNames,
+                    AmericanRoadNames.HighwaySuffixes
                 );
             }
 
@@ -953,8 +359,8 @@ namespace RoadNameGenerator.Naming
 
                     RoadCategory.Alley =>
                         $"{GetOrdinal(number)} " +
-                        s_AlleySuffixes[
-                            (number - 1) % s_AlleySuffixes.Length
+                        AmericanRoadNames.AlleySuffixes[
+                            (number - 1) % AmericanRoadNames.AlleySuffixes.Length
                         ],
 
                     RoadCategory.Residential =>

@@ -354,17 +354,17 @@ namespace RoadNameGenerator.Systems
                     detectedCategory;
 
                 Mod.LogDetailed(
-                    $"Road-Builder-Straße automatisch erkannt: " +
+                    $"Road Builder road detected automatically: " +
                     $"Prefab: \"{prefabName}\", " +
                     $"Name: \"{configurationName}\", " +
-                    $"RB-Kategorie: \"{roadBuilderCategory}\", " +
-                    $"Geschwindigkeit: {speedLimit}, " +
-                    $"Fahrspuren: {carLaneCount}, " +
-                    $"Mittelstreifen: {medianCount}, " +
-                    $"Gehwege: {sidewalkCount}, " +
-                    $"Seitenstreifen: {shoulderCount}, " +
-                    $"Einbahnstraße: {isOneWay}, " +
-                    $"erkannte Kategorie: {detectedCategory}."
+                    $"RB category: \"{roadBuilderCategory}\", " +
+                    $"Speed limit: {speedLimit}, " +
+                    $"Car lanes: {carLaneCount}, " +
+                    $"Medians: {medianCount}, " +
+                    $"Sidewalks: {sidewalkCount}, " +
+                    $"Shoulders: {shoulderCount}, " +
+                    $"One-way road: {isOneWay}, " +
+                    $"Detected category: {detectedCategory}."
                 );
 
                 return true;
@@ -376,8 +376,8 @@ namespace RoadNameGenerator.Systems
                     exception;
 
                 Mod.Log.Warn(
-                    $"Road-Builder-Straße konnte nicht " +
-                    $"analysiert werden: {actualException}"
+                    $"Road Builder road could not be " +
+                    $"analyzed: {actualException}"
                 );
 
                 return false;
@@ -385,8 +385,8 @@ namespace RoadNameGenerator.Systems
             catch (Exception exception)
             {
                 Mod.Log.Warn(
-                    $"Road-Builder-Straße konnte nicht " +
-                    $"analysiert werden: {exception}"
+                    $"Road Builder road could not be " +
+                    $"analyzed: {exception}"
                 );
 
                 return false;
@@ -559,7 +559,7 @@ namespace RoadNameGenerator.Systems
             m_PrefabSystem =
                 World.GetOrCreateSystemManaged<PrefabSystem>();
 
-            Mod.LogDetailed("RoadNamingSystem wurde erstellt.");
+            Mod.LogDetailed("RoadNamingSystem was created.");
         }
 
         protected override void OnUpdate()
@@ -590,7 +590,7 @@ namespace RoadNameGenerator.Systems
             catch (Exception exception)
             {
                 Mod.Log.Error(
-                    $"Fehler im RoadNamingSystem: {exception}"
+                    $"Error in RoadNamingSystem: {exception}"
                 );
             }
         }
@@ -680,9 +680,9 @@ namespace RoadNameGenerator.Systems
                     }
 
                     Mod.LogDetailed(
-                        $"Straßenbestand wurde intern neu geladen. " +
-                        $"{currentRoads.Count} Straßen neu registriert, " +
-                        $"keine Umbenennung durchgeführt."
+                        $"The internal road registry was reloaded. " +
+                        $"{currentRoads.Count} roads were registered again, " +
+                        $"no roads were renamed."
                     );
 
                     return;
@@ -742,20 +742,20 @@ namespace RoadNameGenerator.Systems
                     renamedRoadCount++;
 
                     Mod.LogDetailed(
-                        $"Neue Straße umbenannt: " +
+                        $"New road renamed: " +
                         $"Entity {aggregateEntity.Index}, " +
                         $"Prefab: \"{prefabName}\", " +
-                        $"Kategorie: {category}, " +
-                        $"Namensstil: {selectedStyle}, " +
-                        $"alter Name: \"{currentName}\", " +
-                        $"neuer Name: \"{newName}\""
+                        $"Category: {category}, " +
+                        $"Naming style: {selectedStyle}, " +
+                        $"Previous name: \"{currentName}\", " +
+                        $"New name: \"{newName}\""
                     );
                 }
 
                 if (renamedRoadCount > 0)
                 {
                     Mod.LogDetailed(
-                        $"Insgesamt umbenannte Straßenzüge: " +
+                        $"Total road segments renamed: " +
                         $"{renamedRoadCount}"
                     );
                 }
@@ -763,10 +763,10 @@ namespace RoadNameGenerator.Systems
                 if (registeredWithoutRenameCount > 0)
                 {
                     Mod.LogDetailed(
-                        $"{registeredWithoutRenameCount} neue " +
-                        $"Straßenzüge wurden nicht umbenannt, " +
-                        $"da die automatische Benennung " +
-                        $"deaktiviert ist."
+                        $"{registeredWithoutRenameCount} new " +
+                        $"road segments were not renamed because " +
+                        $"automatic road naming is " +
+                        $"disabled."
                     );
                 }
 
@@ -846,13 +846,13 @@ namespace RoadNameGenerator.Systems
                     renamedRoadCount++;
 
                     Mod.LogDetailed(
-                        $"Bestehende Straße umbenannt: " +
+                        $"Existing road renamed: " +
                         $"Entity {aggregateEntity.Index}, " +
                         $"Prefab: \"{prefabName}\", " +
-                        $"Kategorie: {category}, " +
-                        $"Namensstil: {selectedStyle}, " +
-                        $"alter Name: \"{currentName}\", " +
-                        $"neuer Name: \"{newName}\""
+                        $"Category: {category}, " +
+                        $"Naming style: {selectedStyle}, " +
+                        $"Previous name: \"{currentName}\", " +
+                        $"New name: \"{newName}\""
                     );
                 }
             }
@@ -862,12 +862,12 @@ namespace RoadNameGenerator.Systems
             }
 
             Mod.LogDetailed(
-                $"Bestandsprüfung abgeschlossen. " +
-                $"Geprüft: {checkedRoadCount}, " +
-                $"umbenannt: {renamedRoadCount}, " +
-                $"beibehalten: {preservedRoadCount}, " +
-                $"Modus: {checkMode}, " +
-                $"Namensstil: {selectedStyle}."
+                $"Existing road scan completed. " +
+                $"Checked: {checkedRoadCount}, " +
+                $"renamed: {renamedRoadCount}, " +
+                $"preserved: {preservedRoadCount}, " +
+                $"Mode: {checkMode}, " +
+                $"Naming style: {selectedStyle}."
             );
         }
 
@@ -1034,9 +1034,9 @@ namespace RoadNameGenerator.Systems
             if (m_UnknownRoadPrefabs.Add(cleanedPrefabName))
             {
                 Mod.LogDiagnosticWarning(
-                    $"Unbekannter Straßen-Prefab: " +
+                    $"Unknown road prefab: " +
                     $"\"{cleanedPrefabName}\". " +
-                    $"Vorläufige Kategorie: Standard."
+                    $"Temporary category: Standard."
                 );
             }
 
@@ -1049,12 +1049,12 @@ namespace RoadNameGenerator.Systems
                     aggregateEntity,
                     out Entity roadEdge))
             {
-                return "Unbekannt";
+                return "Unknown";
             }
 
             if (!EntityManager.HasComponent<PrefabRef>(roadEdge))
             {
-                return "Kein PrefabRef";
+                return "No PrefabRef";
             }
 
             PrefabRef prefabRef =
@@ -1074,7 +1074,7 @@ namespace RoadNameGenerator.Systems
 
                 if (prefab == null)
                 {
-                    return "Prefab nicht gefunden";
+                    return "Prefab not found";
                 }
 
                 return prefab.name;
@@ -1082,12 +1082,12 @@ namespace RoadNameGenerator.Systems
             catch (Exception exception)
             {
                 Mod.Log.Warn(
-                    $"Prefabname für Straßenkante " +
-                    $"{roadEdge.Index} konnte nicht gelesen werden: " +
+                    $"Prefab name for road edge " +
+                    $"{roadEdge.Index} could not be read: " +
                     $"{exception.Message}"
                 );
 
-                return "Fehler beim Prefabzugriff";
+                return "Prefab access error";
             }
         }
 
@@ -1114,8 +1114,8 @@ namespace RoadNameGenerator.Systems
                 catch (Exception exception)
                 {
                     Mod.Log.Warn(
-                        $"Name von Entity {aggregateEntity.Index} " +
-                        $"konnte nicht gelesen werden: {exception.Message}"
+                        $"Name of entity {aggregateEntity.Index} " +
+                        $"could not be read: {exception.Message}"
                     );
                 }
 
@@ -1125,11 +1125,11 @@ namespace RoadNameGenerator.Systems
             m_InitialRoadsLoaded = true;
 
             Mod.LogDetailed(
-                $"Vorhandener Straßenbestand registriert: {roadCount}"
+                $"Existing road network registered: {roadCount}"
             );
 
             Mod.LogDetailed(
-                "Ab jetzt werden neue Straßen nach dem ausgewählten Namensstil benannt."
+                "New roads will now be named using the selected naming style."
             );
         }
 
@@ -1164,7 +1164,7 @@ namespace RoadNameGenerator.Systems
             m_UnknownRoadPrefabs.Clear();
             m_RoadBuilderCategoryCache.Clear();
 
-            Mod.LogDetailed("RoadNamingSystem wird beendet.");
+            Mod.LogDetailed("RoadNamingSystem is shutting down.");
 
             base.OnDestroy();
         }

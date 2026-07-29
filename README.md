@@ -4,7 +4,7 @@ Road Name Generator is a code mod for Cities: Skylines II that automatically ass
 
 ## Current version
 
-Version 1.2.0
+Version 1.2.5
 
 ## Supported naming styles
 

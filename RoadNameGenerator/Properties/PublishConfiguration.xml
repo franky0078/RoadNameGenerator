@@ -67,7 +67,7 @@
 	<ForumLink Value="" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.2.0" />
+	<ModVersion Value="1.2.5" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -80,16 +80,20 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		## Version 1.2.0
+		Version 1.2.5
 
-		* Added Italian road names as a new selectable naming style.
-		* Separated American, British, German, and Italian road name data into individual classes.
-		* Improved the internal structure for easier maintenance and future naming-style expansions.
+		Italian Road Names Update
+		
+		- Significantly expanded the Italian road name database
+		- Added many new Italian road prefixes and street types
+		- Added more Italian city, region, landscape, river, mountain and coastal names
+		- Added regional Italian street types, including Venetian, Tuscan, Ligurian and Roman-inspired names
+		- Improved the variety of automatically generated Italian road names
+		- Adjusted prefix weighting so common street types such as Via and Viale appear more frequently than regional or uncommon street types
 
 	</ChangeLog>
 
-	<!-- Später möglich, wenn du ein GitHub-Projekt hast -->
-	<!-- <ExternalLink Type="github" Url="https://github.com/..." /> -->
+	<ExternalLink Type="github" Url="https://github.com/franky0078/RoadNameGenerator" />
 
 	<AccessLevel Value="Public" />
 </Publish>

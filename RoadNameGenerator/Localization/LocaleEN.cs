@@ -56,7 +56,7 @@ namespace RoadNameGenerator.Localization
                     m_Setting.GetOptionGroupLocaleID(
                         Setting.kDiagnosticsGroup
                     ),
-                    "Version 1.2.0"
+                    "Version 1.2.5"
                 },
 
                 /*

@@ -121,9 +121,6 @@ namespace RoadNameGenerator.Naming
             {
                 string result;
 
-                // Vollständige Namen sorgen für typische italienische
-                // Formen wie "Piazza del Popolo" oder
-                // "Lungomare Cristoforo Colombo".
                 if (specialNames.Length > 0 &&
                     m_Random.Next(100) < 35)
                 {

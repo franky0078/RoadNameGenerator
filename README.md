@@ -4,7 +4,7 @@ Road Name Generator is a code mod for Cities: Skylines II that automatically ass
 
 ## Current version
 
-Version 1.2.5
+Version 1.3.0
 
 ## Supported naming styles
 
@@ -12,6 +12,7 @@ Version 1.2.5
 - British road names
 - German road names
 - Italian road names
+- French road names
 
 ## Features
 
@@ -26,14 +27,17 @@ Version 1.2.5
 ## Important notice
 
 Road names are only generated or updated while the game simulation is running and game time is advancing.
-
 If the game is paused, newly created or changed roads will be processed after the simulation is resumed.
 
 ## Compatibility notice
 
-Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.
-
+**Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
 Improved compatibility is planned for a future update.
+
+Additional naming styles are also planned for future updates, including:
+
+- Swedish road names
+- Norwegian road names
 
 ## Installation
 

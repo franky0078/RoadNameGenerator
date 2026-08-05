@@ -56,7 +56,7 @@ namespace RoadNameGenerator.Localization
                     m_Setting.GetOptionGroupLocaleID(
                         Setting.kDiagnosticsGroup
                     ),
-                    "Version 1.3.0"
+                    "Version 1.4.2"
                 },
 
                 /*
@@ -153,6 +153,14 @@ namespace RoadNameGenerator.Localization
                 {
                     "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[French]",
                     "French"
+                },
+                {
+                    "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Swedish]",
+                    "Swedish"
+                },
+                {
+                    "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Spanish]",
+                    "Spanish"
                 },
 
                 /*

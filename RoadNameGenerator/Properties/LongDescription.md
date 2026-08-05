@@ -7,6 +7,8 @@ Road Name Generator automatically assigns road names based on the selected namin
 - German road names
 - Italian road names
 - French road names
+- Spanish road names
+- Swedish road names
 
 ## Features
 
@@ -33,5 +35,10 @@ Improved compatibility is planned for a future update.
 
 Additional naming styles are also planned for future updates, including:
 
-- Swedish road names
 - Norwegian road names
+- Polish road names
+- Swiss road names
+- Greek road names
+- Austrian road names
+- Australian road names
+- Dutch road names

@@ -13,6 +13,8 @@ namespace RoadNameGenerator.Naming
         British,
         German,
         Italian,
-        French
+        French,
+        Swedish,
+        Spanish
     }
 }

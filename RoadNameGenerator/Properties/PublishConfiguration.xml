@@ -22,6 +22,8 @@
 		- French road names
 		- Swedish road names
 		- Spanish road names
+		- Australian road names
+		- Canadian road names
 
 		## Features
 
@@ -53,7 +55,6 @@
 		- Swiss road names
 		- Greek road names
 		- Austrian road names
-		- Australian road names
 		- Dutch road names
 	</LongDescription>
 
@@ -74,7 +75,7 @@
 	<ForumLink Value="" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.4.2" />
+	<ModVersion Value="1.5.1" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -87,15 +88,16 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 1.4.2
+		Version 1.5.1
 
-		Swedish and Spanish Road Names Update
-		- Added Swedish road names as a new naming style.
-		- Added Spanish road names as a new naming style.
-		- Added names for dirt roads, alleys, residential roads, standard roads, avenues and highways.
-		- Added Swedish European routes, national roads, county roads and named major roads.
-		- Added Spanish motorways, national roads, European routes, regional roads and named highways.
-		- Added English and German localization entries for both new naming styles.
+		- Added a new Canadian road naming style.
+		- Added a new Australian road naming style.
+		- Added extensive regional road name pools for both new naming styles.
+		- Added typical Canadian road types such as Crescent, Trail, Parkway, Concession and Expressway.
+		- Added typical Australian road types such as Parade, Circuit, Terrace, Esplanade and Motorway.
+		- Added Canadian numbered highways and named highway routes.
+		- Added Australian alphanumeric route numbers and named highways/freeways.
+		- Added German and English localization entries for the new naming styles.
 
 	</ChangeLog>
 

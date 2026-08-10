@@ -62,7 +62,6 @@ namespace RoadNameGenerator.Naming
             "Market", "Church", "Station", "College", "University", "Harbour",
             "Canal", "Mill", "Bridge", "Park", "Central", "Front", "Union",
 
-            // Weitere kanadische Namen
             "Jack Pine",
             "Lodgepole Pine",
             "Douglas Fir",
@@ -154,7 +153,6 @@ namespace RoadNameGenerator.Naming
             "North Woods", "Backcountry", "Forest", "Wildwood", "Snowshoe",
             "Canoe", "Portage", "Loon", "Beaver", "Moose", "Caribou Ridge",
 
-            // Weitere ländliche kanadische Namen
             "Jack Pine",
             "Lodgepole Pine",
             "White Spruce",
@@ -246,7 +244,6 @@ namespace RoadNameGenerator.Naming
             "Heritage", "Veterans Memorial", "Maple Leaf", "Northern Lights",
             "Clearwater", "Mountain View", "River Valley", "Great Lakes",
 
-            // Weitere kanadische Highway-Basisnamen
             "Saguenay",
             "Richelieu",
             "Outaouais",
@@ -300,7 +297,6 @@ namespace RoadNameGenerator.Naming
             "Perimeter Highway",
             "Veterans Memorial Highway",
 
-            // Weitere benannte kanadische Fernstraßen
             "Cabot Trail",
             "Kicking Horse Trail",
             "Okanagan Connector",

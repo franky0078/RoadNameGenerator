@@ -17,6 +17,8 @@ namespace RoadNameGenerator.Naming
         Swedish,
         Spanish,
         Canadian,
-        Australian
+        Australian,
+        Polish,
+        Dutch
     }
 }

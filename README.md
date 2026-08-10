@@ -1,10 +1,4 @@
-# Road Name Generator
-
-Road Name Generator is a code mod for Cities: Skylines II that automatically assigns road names based on the selected naming style.
-
-## Current version
-
-Version 1.3.0
+Road Name Generator automatically assigns road names based on the selected naming style.
 
 ## Supported naming styles
 
@@ -13,41 +7,55 @@ Version 1.3.0
 - German road names
 - Italian road names
 - French road names
+- Swedish road names
+- Spanish road names
+- Australian road names
+- Canadian road names
+- Polish road names
+- Dutch road names
 
 ## Features
 
 - Automatically names newly created roads
 - Can rename existing roads
-- Supports several road categories
+- Several naming styles and road categories
 - Avoids duplicate road names
-- Optional diagnostic logging
-- Configurable through the game settings
+- Optional logging for troubleshooting
 - Lightweight and runs automatically in the background
+
+The naming style and other options can be configured in the game settings.
 
 ## Important notice
 
 Road names are only generated or updated while the game simulation is running and game time is advancing.
+
 If the game is paused, newly created or changed roads will be processed after the simulation is resumed.
 
 ## Compatibility notice
 
 **Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
+
 Improved compatibility is planned for a future update.
 
 Additional naming styles are also planned for future updates, including:
 
-- Swedish road names
 - Norwegian road names
+- Swiss road names
+- Greek road names
+- Austrian road names
 
-## Installation
+## Update Version 1.6.1
 
-The recommended installation method is through Paradox Mods.
+- Added Polish naming style.
+- Added Dutch naming style.
+- More than 1,000 Polish road name variations.
+- More than 4,000 possible Dutch road name variations.
+- Well-known Polish streets and historical names.
+- Well-known Dutch streets, canals, squares and regional names.
+- Polish motorway and expressway route names.
+- Dutch motorway and national road route names.
+- English and German localization for both new naming styles.
 
-## Development
-
-The project was developed using Visual Studio 2026 and the Cities: Skylines II modding toolchain.
-
-References to local Cities: Skylines II assemblies may need to be adjusted depending on the installation directory.
 
 ## License
 

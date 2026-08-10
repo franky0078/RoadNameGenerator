@@ -7,7 +7,7 @@
 	<DisplayName Value="Road Name Generator" />
 
 	<!-- Kurze Beschreibung -->
-	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish and Spanish road names." />
+	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish, Spanish, Australian, Canadian, Polish and Dutch road names." />
 
 	<!-- Ausführliche Beschreibung -->
 	<LongDescription>
@@ -24,6 +24,8 @@
 		- Spanish road names
 		- Australian road names
 		- Canadian road names
+		- Polish road names
+		- Dutch road names
 
 		## Features
 
@@ -51,21 +53,15 @@
 		Additional naming styles are also planned for future updates, including:
 
 		- Norwegian road names
-		- Polish road names
 		- Swiss road names
 		- Greek road names
 		- Austrian road names
-		- Dutch road names
+
 	</LongDescription>
 
 	<!-- Vorschaubild -->
 	<Thumbnail Value="Properties/Thumbnail.jpg" />
-
-	<!-- Optionale zusätzliche Bilder -->
-	<!--
-  <Screenshot Value="Properties/Screenshot01.png" />
-  <Screenshot Value="Properties/Screenshot02.png" />
-  -->
+	<Screenshot Value="Properties/Screenshot01.jpg" />
 
 	<!-- Optionale Schlagwörter -->
 	<Tag Value="Code Mod" />
@@ -75,7 +71,7 @@
 	<ForumLink Value="" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.5.1" />
+	<ModVersion Value="1.6.1" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -88,16 +84,15 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 1.5.1
-
-		- Added a new Canadian road naming style.
-		- Added a new Australian road naming style.
-		- Added extensive regional road name pools for both new naming styles.
-		- Added typical Canadian road types such as Crescent, Trail, Parkway, Concession and Expressway.
-		- Added typical Australian road types such as Parade, Circuit, Terrace, Esplanade and Motorway.
-		- Added Canadian numbered highways and named highway routes.
-		- Added Australian alphanumeric route numbers and named highways/freeways.
-		- Added German and English localization entries for the new naming styles.
+		Version 1.6.1
+		
+		- Added Polish road name generation.
+		- Added Dutch road name generation.
+		- Added 1,000+ Polish road name variations.
+		- Added 4,000+ possible Dutch road name variations.
+		- Added well-known Polish and Dutch street names.
+		- Added typical Polish and Dutch highway route names.
+		- Improved overall road name variety.
 
 	</ChangeLog>
 

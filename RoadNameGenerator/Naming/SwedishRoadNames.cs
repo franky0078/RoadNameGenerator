@@ -110,7 +110,6 @@ namespace RoadNameGenerator.Naming
             "Naturstigen",
             "Kolbottenvägen",
 
-            // Additional names for version 1.4.2
             "Aborrstigen",
             "Bäverstigen",
             "Dovhjortsstigen",
@@ -279,7 +278,6 @@ namespace RoadNameGenerator.Naming
             "Kanalgränd",
             "Magasinsgränd",
 
-            // Additional names for version 1.4.2
             "Apotekargränd",
             "Bokbindargränd",
             "Bryggargränd",
@@ -502,7 +500,6 @@ namespace RoadNameGenerator.Naming
             "Kolonivägen",
             "Äppelblomsvägen",
 
-            // Additional names for version 1.4.2
             "Avenboksvägen",
             "Balsampoppelvägen",
             "Cembratallsvägen",
@@ -748,7 +745,6 @@ namespace RoadNameGenerator.Naming
             "Kontorsvägen",
             "Servicevägen",
 
-            // Additional names for version 1.4.2
             "Apoteksgatan",
             "Bankgatan",
             "Börsgatan",
@@ -934,7 +930,6 @@ namespace RoadNameGenerator.Naming
             "Parkpromenaden",
             "Norrskensallén",
 
-            // Additional names for version 1.4.2
             "Avenbokallén",
             "Hagtornsallén",
             "Idegransallén",
@@ -1030,7 +1025,6 @@ namespace RoadNameGenerator.Naming
             "Kungsleden",
             "Sydkustleden",
 
-            // Additional names for version 1.4.2
             "Mellansverigeleden",
             "Nordkustleden",
             "Sydostkustleden",

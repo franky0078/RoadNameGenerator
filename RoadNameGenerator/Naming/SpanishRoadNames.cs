@@ -279,7 +279,6 @@ namespace RoadNameGenerator.Naming
             "Calleja de la Campana",
             "Calleja del Mercado",
 
-            // Additional names for version 1.4.2
             "Callejón del Candil",
             "Callejón de la Vela",
             "Callejón del Azahar",
@@ -502,7 +501,6 @@ namespace RoadNameGenerator.Naming
             "Calle de Mercè Rodoreda",
             "Calle de Elena Fortún",
 
-            // Additional names for version 1.4.2
             "Calle de los Abedules",
             "Calle de los Fresnos",
             "Calle de las Hayas",
@@ -741,7 +739,6 @@ namespace RoadNameGenerator.Naming
             "Vía Urbana",
             "Vía de Circunvalación",
 
-            // Additional names for version 1.4.2
             "Calle de la Bolsa",
             "Calle de la Banca",
             "Calle de la Cámara de Comercio",
@@ -927,7 +924,6 @@ namespace RoadNameGenerator.Naming
             "Bulevar del Atlántico",
             "Bulevar Metropolitano",
 
-            // Additional names for version 1.4.2
             "Avenida de la Diversidad",
             "Avenida de la Tolerancia",
             "Avenida de la Cooperación",
@@ -1027,7 +1023,6 @@ namespace RoadNameGenerator.Naming
             "Eje Pirenaico",
             "Enlace Metropolitano",
 
-            // Additional names for version 1.4.2
             "Autovía del Júcar",
             "Autovía del Tajo",
             "Autovía del Guadiana",

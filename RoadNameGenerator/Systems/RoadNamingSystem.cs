@@ -34,6 +34,8 @@ namespace RoadNameGenerator.Systems
         private readonly SpanishRoadNameGenerator m_SpanishNameGenerator = new();
         private readonly CanadianRoadNameGenerator m_CanadianNameGenerator = new();
         private readonly AustralianRoadNameGenerator m_AustralianNameGenerator = new();
+        private readonly PolishRoadNameGenerator m_PolishNameGenerator = new();
+        private readonly DutchRoadNameGenerator m_DutchNameGenerator = new();
 
         private PrefabSystem m_PrefabSystem;
         private readonly HashSet<Entity> m_KnownRoads = new();
@@ -632,6 +634,12 @@ namespace RoadNameGenerator.Systems
                 NamingStyle.Australian =>
                     m_AustralianNameGenerator,
 
+                NamingStyle.Polish =>
+                    m_PolishNameGenerator,
+
+                NamingStyle.Dutch =>
+                    m_DutchNameGenerator,
+
                 _ =>
                     m_AmericanNameGenerator
             };
@@ -648,6 +656,8 @@ namespace RoadNameGenerator.Systems
             m_SpanishNameGenerator.RegisterExistingName(name);
             m_CanadianNameGenerator.RegisterExistingName(name);
             m_AustralianNameGenerator.RegisterExistingName(name);
+            m_PolishNameGenerator.RegisterExistingName(name);
+            m_DutchNameGenerator.RegisterExistingName(name);
         }
 
         private void CheckForNewRoads()

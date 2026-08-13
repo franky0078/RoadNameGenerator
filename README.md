@@ -13,6 +13,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Canadian road names
 - Polish road names
 - Dutch road names
+- Swiss road names
 
 ## Features
 
@@ -31,6 +32,11 @@ Road names are only generated or updated while the game simulation is running an
 
 If the game is paused, newly created or changed roads will be processed after the simulation is resumed.
 
+## Transparency note
+The street name database and streetname variations were created with AI assistance (ChatGPT). 
+
+All other code in this mod was written by me.
+
 ## Compatibility notice
 
 **Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
@@ -44,17 +50,15 @@ Additional naming styles are also planned for future updates, including:
 - Greek road names
 - Austrian road names
 
-## Update Version 1.6.1
+## Update Version 1.7.4
 
-- Added Polish naming style.
-- Added Dutch naming style.
-- More than 1,000 Polish road name variations.
-- More than 4,000 possible Dutch road name variations.
-- Well-known Polish streets and historical names.
-- Well-known Dutch streets, canals, squares and regional names.
-- Polish motorway and expressway route names.
-- Dutch motorway and national road route names.
-- English and German localization for both new naming styles.
+- Added Swiss road name generation.
+- approx. 35% French-speaking Switzerland
+- approx. 25% Ticino / Italian-speaking Switzerland
+- approx. 15% Graubünden / Romansh-speaking Switzerland
+- approx. 25% German-speaking Switzerland
+
+- Added more than 2,400 unique Swiss road name variations across all road categories
 
 
 ## License

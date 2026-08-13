@@ -13,6 +13,7 @@
 	<LongDescription>
 		Road Name Generator automatically assigns road names based on the selected naming style.
 
+
 		## Supported naming styles
 
 		- American road names
@@ -26,6 +27,8 @@
 		- Canadian road names
 		- Polish road names
 		- Dutch road names
+		- Swiss road names
+
 
 		## Features
 
@@ -38,11 +41,20 @@
 
 		The naming style and other options can be configured in the game settings.
 
+
 		## Important notice
 
 		Road names are only generated or updated while the game simulation is running and game time is advancing.
 
 		If the game is paused, newly created or changed roads will be processed after the simulation is resumed.
+
+
+		## Transparency note
+
+		The street name database and streetname variations were created with AI assistance (ChatGPT).
+
+		All other code in this mod was written by me.
+
 
 		## Compatibility notice
 
@@ -53,7 +65,6 @@
 		Additional naming styles are also planned for future updates, including:
 
 		- Norwegian road names
-		- Swiss road names
 		- Greek road names
 		- Austrian road names
 
@@ -71,7 +82,7 @@
 	<ForumLink Value="" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.6.1" />
+	<ModVersion Value="1.7.4" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -84,15 +95,17 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 1.6.1
+		Version 1.7.4
+
+
+		- Added Swiss road name generation.
+		- approx. 35% French-speaking Switzerland
+		- approx. 25% Ticino / Italian-speaking Switzerland
+		- approx. 15% Graubünden / Romansh-speaking Switzerland
+		- approx. 25% German-speaking Switzerland
 		
-		- Added Polish road name generation.
-		- Added Dutch road name generation.
-		- Added 1,000+ Polish road name variations.
-		- Added 4,000+ possible Dutch road name variations.
-		- Added well-known Polish and Dutch street names.
-		- Added typical Polish and Dutch highway route names.
-		- Improved overall road name variety.
+		- Added more than 2,400 unique Swiss road name variations across all road categories.
+
 
 	</ChangeLog>
 

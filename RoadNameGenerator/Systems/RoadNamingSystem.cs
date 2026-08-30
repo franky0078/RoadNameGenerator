@@ -115,11 +115,13 @@ namespace RoadNameGenerator.Systems
             );
         }
 
-        private bool TryDetectRoadBuilderCategory(Entity aggregateEntity, string prefabName, out RoadCategory detectedCategory)
+        private bool TryDetectRoadBuilderCategory(
+            Entity aggregateEntity,
+            string prefabName,
+            out RoadCategory detectedCategory)
         {
             detectedCategory =
                 RoadCategory.Standard;
-
 
             if (m_RoadBuilderCategoryCache.TryGetValue(
                     prefabName,
@@ -165,6 +167,12 @@ namespace RoadNameGenerator.Systems
                     speedLimitText,
                     out double speedLimit
                 );
+
+                // Road Builder stores the speed internally at twice
+                // the value displayed in km/h.
+                // Example: 80 internal = 40 km/h.
+                double speedKmh =
+                    speedLimit / 2.0;
 
                 object lanesObject =
                     configuration
@@ -266,6 +274,18 @@ namespace RoadNameGenerator.Systems
                         .Trim()
                         .ToLowerInvariant();
 
+                /*
+                 * First use Road Builder's own category.
+                 *
+                 * Road Builder categories:
+                 * Road            -> further automatic analysis
+                 * Highway         -> Highway
+                 * PublicTransport -> Standard
+                 * Gravel          -> Dirt
+                 * Tiled           -> Alley (pedestrian street)
+                 * Pathway         -> Alley
+                 */
+
                 if (ContainsAny(
                         normalizedCategory,
                         "gravel",
@@ -284,6 +304,24 @@ namespace RoadNameGenerator.Systems
                 }
                 else if (ContainsAny(
                              normalizedCategory,
+                             "tiled",
+                             "pathway",
+                             "pedestrian"))
+                {
+                    detectedCategory =
+                        RoadCategory.Alley;
+                }
+                else if (ContainsAny(
+                             normalizedCategory,
+                             "publictransport",
+                             "public transport",
+                             "transit"))
+                {
+                    detectedCategory =
+                        RoadCategory.Standard;
+                }
+                else if (ContainsAny(
+                             normalizedCategory,
                              "highway",
                              "motorway") ||
                          ContainsAny(
@@ -297,6 +335,8 @@ namespace RoadNameGenerator.Systems
                     detectedCategory =
                         RoadCategory.Highway;
                 }
+
+                // From here on we mainly analyse normal Road Builder "Road" roads.
                 else if (ContainsAny(
                              normalizedName,
                              "gasse",
@@ -319,35 +359,32 @@ namespace RoadNameGenerator.Systems
                     detectedCategory =
                         RoadCategory.Residential;
                 }
-
-                else if (medianCount > 0)
+                else if (isOneWay &&
+                         carLaneCount <= 2 &&
+                         shoulderCount > 0 &&
+                         sidewalkCount == 0)
                 {
                     detectedCategory =
-                        RoadCategory.Avenue;
+                        RoadCategory.Alley;
                 }
                 else if (carLaneCount >= 4)
                 {
                     detectedCategory =
                         RoadCategory.Avenue;
                 }
-                else if (isOneWay &&
-                         carLaneCount <= 2 &&
-                         shoulderCount > 0 &&
-                         sidewalkCount == 0)
+                else if (medianCount > 0 &&
+                         carLaneCount >= 3)
                 {
-
+                    // A median alone is no longer enough for Avenue.
+                    // This prevents small 2-lane roads with a center element
+                    // from being classified as Avenue.
                     detectedCategory =
-                        RoadCategory.Alley;
+                        RoadCategory.Avenue;
                 }
-                else if (carLaneCount <= 2 &&
-                         speedLimit <= 50)
-                {
-                    detectedCategory =
-                        RoadCategory.Residential;
-                }
-                else if (carLaneCount <= 2 &&
+                else if (carLaneCount <= 3 &&
                          sidewalkCount > 0 &&
-                         speedLimit <= 60)
+                         medianCount == 0 &&
+                         speedKmh <= 50)
                 {
                     detectedCategory =
                         RoadCategory.Residential;
@@ -366,7 +403,8 @@ namespace RoadNameGenerator.Systems
                     $"Prefab: \"{prefabName}\", " +
                     $"Name: \"{configurationName}\", " +
                     $"RB category: \"{roadBuilderCategory}\", " +
-                    $"Speed limit: {speedLimit}, " +
+                    $"Speed limit: {speedKmh:0.#} km/h " +
+                    $"(RB internal: {speedLimit}), " +
                     $"Car lanes: {carLaneCount}, " +
                     $"Medians: {medianCount}, " +
                     $"Sidewalks: {sidewalkCount}, " +
@@ -400,6 +438,7 @@ namespace RoadNameGenerator.Systems
                 return false;
             }
         }
+
 
         private static bool ContainsAny(string source, params string[] searchTerms)
         {

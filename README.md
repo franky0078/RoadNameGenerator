@@ -1,5 +1,6 @@
 Road Name Generator automatically assigns road names based on the selected naming style.
 
+
 ## Supported naming styles
 
 - American road names
@@ -15,6 +16,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Dutch road names
 - Swiss road names
 
+
 ## Features
 
 - Automatically names newly created roads
@@ -26,39 +28,39 @@ Road Name Generator automatically assigns road names based on the selected namin
 
 The naming style and other options can be configured in the game settings.
 
+
 ## Important notice
 
 Road names are only generated or updated while the game simulation is running and game time is advancing.
 
 If the game is paused, newly created or changed roads will be processed after the simulation is resumed.
 
+Road Builder roads are detected and classified very reliably in most cases, based on their Road Builder category and road layout.
+
+
 ## Transparency note
-The street name database and streetname variations were created with AI assistance (ChatGPT). 
+
+The street name database and streetname variations were created with AI assistance (ChatGPT).
 
 All other code in this mod was written by me.
 
-## Compatibility notice
 
-**Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
+## Planned future updates
 
-Improved compatibility is planned for a future update.
-
-Additional naming styles are also planned for future updates, including:
+Additional naming styles
 
 - Norwegian road names
-- Swiss road names
 - Greek road names
 - Austrian road names
 
-## Update Version 1.7.4
+## Update Version 1.8.6
 
-- Added Swiss road name generation.
-- approx. 35% French-speaking Switzerland
-- approx. 25% Ticino / Italian-speaking Switzerland
-- approx. 15% Graubünden / Romansh-speaking Switzerland
-- approx. 25% German-speaking Switzerland
+- Added improved automatic detection for roads created with Road Builder.
+- Supported Road Builder types now include regular roads, highways, public transport roads, gravel roads and pedestrian roads.
+- Improved classification of custom roads based on Number of vehicle lanes, Sidewalks, Medians, Speed limit
 
-- Added more than 2,400 unique Swiss road name variations across all road categories
+- Expand German, Swedish, Polish and Swiss road name databases with additional street names and variations.
+
 
 
 ## License

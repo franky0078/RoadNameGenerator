@@ -35,20 +35,19 @@ Road names are only generated or updated while the game simulation is running an
 
 If the game is paused, newly created or changed roads will be processed after the simulation is resumed.
 
+Road Builder roads are detected and classified very reliably in most cases, based on their Road Builder category and road layout.
+
 
 ## Transparency note
-The street name database and streetname variations were created with AI assistance (ChatGPT). 
+
+The street name database and streetname variations were created with AI assistance (ChatGPT).
 
 All other code in this mod was written by me.
 
 
-## Compatibility notice
+## Planned future updates
 
-**Roads created with the Road Builder mod may currently not work reliably with the Road Name Generator.**
-
-Improved compatibility is planned for a future update.
-
-Additional naming styles are also planned for future updates, including:
+Additional naming styles
 
 - Norwegian road names
 - Greek road names

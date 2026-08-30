@@ -168,9 +168,6 @@ namespace RoadNameGenerator.Systems
                     out double speedLimit
                 );
 
-                // Road Builder stores the speed internally at twice
-                // the value displayed in km/h.
-                // Example: 80 internal = 40 km/h.
                 double speedKmh =
                     speedLimit / 2.0;
 
@@ -274,18 +271,6 @@ namespace RoadNameGenerator.Systems
                         .Trim()
                         .ToLowerInvariant();
 
-                /*
-                 * First use Road Builder's own category.
-                 *
-                 * Road Builder categories:
-                 * Road            -> further automatic analysis
-                 * Highway         -> Highway
-                 * PublicTransport -> Standard
-                 * Gravel          -> Dirt
-                 * Tiled           -> Alley (pedestrian street)
-                 * Pathway         -> Alley
-                 */
-
                 if (ContainsAny(
                         normalizedCategory,
                         "gravel",
@@ -335,8 +320,6 @@ namespace RoadNameGenerator.Systems
                     detectedCategory =
                         RoadCategory.Highway;
                 }
-
-                // From here on we mainly analyse normal Road Builder "Road" roads.
                 else if (ContainsAny(
                              normalizedName,
                              "gasse",
@@ -375,9 +358,6 @@ namespace RoadNameGenerator.Systems
                 else if (medianCount > 0 &&
                          carLaneCount >= 3)
                 {
-                    // A median alone is no longer enough for Avenue.
-                    // This prevents small 2-lane roads with a center element
-                    // from being classified as Avenue.
                     detectedCategory =
                         RoadCategory.Avenue;
                 }

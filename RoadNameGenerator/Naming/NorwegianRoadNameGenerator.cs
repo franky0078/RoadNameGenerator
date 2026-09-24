@@ -12,8 +12,10 @@ namespace RoadNameGenerator.Naming
             "Selje", "Bøk", "Hassel", "Eine", "Hegge", "Myr", "Fjell",
             "Dal", "Elve", "Foss", "Sjø", "Strand", "Vik", "Berg",
             "Ås", "Eng", "Blåbær", "Tyttebær", "Rein", "Elg", "Hjort",
-            "Ravn", "Ørn", "Hav", "Nord", "Sør", "Vest", "Øst",
-            "Sol", "Måne", "Løkke", "Seter", "Haug", "Kvern", "Bekke"
+            "Ravn", "Ørn", "Hav",
+            "Sol", "Måne", "Løkke", "Seter", "Haug", "Kvern", "Bekke",
+            "Tjern", "Granli", "Røsslyng", "Heste", "Multe", "Bjørn",
+            "Fiske", "Stein", "Sand", "Lyng", "Holme", "Fjære"
         };
 
         private static readonly string[] s_City =
@@ -28,9 +30,9 @@ namespace RoadNameGenerator.Naming
         public NorwegianRoadNameGenerator() : base(
             new[]
             {
-                Compound(s_Nature, "stien", "veien", "løypa"),
+                NatureNames("stien", "veien", "løypa"),
                 Compound(s_City, "smuget", "stien"),
-                Compound(s_Nature, "veien", "gata"),
+                NatureNames("veien", "gata"),
                 Compound(s_City, "gata", "veien"),
                 Compound(s_City, "alléen", "veien")
             },
@@ -47,6 +49,13 @@ namespace RoadNameGenerator.Naming
                 "Allé ", "Rv "
             })
         {
+        }
+
+        private static string[] NatureNames(params string[] endings)
+        {
+            return DirectionalVariants(
+                Compound(s_Nature, endings),
+                "Nordre", "Søndre", "Øvre", "Nedre");
         }
     }
 }

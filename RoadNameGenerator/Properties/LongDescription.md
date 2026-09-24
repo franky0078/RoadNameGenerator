@@ -25,6 +25,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Automatically names newly created roads
 - Can rename existing roads
 - Several naming styles and road categories
+- Options translated into English, German and Polish
 - Avoids duplicate road names
 - Optional logging for troubleshooting
 - Lightweight and runs automatically in the background

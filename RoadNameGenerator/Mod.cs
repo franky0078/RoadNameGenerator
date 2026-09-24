@@ -59,6 +59,11 @@ namespace RoadNameGenerator
                 new LocaleEN(Settings)
             );
 
+            GameManager.instance.localizationManager.AddSource(
+                "pl-PL",
+                new LocalePL(Settings)
+            );
+
             AssetDatabase.global.LoadSettings(
                 "RoadNameGenerator",
                 Settings,

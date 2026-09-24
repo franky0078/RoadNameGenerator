@@ -172,5 +172,22 @@ namespace RoadNameGenerator.Naming
 
             return names;
         }
+
+        protected static string[] DirectionalVariants(
+            string[] names, params string[] directions)
+        {
+            string[] result = new string[names.Length * (directions.Length + 1)];
+            int index = 0;
+            foreach (string name in names)
+            {
+                result[index++] = name;
+                foreach (string direction in directions)
+                {
+                    result[index++] = direction + " " + name;
+                }
+            }
+
+            return result;
+        }
     }
 }

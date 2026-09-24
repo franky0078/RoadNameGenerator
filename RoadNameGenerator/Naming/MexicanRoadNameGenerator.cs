@@ -16,7 +16,15 @@ namespace RoadNameGenerator.Naming
             "La Laguna", "La Cascada", "La Primavera", "El Sol",
             "La Luna", "El Volcán", "La Montaña", "El Naranjo",
             "El Mezquite", "Los Girasoles", "Las Orquídeas",
-            "El Jardín", "La Barranca", "La Esperanza", "El Paraíso"
+            "El Jardín", "La Barranca", "La Esperanza", "El Paraíso",
+            "Los Cipreses", "Los Fresnos", "Los Nogales", "Los Abedules",
+            "Los Duraznos", "Los Naranjos", "Los Limones", "Los Guayabos",
+            "Las Magnolias", "Las Gardenias", "Las Violetas", "Las Dalias",
+            "Las Amapolas", "Las Azucenas", "Las Camelias", "Las Gaviotas",
+            "El Manantial", "El Arroyo", "El Valle", "El Pedregal",
+            "El Cerro", "El Pinar", "El Palmar", "El Cenote",
+            "La Colina", "La Arboleda", "La Huerta", "La Pradera",
+            "La Ribera", "La Hacienda", "La Palma", "La Ceiba"
         };
 
         private static readonly string[] s_History =
@@ -30,17 +38,28 @@ namespace RoadNameGenerator.Naming
             "Revolución", "Constitución", "Insurgentes", "Universidad",
             "México", "Guadalajara", "Monterrey", "Puebla", "Oaxaca",
             "Veracruz", "Yucatán", "Chiapas", "Michoacán", "Sonora",
-            "Jalisco", "Guanajuato", "Querétaro", "Zacatecas"
+            "Jalisco", "Guanajuato", "Querétaro", "Zacatecas",
+            "Belisario Domínguez", "Ricardo Flores Magón",
+            "Manuel Ávila Camacho", "Adolfo López Mateos",
+            "Plutarco Elías Calles", "Álvaro Obregón",
+            "Felipe Ángeles", "Nicolás Bravo", "Mariano Matamoros",
+            "Guadalupe Victoria", "José Vasconcelos", "Amado Nervo",
+            "Rosario Castellanos", "Octavio Paz", "Diego Rivera",
+            "Frida Kahlo", "Juan Rulfo", "Agustín de Iturbide",
+            "Tamaulipas", "Coahuila", "Durango", "Tabasco",
+            "Campeche", "Sinaloa", "Nayarit", "Colima",
+            "Hermosillo", "Mérida", "Morelia", "Acapulco",
+            "Toluca", "Tijuana", "Chihuahua", "Xalapa"
         };
 
         public MexicanRoadNameGenerator() : base(
             new[]
             {
-                Places("Camino", "Sendero"),
-                Places("Callejón", "Privada"),
-                Places("Calle", "Paseo"),
-                Prefix(s_History, "Calle ", "Calzada "),
-                Prefix(s_History, "Avenida ", "Bulevar ")
+                Places("Camino", "Sendero", "Vereda", "Brecha"),
+                Places("Callejón", "Privada", "Cerrada", "Andador"),
+                Places("Calle", "Paseo", "Circuito", "Retorno"),
+                Prefix(s_History, "Calle ", "Calzada ", "Privada ", "Circuito "),
+                Prefix(s_History, "Avenida ", "Bulevar ", "Calzada ", "Paseo ")
             },
             new[]
             {

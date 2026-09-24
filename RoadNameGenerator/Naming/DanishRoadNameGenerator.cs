@@ -11,10 +11,11 @@ namespace RoadNameGenerator.Naming
             "Bøge", "Ege", "Birke", "Fyrre", "Gran", "Linde", "Pile",
             "Aske", "Elme", "Rønne", "Hassel", "Kastanje", "Skov",
             "Eng", "Hede", "Mose", "Sø", "Strand", "Kyst", "Havn",
-            "Fjord", "Å", "Bakke", "Dal", "Vester", "Øster",
-            "Nørre", "Sønder", "Sol", "Måne", "Kløver", "Rosen",
+            "Fjord", "Å", "Bakke", "Dal", "Sol", "Måne", "Kløver", "Rosen",
             "Lilje", "Valmue", "Hjorte", "Ræve", "Egern", "Lærke",
-            "Svale", "Fiske", "Mølle", "Kilde"
+            "Svale", "Fiske", "Mølle", "Kilde", "Korn", "Hvede",
+            "Byg", "Rug", "Havre", "Siv", "Rør", "Klint", "Vinge",
+            "Drossel", "Høge", "Sten"
         };
 
         private static readonly string[] s_City =
@@ -29,9 +30,9 @@ namespace RoadNameGenerator.Naming
         public DanishRoadNameGenerator() : base(
             new[]
             {
-                Compound(s_Nature, "sti", "vej", "spor"),
+                NatureNames("sti", "vej", "spor"),
                 Compound(s_City, "stræde", "gyde"),
-                Compound(s_Nature, "vej", "gade"),
+                NatureNames("vej", "gade"),
                 Compound(s_City, "gade", "vej"),
                 Compound(s_City, "allé", "boulevard")
             },
@@ -48,6 +49,13 @@ namespace RoadNameGenerator.Naming
                 "Allé ", "Primærrute "
             })
         {
+        }
+
+        private static string[] NatureNames(params string[] endings)
+        {
+            return DirectionalVariants(
+                Compound(s_Nature, endings),
+                "Nordre", "Søndre", "Østre", "Vestre");
         }
     }
 }

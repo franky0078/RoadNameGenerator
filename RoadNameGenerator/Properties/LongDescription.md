@@ -15,6 +15,9 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Polish road names
 - Dutch road names
 - Swiss road names
+- Norwegian road names
+- Danish road names
+- Mexican road names
 
 
 ## Features
@@ -49,6 +52,5 @@ All other code in this mod was written by me.
 
 Additional naming styles
 
-- Norwegian road names
 - Greek road names
 - Austrian road names

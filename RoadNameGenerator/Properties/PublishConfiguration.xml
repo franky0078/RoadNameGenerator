@@ -80,7 +80,7 @@
 	<ForumLink Value="" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.8.6" />
+	<ModVersion Value="1.9.0" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -93,13 +93,10 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 1.8.6
+		Version 1.9.0
 
 
-		- Added improved automatic detection for roads created with Road Builder.
-		- Supported Road Builder types now include regular roads, highways, public transport roads, gravel roads and pedestrian roads.
-		- Improved classification of custom roads based on Number of vehicle lanes, Sidewalks, Medians, Speed limit
-		- Expand German, Swedish, Polish and Swiss road name databases with additional street names and variations.
+		- Added support for Norwegian, Danish and Mexican road names
 
 
 	</ChangeLog>

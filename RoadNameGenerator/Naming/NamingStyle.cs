@@ -20,6 +20,9 @@ namespace RoadNameGenerator.Naming
         Australian,
         Polish,
         Dutch,
-        Swiss
+        Swiss,
+        Norwegian,
+        Danish,
+        Mexican
     }
 }

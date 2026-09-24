@@ -7,7 +7,7 @@
 	<DisplayName Value="Road Name Generator" />
 
 	<!-- Kurze Beschreibung -->
-	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish, Spanish, Australian, Canadian, Polish and Dutch road names." />
+	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish, Spanish, Australian, Canadian, Polish, Dutch, Swiss, Norwegian, Danish, Mexican road names." />
 
 	<!-- Ausführliche Beschreibung -->
 	<LongDescription>
@@ -28,6 +28,9 @@
 		- Polish road names
 		- Dutch road names
 		- Swiss road names
+		- Norwegian road names
+		- Danish road names
+		- Mexican road names
 
 
 		## Features
@@ -38,6 +41,7 @@
 		- Avoids duplicate road names
 		- Optional logging for troubleshooting
 		- Lightweight and runs automatically in the background
+		- Language support for English, German, French, Italian, Spanish and Polish
 
 		The naming style and other options can be configured in the game settings.
 
@@ -62,10 +66,8 @@
 
 		Additional naming styles
 
-		- Norwegian road names
 		- Greek road names
 		- Austrian road names
-
 	</LongDescription>
 
 	<!-- Vorschaubild -->
@@ -97,7 +99,7 @@
 
 
 		- Added support for Norwegian, Danish and Mexican road names
-		- Added polish language support
+		- Added spanish, french, italian and polish language support
 
 
 	</ChangeLog>

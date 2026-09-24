@@ -28,7 +28,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Avoids duplicate road names
 - Optional logging for troubleshooting
 - Lightweight and runs automatically in the background
-- Language support for English, German, French, Italian, Spanish and Polski
+- Language support for English, German, French, Italian, Spanish and Polish
 
 The naming style and other options can be configured in the game settings.
 

@@ -22,7 +22,7 @@ namespace RoadNameGenerator.Localization
         {
             return new Dictionary<string, string>
             {
-                { m_Setting.GetSettingsLocaleID(), "Generatore di nomi delle strade" },
+                { m_Setting.GetSettingsLocaleID(), "Road Name Generator" },
                 { m_Setting.GetOptionTabLocaleID(Setting.kMainSection), "Generale" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kAutomaticNamingGroup),
                     "Assegnazione automatica dei nomi" },

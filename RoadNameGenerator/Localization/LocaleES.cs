@@ -1,4 +1,4 @@
-// Road Name Generator
+﻿// Road Name Generator
 // Copyright (C) 2026 franky0078
 // Licensed under the GNU General Public License version 3 or later.
 
@@ -29,7 +29,7 @@ namespace RoadNameGenerator.Localization
                 { m_Setting.GetOptionGroupLocaleID(Setting.kExistingRoadsGroup),
                     "Vías existentes" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kDiagnosticsGroup),
-                    "Versión 1.9.0" },
+                    "Versión 1.9.5" },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.SelectedNamingStyle)),
                     "Estilo de nombres" },
@@ -59,7 +59,10 @@ namespace RoadNameGenerator.Localization
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Australian]", "Australiano" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Polish]", "Polaco" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Dutch]", "Neerlandés" },
-                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Swiss]", "Suizo" },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Swiss]", "Suiza (alemán)" },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissFrench]", "Suiza (francés)" },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissItalian]", "Suiza (italiano)" },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissRomansh]", "Suiza (romanche)" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Norwegian]", "Noruego" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Danish]", "Danés" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Mexican]", "Mexicano" },

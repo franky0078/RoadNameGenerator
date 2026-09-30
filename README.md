@@ -14,7 +14,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Canadian road names
 - Polish road names
 - Dutch road names
-- Swiss road names
+- Swiss road names (german, french, italian, romansh)
 - Norwegian road names
 - Danish road names
 - Mexican road names

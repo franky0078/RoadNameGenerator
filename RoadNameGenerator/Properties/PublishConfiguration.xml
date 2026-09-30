@@ -27,7 +27,7 @@
 		- Canadian road names
 		- Polish road names
 		- Dutch road names
-		- Swiss road names
+		- Swiss road names (german, french, italian, romansh)
 		- Norwegian road names
 		- Danish road names
 		- Mexican road names
@@ -73,16 +73,21 @@
 	<!-- Vorschaubild -->
 	<Thumbnail Value="Properties/Thumbnail.jpg" />
 	<Screenshot Value="Properties/Screenshot01.jpg" />
+	<Screenshot Value="Properties/Screenshot02.jpg" />
+	<Screenshot Value="Properties/Screenshot03.jpg" />
+	<Screenshot Value="Properties/Screenshot04.jpg" />
+	<Screenshot Value="Properties/Screenshot05.jpg" />
+	<Screenshot Value="Properties/Screenshot06.jpg" />
 
 	<!-- Optionale Schlagwörter -->
 	<Tag Value="Code Mod" />
 
 
 	<!-- Optionaler Diskussionslink -->
-	<ForumLink Value="" />
+	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.9.0" />
+	<ModVersion Value="1.9.5" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -95,11 +100,10 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 1.9.0
+		Version 1.9.5
 
 
-		- Added support for Norwegian, Danish and Mexican road names
-		- Added spanish, french, italian and polish language support
+		- swiss roadnames now for 4 national languages (german, french, italian, romansh)
 
 
 	</ChangeLog>

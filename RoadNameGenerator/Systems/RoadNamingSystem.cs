@@ -36,7 +36,14 @@ namespace RoadNameGenerator.Systems
         private readonly AustralianRoadNameGenerator m_AustralianNameGenerator = new();
         private readonly PolishRoadNameGenerator m_PolishNameGenerator = new();
         private readonly DutchRoadNameGenerator m_DutchNameGenerator = new();
-        private readonly SwissRoadNameGenerator m_SwissNameGenerator = new();
+        private readonly SwissRegionalRoadNameGenerator m_SwissNameGenerator =
+            new(NamingStyle.Swiss);
+        private readonly SwissRegionalRoadNameGenerator m_SwissFrenchNameGenerator =
+            new(NamingStyle.SwissFrench);
+        private readonly SwissRegionalRoadNameGenerator m_SwissItalianNameGenerator =
+            new(NamingStyle.SwissItalian);
+        private readonly SwissRegionalRoadNameGenerator m_SwissRomanshNameGenerator =
+            new(NamingStyle.SwissRomansh);
         private readonly NorwegianRoadNameGenerator m_NorwegianNameGenerator = new();
         private readonly DanishRoadNameGenerator m_DanishNameGenerator = new();
         private readonly MexicanRoadNameGenerator m_MexicanNameGenerator = new();
@@ -666,6 +673,15 @@ namespace RoadNameGenerator.Systems
                 NamingStyle.Swiss =>
                     m_SwissNameGenerator,
 
+                NamingStyle.SwissFrench =>
+                    m_SwissFrenchNameGenerator,
+
+                NamingStyle.SwissItalian =>
+                    m_SwissItalianNameGenerator,
+
+                NamingStyle.SwissRomansh =>
+                    m_SwissRomanshNameGenerator,
+
                 NamingStyle.Norwegian =>
                     m_NorwegianNameGenerator,
 
@@ -694,6 +710,9 @@ namespace RoadNameGenerator.Systems
             m_PolishNameGenerator.RegisterExistingName(name);
             m_DutchNameGenerator.RegisterExistingName(name);
             m_SwissNameGenerator.RegisterExistingName(name);
+            m_SwissFrenchNameGenerator.RegisterExistingName(name);
+            m_SwissItalianNameGenerator.RegisterExistingName(name);
+            m_SwissRomanshNameGenerator.RegisterExistingName(name);
             m_NorwegianNameGenerator.RegisterExistingName(name);
             m_DanishNameGenerator.RegisterExistingName(name);
             m_MexicanNameGenerator.RegisterExistingName(name);

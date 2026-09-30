@@ -10,19 +10,22 @@ namespace RoadNameGenerator.Naming
     public enum NamingStyle
     {
         American,
+        Australian,
         British,
+        Canadian,
+        Danish,
+        Dutch,
+        French,
         German,
         Italian,
-        French,
-        Swedish,
-        Spanish,
-        Canadian,
-        Australian,
-        Polish,
-        Dutch,
-        Swiss,
+        Mexican,
         Norwegian,
-        Danish,
-        Mexican
+        Polish,
+        Spanish,
+        Swedish,
+        SwissFrench,
+        Swiss,
+        SwissItalian,
+        SwissRomansh
     }
 }

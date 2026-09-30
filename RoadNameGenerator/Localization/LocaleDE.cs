@@ -57,7 +57,7 @@ namespace RoadNameGenerator.Localization
                     m_Setting.GetOptionGroupLocaleID(
                         Setting.kDiagnosticsGroup
                     ),
-                    "Version 1.9.0"
+                    "Version 1.9.5"
                 },
 
                 /*
@@ -181,8 +181,11 @@ namespace RoadNameGenerator.Localization
                 },
                 {
                     "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Swiss]",
-                    "Schweizerisch"
+                    "Schweiz (Deutsch)"
                 },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissFrench]", "Schweiz (Französisch)" },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissItalian]", "Schweiz (Italienisch)" },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissRomansh]", "Schweiz (Rätoromanisch)" },
                 {
                     "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Norwegian]",
                     "Norwegisch"

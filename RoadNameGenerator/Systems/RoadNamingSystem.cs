@@ -638,7 +638,7 @@ namespace RoadNameGenerator.Systems
                 Mod.Settings?.SelectedNamingStyle
                 ?? NamingStyle.American;
 
-            return selectedStyle switch
+            IRoadNameGenerator generator = selectedStyle switch
             {
                 NamingStyle.British =>
                     m_BritishNameGenerator,
@@ -694,10 +694,16 @@ namespace RoadNameGenerator.Systems
                 _ =>
                     m_AmericanNameGenerator
             };
+
+            return new CustomRoadNameGenerator(generator,
+                Mod.Settings?.CustomNames ?? CustomNameMode.Disabled,
+                CustomRoadNameList.Names, m_UsedRoadNames);
         }
 
         private void RegisterExistingNameInAllGenerators(string name)
         {
+            if (!string.IsNullOrWhiteSpace(name))
+                m_UsedRoadNames.Add(name.Trim());
             m_AmericanNameGenerator.RegisterExistingName(name);
             m_BritishNameGenerator.RegisterExistingName(name);
             m_GermanNameGenerator.RegisterExistingName(name);
@@ -742,6 +748,13 @@ namespace RoadNameGenerator.Systems
                     }
 
                     currentRoads.Add(aggregateEntity);
+                    if (Mod.Settings?.CustomNames != CustomNameMode.Disabled)
+                    {
+                        string registeredName = m_NameSystem.GetRenderedLabelName(aggregateEntity);
+                        if (!string.IsNullOrWhiteSpace(registeredName) &&
+                            !m_UsedRoadNames.Contains(registeredName.Trim()))
+                            RegisterExistingNameInAllGenerators(registeredName);
+                    }
 
                     if (!m_KnownRoads.Contains(aggregateEntity))
                     {
@@ -822,6 +835,13 @@ namespace RoadNameGenerator.Systems
 
                     string newName =
                         nameGenerator.Generate(category);
+
+                    if (string.IsNullOrWhiteSpace(newName))
+                    {
+                        RegisterExistingNameInAllGenerators(currentName);
+                        Mod.LogDetailed("Custom road names exhausted; the current name was preserved.");
+                        continue;
+                    }
 
                     m_NameSystem.SetCustomName(
                         aggregateEntity,
@@ -926,6 +946,13 @@ namespace RoadNameGenerator.Systems
 
                     string newName =
                         nameGenerator.Generate(category);
+
+                    if (string.IsNullOrWhiteSpace(newName))
+                    {
+                        RegisterExistingNameInAllGenerators(currentName);
+                        Mod.LogDetailed("Custom road names exhausted; the current name was preserved.");
+                        continue;
+                    }
 
                     m_NameSystem.SetCustomName(
                         aggregateEntity,

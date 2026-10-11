@@ -8,11 +8,15 @@ namespace RoadNameGenerator
     [FileLocation("RoadNameGenerator")]
     [SettingsUIGroupOrder(
     kAutomaticNamingGroup,
+    kCustomNamesGroup,
+    kSingleRoadGroup,
     kExistingRoadsGroup,
     kDiagnosticsGroup
 )]
     [SettingsUIShowGroupName(
     kAutomaticNamingGroup,
+    kCustomNamesGroup,
+    kSingleRoadGroup,
     kExistingRoadsGroup,
     kDiagnosticsGroup
 )]
@@ -21,6 +25,8 @@ namespace RoadNameGenerator
         public const string kMainSection = "Main";
         public const string kAutomaticNamingGroup = "AutomaticNaming";
         public const string kExistingRoadsGroup = "ExistingRoads";
+        public const string kCustomNamesGroup = "CustomNames";
+        public const string kSingleRoadGroup = "SingleRoad";
         public const string kDiagnosticsGroup = "Diagnostics";
 
 
@@ -73,6 +79,20 @@ namespace RoadNameGenerator
             }
         }
 
+        [SettingsUISection(kMainSection, kCustomNamesGroup)]
+        public CustomNameMode CustomNames { get; set; }
+
+        [SettingsUIButton]
+        [SettingsUISection(kMainSection, kCustomNamesGroup)]
+        public bool OpenCustomNamesFolder { set => CustomRoadNameList.OpenFolder(); }
+
+        [SettingsUIButton]
+        [SettingsUISection(kMainSection, kCustomNamesGroup)]
+        public bool ReloadCustomNames { set => CustomRoadNameList.Reload(); }
+
+        [SettingsUISection(kMainSection, kSingleRoadGroup)]
+        public bool ShowRoadSuggestionsButton { get; set; }
+
         [SettingsUISection(
             kMainSection,
             kDiagnosticsGroup
@@ -94,6 +114,8 @@ namespace RoadNameGenerator
             ExistingRoadCheckMode =
                 ExistingRoadMode.GameGeneratedOnly;
 
+            CustomNames = CustomNameMode.Disabled;
+            ShowRoadSuggestionsButton = true;
             EnableDetailedLogging = false;
         }
     }

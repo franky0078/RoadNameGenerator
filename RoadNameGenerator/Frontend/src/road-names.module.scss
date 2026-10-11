@@ -1,0 +1,83 @@
+.launcher {
+    width: 40rem;
+    height: 40rem;
+    margin: 0 4rem;
+    padding: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background-color: rgba(76, 188, 226, 0.95);
+    border: 0;
+    border-radius: 7rem;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    align-self: flex-start;
+    cursor: pointer;
+    &:hover { background-color: rgba(95, 201, 235, 0.95); }
+}
+.icon { width: 28rem; height: 28rem; }
+.panel { width: 380rem; }
+.content { padding: 14rem; color: #fff; }
+.styleRow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14rem; }
+.styleRow > span { margin-bottom: 0; margin-right: 8rem; }
+// Explicit theme classes avoid the unthemed white dropdown defaults.
+.styleToggle {
+    width: 210rem; height: 32rem; padding: 6rem 10rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1rem solid rgba(255, 255, 255, 0.25); border-radius: 4rem;
+    background-color: rgba(16, 29, 35, 0.85); color: #fff;
+    font-size: 14rem; text-align: left;
+    &:hover { background-color: rgba(76, 188, 226, 0.3); }
+}
+.styleValue { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.styleIndicator { width: 16rem; height: 16rem; margin-left: 8rem; flex-shrink: 0; }
+.styleLayer { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 2147483000; pointer-events: auto; }
+.styleMenu {
+    position: fixed; width: 260rem; padding: 4rem; display: flex; box-sizing: border-box;
+    background-color: rgba(16, 29, 35, 0.98); color: #fff;
+    border: 1rem solid rgba(255, 255, 255, 0.25); border-radius: 4rem;
+    pointer-events: auto;
+}
+.styleOptions { display: flex; flex-direction: column; flex: 1; height: 256rem; }
+.styleTrack { position: relative; width: 12rem; height: 256rem; margin-left: 4rem;
+    background-color: rgba(255, 255, 255, 0.08); border-radius: 4rem; cursor: pointer; }
+.styleThumb { position: absolute; width: 6rem; left: 3rem; border-radius: 3rem;
+    background-color: rgba(255, 255, 255, 0.55); pointer-events: none; }
+.styleItem {
+    display: flex; align-items: center; width: 100%; height: 32rem; flex-shrink: 0; box-sizing: border-box;
+    padding: 7rem 10rem; border: 0; border-radius: 3rem;
+    background-color: transparent; color: #fff; font-size: 14rem; text-align: left;
+    &:hover { background-color: rgba(76, 188, 226, 0.3); }
+
+}
+.styleSelected { background-color: rgba(76, 188, 226, 0.45); }
+.label { font-size: 14rem; opacity: 0.75; margin-bottom: 6rem; }
+.currentName { font-size: 19rem; margin-bottom: 18rem; overflow-wrap: break-word; }
+.suggestion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 6rem;
+    padding: 10rem;
+    border-radius: 4rem;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    text-align: left;
+    > span:first-child { flex: 1; overflow-wrap: break-word; }
+    &:hover { background-color: rgba(76, 188, 226, 0.3); }
+}
+.apply { margin-left: 12rem; color: #86d8ee; font-size: 13rem; }
+.button {
+    padding: 8rem 12rem;
+    border-radius: 4rem;
+    color: #fff;
+    background-color: rgba(76, 188, 226, 0.2);
+    &:hover { background-color: rgba(76, 188, 226, 0.4); }
+}
+.customSection { margin-top: 16rem; padding-top: 12rem; border-top: 1rem solid rgba(255, 255, 255, 0.15); }
+.buttons { display: flex; margin-top: 10rem; > button { margin-right: 8rem; } }
+.hint { font-size: 14rem; line-height: 1.4; opacity: 0.8; margin-bottom: 10rem; }
+.message { margin-top: 10rem; font-size: 14rem; color: #86d8ee; }
+.error { margin-top: 8rem; font-size: 14rem; color: #ffb3a3; }

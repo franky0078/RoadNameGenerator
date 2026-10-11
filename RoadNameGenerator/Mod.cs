@@ -11,6 +11,7 @@ using Game;
 using Game.Modding;
 using Game.SceneFlow;
 using RoadNameGenerator.Localization;
+using RoadNameGenerator.Naming;
 using RoadNameGenerator.Systems;
 
 namespace RoadNameGenerator
@@ -84,6 +85,9 @@ namespace RoadNameGenerator
                 Settings,
                 new Setting(this)
             );
+
+            CustomRoadNameList.Reload();
+            updateSystem.UpdateAt<RoadSuggestionsUISystem>(SystemUpdatePhase.UIUpdate);
 
             updateSystem.UpdateAt<RoadNamingSystem>(
                 SystemUpdatePhase.GameSimulation

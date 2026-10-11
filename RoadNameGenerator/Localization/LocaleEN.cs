@@ -17,7 +17,7 @@ namespace RoadNameGenerator.Localization
                 IList<IDictionaryEntryError> errors,
                 Dictionary<string, int> indexCounts)
         {
-            return new Dictionary<string, string>
+            return RoadNameGeneratorLocale.AddEntries(new Dictionary<string, string>
             {
                 /*
                  * Mod name.
@@ -56,7 +56,7 @@ namespace RoadNameGenerator.Localization
                     m_Setting.GetOptionGroupLocaleID(
                         Setting.kDiagnosticsGroup
                     ),
-                    "Version 1.9.5"
+                    "Version 2.0.0"
                 },
 
                 /*
@@ -229,7 +229,7 @@ namespace RoadNameGenerator.Localization
                     ),
                     "Writes detailed information about detected, checked and renamed roads to the log file. This option can remain disabled during normal use."
                 }
-            };
+            }, m_Setting, "en");
         }
 
         public void Unload()

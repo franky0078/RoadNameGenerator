@@ -39,9 +39,12 @@
 		- Can rename existing roads
 		- Several naming styles and road categories
 		- Avoids duplicate road names
-		- Optional logging for troubleshooting
+		- Custom road names: Create your own name list
+		- Flexible name sources: Use a predefined naming style, your custom list, or a mix of both
+		- Quick style selection: Switch between all 18 naming styles and your custom list directly ingame
 		- Lightweight and runs automatically in the background
 		- Language support for English, German, French, Italian, Spanish and Polish
+		- Optional logging for troubleshooting
 
 		The naming style and other options can be configured in the game settings.
 
@@ -78,6 +81,8 @@
 	<Screenshot Value="Properties/Screenshot04.jpg" />
 	<Screenshot Value="Properties/Screenshot05.jpg" />
 	<Screenshot Value="Properties/Screenshot06.jpg" />
+	<Screenshot Value="Properties/Screenshot07.jpg" />
+	<Screenshot Value="Properties/Screenshot08.jpg" />
 
 	<!-- Optionale Schlagwörter -->
 	<Tag Value="Code Mod" />
@@ -87,7 +92,7 @@
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="1.9.5" />
+	<ModVersion Value="2.0.0" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -100,10 +105,12 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 1.9.5
+		Version 2.0.0
 
 
-		- swiss roadnames now for 4 national languages (german, french, italian, romansh)
+		- Added support for custom road names loaded from CustomRoadNames.txt
+		- Added a window with name suggestions for individual roads.
+		- Added an ingame dropdown to select naming styles or the custom name list.
 
 
 	</ChangeLog>

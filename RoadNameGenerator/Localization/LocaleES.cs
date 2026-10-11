@@ -20,7 +20,7 @@ namespace RoadNameGenerator.Localization
             IList<IDictionaryEntryError> errors,
             Dictionary<string, int> indexCounts)
         {
-            return new Dictionary<string, string>
+            return RoadNameGeneratorLocale.AddEntries(new Dictionary<string, string>
             {
                 { m_Setting.GetSettingsLocaleID(), "Road Name Generator" },
                 { m_Setting.GetOptionTabLocaleID(Setting.kMainSection), "General" },
@@ -29,7 +29,7 @@ namespace RoadNameGenerator.Localization
                 { m_Setting.GetOptionGroupLocaleID(Setting.kExistingRoadsGroup),
                     "Vías existentes" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kDiagnosticsGroup),
-                    "Versión 1.9.5" },
+                    "Versión 2.0.0" },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.SelectedNamingStyle)),
                     "Estilo de nombres" },
@@ -78,7 +78,7 @@ namespace RoadNameGenerator.Localization
                     "Registro detallado" },
                 { m_Setting.GetOptionDescLocaleID(nameof(Setting.EnableDetailedLogging)),
                     "Escribe información detallada sobre las vías detectadas, revisadas y renombradas en el registro. Puede desactivarse durante el uso normal." }
-            };
+            }, m_Setting, "es");
         }
 
         public void Unload()

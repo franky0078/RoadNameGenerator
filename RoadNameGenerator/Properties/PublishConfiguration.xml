@@ -26,6 +26,7 @@
 		- Australian road names
 		- Canadian road names
 		- Polish road names
+		- Portuguese road names (Portugal)
 		- Dutch road names
 		- Swiss road names (german, french, italian, romansh)
 		- Norwegian road names
@@ -92,7 +93,7 @@
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="2.0.0" />
+	<ModVersion Value="2.1.0" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -105,12 +106,10 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 2.0.0
+		Version 2.1.0
 
 
-		- Added support for custom road names loaded from CustomRoadNames.txt
-		- Added a window with name suggestions for individual roads.
-		- Added an ingame dropdown to select naming styles or the custom name list.
+		- Added Portuguese road names (Portugal)
 
 
 	</ChangeLog>

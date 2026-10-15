@@ -97,16 +97,11 @@
 		<None Include="$(ModTargetsFile)" Link="Properties\Mod.targets" />
 	</ItemGroup>
 
-    <Target Name="RestoreRoadNameGeneratorUI"
-        Condition="'$(EnableRoadNameGeneratorUIBuild)' == 'true'"
-        Inputs="$(UIProjectDirectory)\package.json;$(UIProjectDirectory)\package-lock.json"
-        Outputs="$(UIProjectDirectory)\node_modules\.road-name-generator-restored">
+    <Target Name="RestoreRoadNameGeneratorUI" Condition="'$(EnableRoadNameGeneratorUIBuild)' == 'true'" Inputs="$(UIProjectDirectory)\package.json;$(UIProjectDirectory)\package-lock.json" Outputs="$(UIProjectDirectory)\node_modules\.road-name-generator-restored">
         <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(UIProjectDirectory)" />
         <Touch Files="$(UIProjectDirectory)\node_modules\.road-name-generator-restored" AlwaysCreate="true" />
     </Target>
-    <Target Name="BuildRoadNameGeneratorUI" AfterTargets="AfterBuild"
-        DependsOnTargets="RestoreRoadNameGeneratorUI"
-        Condition="'$(EnableRoadNameGeneratorUIBuild)' == 'true'">
+    <Target Name="BuildRoadNameGeneratorUI" AfterTargets="AfterBuild" DependsOnTargets="RestoreRoadNameGeneratorUI" Condition="'$(EnableRoadNameGeneratorUIBuild)' == 'true'">
         <Exec Command="npm run build" WorkingDirectory="$(UIProjectDirectory)" />
     </Target>
 </Project>

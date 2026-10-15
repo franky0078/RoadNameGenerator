@@ -8,6 +8,10 @@ namespace RoadNameGenerator.Localization
         public static IEnumerable<KeyValuePair<string, string>> AddEntries(
             Dictionary<string, string> entries, Setting setting, string language)
         {
+            entries[setting.GetOptionLabelLocaleID(nameof(Setting.NamingStyleSelection))] =
+                entries[setting.GetOptionLabelLocaleID(nameof(Setting.SelectedNamingStyle))];
+            entries[setting.GetOptionDescLocaleID(nameof(Setting.NamingStyleSelection))] =
+                entries[setting.GetOptionDescLocaleID(nameof(Setting.SelectedNamingStyle))];
             string[] text;
             switch (language)
             {

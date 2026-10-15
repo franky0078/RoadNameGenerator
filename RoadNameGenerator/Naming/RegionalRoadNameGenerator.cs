@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace RoadNameGenerator.Naming
 {
-    // Shared uniqueness and portfolio checks for the three regional name sets.
+    // Shared uniqueness and portfolio checks for regional name sets.
     public abstract class RegionalRoadNameGenerator : IRoadNameGenerator
     {
         private readonly Random m_Random = new();
@@ -18,17 +18,20 @@ namespace RoadNameGenerator.Naming
         private readonly string[] m_NamedHighways;
         private readonly HashSet<string> m_HighwaySet;
         private readonly string[] m_RoutePrefixes;
+        private readonly string[] m_RouteNames;
         private readonly string[] m_FallbackPrefixes;
 
         protected RegionalRoadNameGenerator(
             string[][] names,
             string[] namedHighways,
             string[] routePrefixes,
-            string[] fallbackPrefixes)
+            string[] fallbackPrefixes,
+            string[] routeNames = null)
         {
             m_Names = names;
             m_NamedHighways = namedHighways;
             m_RoutePrefixes = routePrefixes;
+            m_RouteNames = routeNames;
             m_FallbackPrefixes = fallbackPrefixes;
             m_NameSets = new HashSet<string>[5];
 
@@ -40,6 +43,8 @@ namespace RoadNameGenerator.Naming
 
             m_HighwaySet = new HashSet<string>(
                 namedHighways, StringComparer.OrdinalIgnoreCase);
+            if (routeNames != null)
+                m_HighwaySet.UnionWith(routeNames);
         }
 
         public string Generate(RoadCategory category)
@@ -55,21 +60,37 @@ namespace RoadNameGenerator.Naming
                 string result;
                 if (index == (int)RoadCategory.Highway)
                 {
-                    if (m_Random.Next(100) < 75)
+                    bool hasRoutes = m_RouteNames != null
+                        ? m_RouteNames.Length > 0
+                        : m_RoutePrefixes.Length > 0;
+                    if (hasRoutes && (m_NamedHighways.Length == 0 || m_Random.Next(100) < 75))
                     {
-                        string prefix = m_RoutePrefixes[
-                            m_Random.Next(m_RoutePrefixes.Length)];
-                        result = prefix + m_Random.Next(1, 1000);
+                        if (m_RouteNames != null)
+                        {
+                            result = m_RouteNames[m_Random.Next(m_RouteNames.Length)];
+                        }
+                        else
+                        {
+                            string prefix = m_RoutePrefixes[
+                                m_Random.Next(m_RoutePrefixes.Length)];
+                            result = prefix + m_Random.Next(1, 1000);
+                        }
                     }
-                    else
+                    else if (m_NamedHighways.Length > 0)
                     {
                         result = m_NamedHighways[
                             m_Random.Next(m_NamedHighways.Length)];
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 else
                 {
                     string[] names = m_Names[index];
+                    if (names.Length == 0)
+                        break;
                     result = names[m_Random.Next(names.Length)];
                 }
 
@@ -79,8 +100,38 @@ namespace RoadNameGenerator.Naming
                 }
             }
 
-            // All random choices may collide in a large city. This terminates
-            // only when a unique name has been found.
+            // Random collisions do not prove the portfolio is exhausted.
+            // Inspect every remaining candidate before using numbered names.
+            if (index != (int)RoadCategory.Highway)
+            {
+                if (TryTakeUnused(m_Names[index], out string unusedName))
+                    return unusedName;
+            }
+            else
+            {
+                if (m_RouteNames != null)
+                {
+                    if (TryTakeUnused(m_RouteNames, out string unusedRoute))
+                        return unusedRoute;
+                }
+                else
+                {
+                    foreach (string prefix in m_RoutePrefixes)
+                    {
+                        int start = m_Random.Next(1, 1000);
+                        for (int offset = 0; offset < 999; offset++)
+                        {
+                            string route = prefix + (1 + (start - 1 + offset) % 999);
+                            if (m_UsedNames.Add(route))
+                                return route;
+                        }
+                    }
+                }
+                if (TryTakeUnused(m_NamedHighways, out string unusedHighway))
+                    return unusedHighway;
+            }
+
+            // Only an exhausted category falls back to numbered names.
             for (int number = 1; ; number++)
             {
                 string result = m_FallbackPrefixes[index] + number;
@@ -89,6 +140,24 @@ namespace RoadNameGenerator.Naming
                     return result;
                 }
             }
+        }
+
+        private bool TryTakeUnused(string[] names, out string result)
+        {
+            result = null;
+            if (names.Length == 0)
+                return false;
+            int start = m_Random.Next(names.Length);
+            for (int offset = 0; offset < names.Length; offset++)
+            {
+                string name = names[(start + offset) % names.Length];
+                if (m_UsedNames.Add(name))
+                {
+                    result = name;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool IsNameFromPortfolio(string name, RoadCategory category)

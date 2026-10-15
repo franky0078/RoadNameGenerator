@@ -1,4 +1,8 @@
 ﻿using Colossal.IO.AssetDatabase;
+using Colossal.Json;
+using Game.UI.Localization;
+using Game.UI.Widgets;
+using System;
 using Game.Modding;
 using Game.Settings;
 using RoadNameGenerator.Naming;
@@ -40,10 +44,52 @@ namespace RoadNameGenerator
             kMainSection,
             kAutomaticNamingGroup
         )]
+        [SettingsUIHidden]
         public NamingStyle SelectedNamingStyle
         {
             get;
             set;
+        }
+
+        // UI order is independent from the persisted enum values.
+        [Exclude]
+        [SettingsUIDropdown(typeof(Setting), nameof(GetNamingStyleItems))]
+        [SettingsUISection(kMainSection, kAutomaticNamingGroup)]
+        public int NamingStyleSelection
+        {
+            get => (int)SelectedNamingStyle;
+            set
+            {
+                if (Enum.IsDefined(typeof(NamingStyle), value))
+                    SelectedNamingStyle = (NamingStyle)value;
+            }
+        }
+
+        public DropdownItem<int>[] GetNamingStyleItems()
+        {
+            NamingStyle[] styles =
+            {
+                NamingStyle.American, NamingStyle.Australian,
+                NamingStyle.British, NamingStyle.Canadian,
+                NamingStyle.Danish, NamingStyle.Dutch,
+                NamingStyle.French, NamingStyle.German,
+                NamingStyle.Italian, NamingStyle.Mexican,
+                NamingStyle.Norwegian, NamingStyle.Polish,
+                NamingStyle.PortuguesePortugal, NamingStyle.Spanish,
+                NamingStyle.Swedish, NamingStyle.Swiss,
+                NamingStyle.SwissFrench, NamingStyle.SwissItalian,
+                NamingStyle.SwissRomansh
+            };
+            DropdownItem<int>[] items = new DropdownItem<int>[styles.Length];
+            for (int i = 0; i < styles.Length; i++)
+            {
+                items[i] = new DropdownItem<int>
+                {
+                    value = (int)styles[i],
+                    displayName = LocalizedString.Id(GetEnumValueLocaleID(styles[i]))
+                };
+            }
+            return items;
         }
 
         [SettingsUISection(

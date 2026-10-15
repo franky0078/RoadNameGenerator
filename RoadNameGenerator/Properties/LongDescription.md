@@ -13,6 +13,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Australian road names
 - Canadian road names
 - Polish road names
+- Portuguese road names (Portugal)
 - Dutch road names
 - Swiss road names (german, french, italian, romansh)
 - Norwegian road names
@@ -28,7 +29,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Avoids duplicate road names
 - Custom road names: Create your own name list
 - Flexible name sources: Use a predefined naming style, your custom list, or a mix of both
-- Quick style selection: Switch between all 18 naming styles and your custom list directly ingame
+- Quick style selection: Switch between all 19 naming styles and your custom list directly ingame
 - Lightweight and runs automatically in the background
 - Language support for English, German, French, Italian, Spanish and Polish
 - Optional logging for troubleshooting

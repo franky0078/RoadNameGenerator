@@ -26,6 +26,7 @@ namespace RoadNameGenerator.Naming
         SwissFrench,
         Swiss,
         SwissItalian,
-        SwissRomansh
+        SwissRomansh,
+        PortuguesePortugal = 18
     }
 }

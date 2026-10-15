@@ -35,6 +35,7 @@ namespace RoadNameGenerator.Systems
         private readonly CanadianRoadNameGenerator m_CanadianNameGenerator = new();
         private readonly AustralianRoadNameGenerator m_AustralianNameGenerator = new();
         private readonly PolishRoadNameGenerator m_PolishNameGenerator = new();
+        private readonly PortugueseRoadNameGenerator m_PortugueseNameGenerator = new();
         private readonly DutchRoadNameGenerator m_DutchNameGenerator = new();
         private readonly SwissRegionalRoadNameGenerator m_SwissNameGenerator =
             new(NamingStyle.Swiss);
@@ -667,6 +668,9 @@ namespace RoadNameGenerator.Systems
                 NamingStyle.Polish =>
                     m_PolishNameGenerator,
 
+                NamingStyle.PortuguesePortugal =>
+                    m_PortugueseNameGenerator,
+
                 NamingStyle.Dutch =>
                     m_DutchNameGenerator,
 
@@ -714,6 +718,7 @@ namespace RoadNameGenerator.Systems
             m_CanadianNameGenerator.RegisterExistingName(name);
             m_AustralianNameGenerator.RegisterExistingName(name);
             m_PolishNameGenerator.RegisterExistingName(name);
+            m_PortugueseNameGenerator.RegisterExistingName(name);
             m_DutchNameGenerator.RegisterExistingName(name);
             m_SwissNameGenerator.RegisterExistingName(name);
             m_SwissFrenchNameGenerator.RegisterExistingName(name);

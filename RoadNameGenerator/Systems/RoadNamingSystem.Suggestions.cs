@@ -79,8 +79,6 @@ namespace RoadNameGenerator.Systems
 
             m_NameSystem.SetCustomName(road, name);
             RegisterExistingNameInAllGenerators(name);
-            // Avoid the automatic naming pass replacing a manually accepted suggestion
-            // on a newly built road that has not been registered yet.
             m_KnownRoads.Add(road);
             Mod.LogDetailed($"Selected road {road.Index} renamed to \"{name}\".");
             return true;
@@ -97,6 +95,7 @@ namespace RoadNameGenerator.Systems
             NamingStyle.Canadian => new CanadianRoadNameGenerator(),
             NamingStyle.Australian => new AustralianRoadNameGenerator(),
             NamingStyle.Polish => new PolishRoadNameGenerator(),
+            NamingStyle.PortuguesePortugal => new PortugueseRoadNameGenerator(),
             NamingStyle.Dutch => new DutchRoadNameGenerator(),
             NamingStyle.Swiss => new SwissRegionalRoadNameGenerator(NamingStyle.Swiss),
             NamingStyle.SwissFrench => new SwissRegionalRoadNameGenerator(NamingStyle.SwissFrench),

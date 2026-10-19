@@ -15,6 +15,9 @@ const token$ = bindValue<string>(group, "token", "");
 const message$ = bindValue<string>(group, "message", "");
 const customCount$ = bindValue<number>(group, "customCount", 0);
 const listError$ = bindValue<boolean>(group, "listError", false);
+const exclusionsEnabled$ = bindValue<boolean>(group, "exclusionsEnabled", true);
+const excludedCount$ = bindValue<number>(group, "excludedCount", 0);
+const exclusionError$ = bindValue<boolean>(group, "exclusionError", false);
 const namingStyle$ = bindValue<number>(group, "namingStyle", 0);
 const customMode$ = bindValue<number>(group, "customMode", 0);
 // Explicit values match the existing saved C# enum; keep Swiss variants together.
@@ -166,6 +169,9 @@ function RoadNamesPanel() {
     const count = useValue(customCount$);
     const listError = useValue(listError$);
     const namingStyle = useValue(namingStyle$);
+    const excludedCount = useValue(excludedCount$);
+    const exclusionsEnabled = useValue(exclusionsEnabled$);
+    const exclusionError = useValue(exclusionError$);
     const customMode = useValue(customMode$);
     // Keep hooks unconditional when the selected road or window changes.
     const suggestions = [useValue(suggestion0$), useValue(suggestion1$),
@@ -200,7 +206,7 @@ function RoadNamesPanel() {
                         <button className={styles.suggestion} onClick={() => trigger(group, "apply", token, name)}>
                             <span>{name}</span><span className={styles.apply}>{t("Apply")}</span>
                         </button>
-                    </Tooltip>) : <div className={styles.hint}>{t("NoSuggestions")}</div>}
+                    </Tooltip>) : <div className={styles.hint}>{t(excludedCount > 0 ? "ExclusionsUnavailable" : "NoSuggestions")}</div>}
                 <button className={styles.button} onClick={() => trigger(group, "refresh")}>{t("Refresh")}</button>
             </> : <div className={styles.hint}>{t("SelectRoad")}</div>}
             {message && <div className={styles.message}>{translate(message) ?? message}</div>}
@@ -213,6 +219,19 @@ function RoadNamesPanel() {
                     <button className={styles.button} onClick={() => trigger(group, "reloadList")}>{t("ReloadList")}</button>
                 </div>
             </div>
+            {exclusionsEnabled && <div className={styles.customSection}>
+                <div className={styles.label}>{excludedCount > 0
+                    ? `${t("ExclusionList")} (${excludedCount})` : t("NoExclusions")}</div>
+                <div className={styles.hint}>{t("ExclusionHint")}</div>
+                {exclusionError && <div className={styles.error}>{t("ListError")}</div>}
+                <div className={styles.buttons}>
+                    <button className={styles.button} onClick={() => trigger(group, "reloadExclusions")}>{t("ReloadExclusions")}</button>
+                    <Tooltip tooltip={t("RemoveExclusionsHint")}>
+                        <button className={styles.button} disabled={excludedCount === 0}
+                            onClick={() => trigger(group, "removeExclusions")}>{t("RemoveExclusions")}</button>
+                    </Tooltip>
+                </div>
+            </div>}
         </div>
     </Panel>;
 }

@@ -29,6 +29,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Avoids duplicate road names
 - Custom road names: Create your own name list
 - Flexible name sources: Use a predefined naming style, your custom list, or a mix of both
+- Customize any naming style by excluding unwanted road names.
 - Quick style selection: Switch between all 19 naming styles and your custom list directly ingame
 - Lightweight and runs automatically in the background
 - Language support for English, German, French, Italian, Spanish and Polish

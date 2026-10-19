@@ -136,6 +136,21 @@ namespace RoadNameGenerator
         [SettingsUISection(kMainSection, kCustomNamesGroup)]
         public bool ReloadCustomNames { set => CustomRoadNameList.Reload(); }
 
+        [SettingsUISection(kMainSection, kCustomNamesGroup)]
+        public bool UseNameExclusions { get; set; }
+
+        [SettingsUIButton]
+        [SettingsUISection(kMainSection, kCustomNamesGroup)]
+        public bool ReloadExcludedNames
+        {
+            set
+            {
+                RoadNameExclusionList.Reload();
+                UseNameExclusions = true;
+                ApplyAndSave();
+            }
+        }
+
         [SettingsUISection(kMainSection, kSingleRoadGroup)]
         public bool ShowRoadSuggestionsButton { get; set; }
 
@@ -161,6 +176,7 @@ namespace RoadNameGenerator
                 ExistingRoadMode.GameGeneratedOnly;
 
             CustomNames = CustomNameMode.Disabled;
+            UseNameExclusions = true;
             ShowRoadSuggestionsButton = true;
             EnableDetailedLogging = false;
         }

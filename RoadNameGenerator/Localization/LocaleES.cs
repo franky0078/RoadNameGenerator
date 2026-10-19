@@ -29,7 +29,7 @@ namespace RoadNameGenerator.Localization
                 { m_Setting.GetOptionGroupLocaleID(Setting.kExistingRoadsGroup),
                     "Vías existentes" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kDiagnosticsGroup),
-                    "Versión 2.1.0" },
+                    "Versión 2.2.0" },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.SelectedNamingStyle)),
                     "Estilo de nombres" },

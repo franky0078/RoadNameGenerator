@@ -290,6 +290,104 @@ namespace RoadNameGenerator.Localization
             for (int i = 0; i < keys.Length; i++)
                 entries[keys[i]] = text[i + 13];
             entries["RoadNameGenerator.UI.MixedSource"] = text[12];
+            string[] exclusions = language switch
+            {
+                "de" => new[]
+                {
+                    "Geladene Ausschlussregeln",
+                    "Keine Ausschlussliste aktiv",
+                    "ExcludedRoadNames.txt: ein Name oder Muster pro Zeile. * steht für beliebigen Text, z. B. Autoroute *. Groß-/Kleinschreibung wird ignoriert.",
+                    "Ausschlüsse laden",
+                    "Entfernen",
+                    "Deaktiviert die Ausschlussliste. Die Datei bleibt erhalten und kann erneut geladen werden.",
+                    "Kein erlaubter ungenutzter Name gefunden. Ausschlussregeln prüfen, eigene Namen ergänzen oder eine andere Namensquelle wählen.",
+                    "Ausschlussliste verwenden",
+                    "Wendet ExcludedRoadNames.txt auf alle Namensstile und eigene Namen an. Bestehende Straßen ändern sich erst beim bewussten erneuten Benennen.",
+                    "Ausschlussliste neu laden",
+                    "Lädt und aktiviert ExcludedRoadNames.txt aus dem Namenslistenordner (UTF-8). Ein vollständiger Name oder *-Muster pro Zeile; Leerzeilen und #-Kommentare werden ignoriert. Das Neuladen benennt keine bestehenden Straßen um.",
+                },
+                "es" => new[]
+                {
+                    "Reglas de exclusión cargadas",
+                    "Ninguna lista de exclusión activa",
+                    "ExcludedRoadNames.txt: un nombre o patrón por línea. * representa cualquier texto, p. ej. Autoroute *. No distingue mayúsculas de minúsculas.",
+                    "Cargar exclusiones",
+                    "Quitar",
+                    "Desactiva las exclusiones. El archivo se conserva y puede cargarse de nuevo.",
+                    "No se encontró ningún nombre permitido sin usar. Revisa las exclusiones, añade nombres o cambia el origen.",
+                    "Usar lista de exclusión",
+                    "Aplica ExcludedRoadNames.txt a todos los estilos y nombres personalizados. Las calles existentes solo cambian al renombrarlas expresamente.",
+                    "Recargar exclusiones",
+                    "Carga y activa ExcludedRoadNames.txt desde la carpeta de nombres (UTF-8). Un nombre completo o patrón con * por línea; ignora líneas vacías y comentarios #. No renombra calles existentes.",
+                },
+                "fr" => new[]
+                {
+                    "Règles d’exclusion chargées",
+                    "Aucune liste d’exclusion active",
+                    "ExcludedRoadNames.txt : un nom ou motif par ligne. * représente tout texte, p. ex. Autoroute *. La casse est ignorée.",
+                    "Charger exclusions",
+                    "Retirer",
+                    "Désactive les exclusions. Le fichier est conservé et peut être rechargé.",
+                    "Aucun nom autorisé inutilisé trouvé. Vérifiez les exclusions, ajoutez des noms ou changez la source.",
+                    "Utiliser la liste d’exclusion",
+                    "Applique ExcludedRoadNames.txt à tous les styles et noms personnalisés. Les rues existantes ne changent que lors d’un renommage explicite.",
+                    "Recharger les exclusions",
+                    "Charge et active ExcludedRoadNames.txt depuis le dossier des noms (UTF-8). Un nom complet ou motif avec * par ligne ; ignore les lignes vides et commentaires #. Ne renomme pas les rues existantes.",
+                },
+                "it" => new[]
+                {
+                    "Regole di esclusione caricate",
+                    "Nessun elenco di esclusione attivo",
+                    "ExcludedRoadNames.txt: un nome o modello per riga. * indica qualsiasi testo, ad es. Autoroute *. Ignora maiuscole e minuscole.",
+                    "Carica esclusioni",
+                    "Rimuovi",
+                    "Disattiva le esclusioni. Il file viene conservato e può essere ricaricato.",
+                    "Nessun nome consentito inutilizzato trovato. Controlla le esclusioni, aggiungi nomi o cambia origine.",
+                    "Usa elenco di esclusione",
+                    "Applica ExcludedRoadNames.txt a tutti gli stili e nomi personalizzati. Le strade esistenti cambiano solo quando rinominate esplicitamente.",
+                    "Ricarica esclusioni",
+                    "Carica e attiva ExcludedRoadNames.txt dalla cartella dei nomi (UTF-8). Un nome completo o modello con * per riga; ignora righe vuote e commenti #. Non rinomina strade esistenti.",
+                },
+                "pl" => new[]
+                {
+                    "Wczytane reguły wykluczeń",
+                    "Brak aktywnej listy wykluczeń",
+                    "ExcludedRoadNames.txt: jedna nazwa lub wzorzec w wierszu. * oznacza dowolny tekst, np. Autoroute *. Wielkość liter jest ignorowana.",
+                    "Wczytaj wykluczenia",
+                    "Usuń",
+                    "Wyłącza wykluczenia. Plik zostaje zachowany i można go wczytać ponownie.",
+                    "Nie znaleziono dozwolonej niewykorzystanej nazwy. Sprawdź wykluczenia, dodaj nazwy lub zmień źródło.",
+                    "Używaj listy wykluczeń",
+                    "Stosuje ExcludedRoadNames.txt do wszystkich stylów i własnych nazw. Istniejące ulice zmieniają się tylko po jawnym ponownym nazwaniu.",
+                    "Wczytaj ponownie wykluczenia",
+                    "Wczytuje i włącza ExcludedRoadNames.txt z folderu nazw (UTF-8). Jedna pełna nazwa lub wzorzec z * na wiersz; pomija puste wiersze i komentarze #. Nie zmienia nazw istniejących ulic.",
+                },
+                _ => new[]
+                {
+                    "Loaded exclusion rules",
+                    "No exclusion list active",
+                    "ExcludedRoadNames.txt: one name or pattern per line. * matches any text, e.g. Autoroute *. Matching ignores letter case.",
+                    "Load exclusions",
+                    "Remove",
+                    "Disables the exclusion list. The file is kept and can be loaded again.",
+                    "No allowed unused name found. Check the exclusion rules, add custom names or choose another name source.",
+                    "Use name exclusion list",
+                    "Applies ExcludedRoadNames.txt to all naming styles and custom names. Existing roads change only when explicitly renamed.",
+                    "Reload exclusion list",
+                    "Loads and enables ExcludedRoadNames.txt from the name list folder (UTF-8). One complete name or * pattern per line; empty lines and # comments are ignored. Reloading does not rename existing roads.",
+                },
+            };
+            entries["RoadNameGenerator.UI.ExclusionList"] = exclusions[0];
+            entries["RoadNameGenerator.UI.NoExclusions"] = exclusions[1];
+            entries["RoadNameGenerator.UI.ExclusionHint"] = exclusions[2];
+            entries["RoadNameGenerator.UI.ReloadExclusions"] = exclusions[3];
+            entries["RoadNameGenerator.UI.RemoveExclusions"] = exclusions[4];
+            entries["RoadNameGenerator.UI.RemoveExclusionsHint"] = exclusions[5];
+            entries["RoadNameGenerator.UI.ExclusionsUnavailable"] = exclusions[6];
+            entries[setting.GetOptionLabelLocaleID(nameof(Setting.UseNameExclusions))] = exclusions[7];
+            entries[setting.GetOptionDescLocaleID(nameof(Setting.UseNameExclusions))] = exclusions[8];
+            entries[setting.GetOptionLabelLocaleID(nameof(Setting.ReloadExcludedNames))] = exclusions[9];
+            entries[setting.GetOptionDescLocaleID(nameof(Setting.ReloadExcludedNames))] = exclusions[10];
             return entries;
         }
     }

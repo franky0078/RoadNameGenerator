@@ -74,7 +74,7 @@ namespace RoadNameGenerator.Systems
         public bool TryApplySuggestion(Entity road, string name)
         {
             if (road == Entity.Null || ResolveRoad(road) != road || string.IsNullOrWhiteSpace(name) ||
-                name.Length > 128 || GetCurrentRoadNames().Contains(name.Trim()))
+                name.Length > 128 || RoadNameExclusionList.IsExcluded(name) || GetCurrentRoadNames().Contains(name.Trim()))
                 return false;
 
             m_NameSystem.SetCustomName(road, name);

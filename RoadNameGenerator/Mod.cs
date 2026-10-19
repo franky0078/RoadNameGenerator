@@ -87,6 +87,7 @@ namespace RoadNameGenerator
             );
 
             CustomRoadNameList.Reload();
+            RoadNameExclusionList.Reload();
             updateSystem.UpdateAt<RoadSuggestionsUISystem>(SystemUpdatePhase.UIUpdate);
 
             updateSystem.UpdateAt<RoadNamingSystem>(

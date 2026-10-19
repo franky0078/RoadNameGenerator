@@ -7,7 +7,7 @@
 	<DisplayName Value="Road Name Generator" />
 
 	<!-- Kurze Beschreibung -->
-	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish, Spanish, Australian, Canadian, Polish, Dutch, Swiss, Norwegian, Danish, Mexican road names." />
+	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish, Spanish, Australian, Canadian, Polish, Dutch, Swiss, Norwegian, Danish, Portuguese, Mexican road names." />
 
 	<!-- Ausführliche Beschreibung -->
 	<LongDescription>
@@ -42,7 +42,8 @@
 		- Avoids duplicate road names
 		- Custom road names: Create your own name list
 		- Flexible name sources: Use a predefined naming style, your custom list, or a mix of both
-		- Quick style selection: Switch between all 18 naming styles and your custom list directly ingame
+		- Customize any naming style by excluding unwanted road names.
+		- Quick style selection: Switch between all 19 naming styles and your custom list directly ingame
 		- Lightweight and runs automatically in the background
 		- Language support for English, German, French, Italian, Spanish and Polish
 		- Optional logging for troubleshooting
@@ -84,6 +85,7 @@
 	<Screenshot Value="Properties/Screenshot06.jpg" />
 	<Screenshot Value="Properties/Screenshot07.jpg" />
 	<Screenshot Value="Properties/Screenshot08.jpg" />
+	<Screenshot Value="Properties/Screenshot09.jpg" />
 
 	<!-- Optionale Schlagwörter -->
 	<Tag Value="Code Mod" />
@@ -93,7 +95,7 @@
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="2.1.0" />
+	<ModVersion Value="2.2.0" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -106,12 +108,10 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Version 2.1.0
+		Latest changes:
 
-
-		- Added Portuguese road names (Portugal)
-
-
+		- added a name exclusion list with support for exact names and * wildcards.
+		- added option to use a custom roadname blacklist
 	</ChangeLog>
 
 	<ExternalLink Type="github" Url="https://github.com/franky0078/RoadNameGenerator" />

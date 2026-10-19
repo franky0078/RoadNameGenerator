@@ -844,7 +844,7 @@ namespace RoadNameGenerator.Systems
                     if (string.IsNullOrWhiteSpace(newName))
                     {
                         RegisterExistingNameInAllGenerators(currentName);
-                        Mod.LogDetailed("Custom road names exhausted; the current name was preserved.");
+                        Mod.LogDetailed("No allowed road name available; the current name was preserved.");
                         continue;
                     }
 
@@ -955,7 +955,7 @@ namespace RoadNameGenerator.Systems
                     if (string.IsNullOrWhiteSpace(newName))
                     {
                         RegisterExistingNameInAllGenerators(currentName);
-                        Mod.LogDetailed("Custom road names exhausted; the current name was preserved.");
+                        Mod.LogDetailed("No allowed road name available; the current name was preserved.");
                         continue;
                     }
 

@@ -22,16 +22,22 @@ namespace RoadNameGenerator.Naming
 
         public string Generate(RoadCategory category)
         {
-            if (m_Mode == CustomNameMode.Disabled ||
-                (m_Mode == CustomNameMode.Mixed && m_Random.Next(2) == 0))
+            if (m_Mode == CustomNameMode.Disabled)
                 return GenerateFallback(category);
+            bool triedFallback = m_Mode == CustomNameMode.Mixed && m_Random.Next(2) == 0;
+            if (triedFallback)
+            {
+                string generated = GenerateFallback(category);
+                if (generated != null)
+                    return generated;
+            }
 
             // Reservoir sampling gives each available name the same chance, even in large lists.
             string selected = null;
             int available = 0;
             foreach (string name in m_Names)
             {
-                if (!m_UsedNames.Contains(name) && m_Random.Next(++available) == 0)
+                if (!m_UsedNames.Contains(name) && !RoadNameExclusionList.IsExcluded(name) && m_Random.Next(++available) == 0)
                     selected = name;
             }
             if (selected != null)
@@ -41,18 +47,32 @@ namespace RoadNameGenerator.Naming
             }
 
             // Custom-only never invents suffixes or silently switches to another naming style.
-            return m_Mode == CustomNameMode.CustomOnly ? null : GenerateFallback(category);
+            return m_Mode == CustomNameMode.CustomOnly || triedFallback ? null : GenerateFallback(category);
         }
 
         private string GenerateFallback(RoadCategory category)
         {
-            string name = m_Fallback.Generate(category);
-            RegisterExistingName(name);
-            return name;
+            // Bound rejection sampling: broad rules must never stall the simulation.
+            for (int attempt = 0; attempt < 256; attempt++)
+            {
+                if (RoadNameExclusionList.ExcludesEverything)
+                    break;
+                string name = m_Fallback.Generate(category);
+                if (string.IsNullOrWhiteSpace(name))
+                    return null;
+                if (RoadNameExclusionList.IsExcluded(name))
+                    continue;
+                RegisterExistingName(name);
+                return name;
+            }
+            RoadNameExclusionList.ReportUnavailable();
+            return null;
         }
 
         public bool IsNameFromPortfolio(string name, RoadCategory category)
         {
+            if (RoadNameExclusionList.IsExcluded(name))
+                return false;
             if (m_Mode != CustomNameMode.Disabled)
                 foreach (string customName in m_Names)
                     if (string.Equals(customName, name?.Trim(), StringComparison.OrdinalIgnoreCase))

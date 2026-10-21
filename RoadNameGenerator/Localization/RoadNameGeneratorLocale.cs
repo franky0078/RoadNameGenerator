@@ -388,6 +388,18 @@ namespace RoadNameGenerator.Localization
             entries[setting.GetOptionDescLocaleID(nameof(Setting.UseNameExclusions))] = exclusions[8];
             entries[setting.GetOptionLabelLocaleID(nameof(Setting.ReloadExcludedNames))] = exclusions[9];
             entries[setting.GetOptionDescLocaleID(nameof(Setting.ReloadExcludedNames))] = exclusions[10];
+
+            string[] protection = language switch
+            {
+                "de" => new[] { "Einzeln benannte Straßen überschreiben", "Erlaubt der Bestandsprüfung, einzeln eingegebene oder über Namensvorschläge gewählte Namen zu ersetzen. Standardmäßig bleiben sie geschützt, auch bei „Alle Straßen“. Automatisch durch diese Version vergebene Namen können weiterhin geändert werden. Namen aus älteren Versionen ohne Herkunftskennzeichnung gelten als geschützt. Der gewählte Prüfmodus gilt weiterhin; „Nur vom Spiel generierte Namen“ überspringt alle benutzerdefinierten Namen." },
+                "fr" => new[] { "Remplacer les noms attribués individuellement", "Autorise la vérification à remplacer les noms saisis manuellement ou choisis parmi les suggestions. Par défaut, ils restent protégés, même en mode Toutes les voies. Les noms attribués automatiquement par cette version restent modifiables. Les anciens noms personnalisés sans origine connue sont protégés. Le mode sélectionné reste applicable ; le mode Noms du jeu uniquement ignore tous les noms personnalisés." },
+                "it" => new[] { "Sovrascrivi i nomi assegnati singolarmente", "Consente alla verifica di sostituire i nomi inseriti manualmente o scelti dai suggerimenti. Per impostazione predefinita restano protetti anche in modalità Tutte le strade. I nomi assegnati automaticamente da questa versione restano modificabili. I vecchi nomi personalizzati di origine sconosciuta sono protetti. La modalità selezionata resta valida; Solo nomi del gioco ignora tutti i nomi personalizzati." },
+                "es" => new[] { "Sobrescribir nombres asignados individualmente", "Permite que la revisión sustituya nombres escritos manualmente o elegidos entre las sugerencias. Por defecto quedan protegidos incluso en el modo Todas las vías. Los nombres asignados automáticamente por esta versión siguen siendo modificables. Los nombres personalizados antiguos sin origen conocido están protegidos. El modo seleccionado sigue aplicándose; Solo nombres del juego omite todos los nombres personalizados." },
+                "pl" => new[] { "Nadpisuj nazwy nadane pojedynczym drogom", "Pozwala kontroli zastępować nazwy wpisane ręcznie lub wybrane z propozycji. Domyślnie pozostają chronione także w trybie Wszystkie drogi. Nazwy nadane automatycznie przez tę wersję nadal można zmieniać. Starsze własne nazwy o nieznanym pochodzeniu są chronione. Wybrany tryb nadal obowiązuje; Tylko nazwy z gry pomija wszystkie własne nazwy." },
+                _ => new[] { "Overwrite individually named roads", "Allows the existing-road scan to replace names entered manually or selected from suggestions. By default they remain protected, even in All roads mode. Names automatically assigned by this version can still be changed. Older custom names without provenance are protected. The selected scan mode still applies; Game-generated only skips all custom names." },
+            };
+            entries[setting.GetOptionLabelLocaleID(nameof(Setting.OverwriteIndividuallyNamedRoads))] = protection[0];
+            entries[setting.GetOptionDescLocaleID(nameof(Setting.OverwriteIndividuallyNamedRoads))] = protection[1];
             return entries;
         }
     }

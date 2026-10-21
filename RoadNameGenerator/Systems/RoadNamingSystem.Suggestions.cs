@@ -78,6 +78,7 @@ namespace RoadNameGenerator.Systems
                 return false;
 
             m_NameSystem.SetCustomName(road, name);
+            ForgetAutomaticallyAssignedName(road);
             RegisterExistingNameInAllGenerators(name);
             m_KnownRoads.Add(road);
             Mod.LogDetailed($"Selected road {road.Index} renamed to \"{name}\".");

@@ -112,6 +112,9 @@ namespace RoadNameGenerator
             set;
         }
 
+        [SettingsUISection(kMainSection, kExistingRoadsGroup)]
+        public bool OverwriteIndividuallyNamedRoads { get; set; }
+
         [SettingsUIButton]
         [SettingsUISection(
             kMainSection,
@@ -174,6 +177,8 @@ namespace RoadNameGenerator
 
             ExistingRoadCheckMode =
                 ExistingRoadMode.GameGeneratedOnly;
+
+            OverwriteIndividuallyNamedRoads = false;
 
             CustomNames = CustomNameMode.Disabled;
             UseNameExclusions = true;

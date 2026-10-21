@@ -753,6 +753,10 @@ namespace RoadNameGenerator.Systems
                     }
 
                     currentRoads.Add(aggregateEntity);
+                    // Drop automatic ownership after an external/manual name change.
+                    if (EntityManager.HasComponent<AutomaticallyAssignedRoadName>(aggregateEntity))
+                        IsAutomaticallyAssignedName(aggregateEntity,
+                            m_NameSystem.GetRenderedLabelName(aggregateEntity));
                     if (Mod.Settings?.CustomNames != CustomNameMode.Disabled)
                     {
                         string registeredName = m_NameSystem.GetRenderedLabelName(aggregateEntity);
@@ -832,6 +836,18 @@ namespace RoadNameGenerator.Systems
                         continue;
                     }
 
+                    // A newly discovered aggregate may already carry a player-assigned
+                    // or inherited custom name. Automatic naming must preserve it.
+                    if (EntityManager.HasComponent<CustomName>(aggregateEntity))
+                    {
+                        RegisterExistingNameInAllGenerators(currentName);
+                        Mod.LogDetailed(
+                            $"Newly detected road {aggregateEntity.Index} already has a custom name; " +
+                            $"preserved: \"{currentName}\"."
+                        );
+                        continue;
+                    }
+
                     string prefabName =
                         GetRoadPrefabName(aggregateEntity);
 
@@ -852,6 +868,7 @@ namespace RoadNameGenerator.Systems
                         aggregateEntity,
                         newName
                     );
+                    RememberAutomaticallyAssignedName(aggregateEntity, newName);
 
                     RegisterExistingNameInAllGenerators(
                         newName
@@ -963,6 +980,7 @@ namespace RoadNameGenerator.Systems
                         aggregateEntity,
                         newName
                     );
+                    RememberAutomaticallyAssignedName(aggregateEntity, newName);
 
                     RegisterExistingNameInAllGenerators(
                         newName
@@ -992,21 +1010,25 @@ namespace RoadNameGenerator.Systems
                 $"renamed: {renamedRoadCount}, " +
                 $"preserved: {preservedRoadCount}, " +
                 $"Mode: {checkMode}, " +
+                $"Overwrite individually named roads: {Mod.Settings?.OverwriteIndividuallyNamedRoads ?? false}, " +
                 $"Naming style: {selectedStyle}."
             );
         }
 
         private bool ShouldRenameExistingRoad(Entity roadEntity, string currentName, RoadCategory category, ExistingRoadMode checkMode, IRoadNameGenerator nameGenerator)
         {
+            bool hasCustomName = EntityManager.HasComponent<CustomName>(roadEntity);
+            bool automaticallyAssigned = IsAutomaticallyAssignedName(roadEntity, currentName);
+            if (hasCustomName && !automaticallyAssigned &&
+                !(Mod.Settings?.OverwriteIndividuallyNamedRoads ?? false))
+            {
+                return false;
+            }
+
             switch (checkMode)
             {
                 case ExistingRoadMode.GameGeneratedOnly:
                     {
-                        bool hasCustomName =
-                            EntityManager.HasComponent<CustomName>(
-                                roadEntity
-                            );
-
                         return !hasCustomName;
                     }
 

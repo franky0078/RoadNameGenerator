@@ -1,7 +1,7 @@
 Road Name Generator automatically assigns road names based on the selected naming style.
 
 
-## Supported naming styles
+**Supported naming styles**
 
 - American road names
 - British road names
@@ -21,7 +21,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Mexican road names
 
 
-## Features
+**Features**
 
 - Automatically names newly created roads
 - Can rename existing roads
@@ -38,7 +38,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 The naming style and other options can be configured in the game settings.
 
 
-## Important notice
+**Important notice**
 
 Road names are only generated or updated while the game simulation is running and game time is advancing.
 
@@ -47,14 +47,14 @@ If the game is paused, newly created or changed roads will be processed after th
 Road Builder roads are detected and classified very reliably in most cases, based on their Road Builder category and road layout.
 
 
-## Transparency note
+**Transparency note**
 
 The street name database and streetname variations were created with AI assistance (ChatGPT).
 
 All other code in this mod was written by me.
 
 
-## Planned future updates
+**Planned future updates**
 
 Additional naming styles
 

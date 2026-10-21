@@ -14,7 +14,7 @@
 		Road Name Generator automatically assigns road names based on the selected naming style.
 
 
-		## Supported naming styles
+		**Supported naming styles**
 
 		- American road names
 		- British road names
@@ -34,7 +34,7 @@
 		- Mexican road names
 
 
-		## Features
+		**Features**
 
 		- Automatically names newly created roads
 		- Can rename existing roads
@@ -51,7 +51,7 @@
 		The naming style and other options can be configured in the game settings.
 
 
-		## Important notice
+		**Important notice**
 
 		Road names are only generated or updated while the game simulation is running and game time is advancing.
 
@@ -60,14 +60,14 @@
 		Road Builder roads are detected and classified very reliably in most cases, based on their Road Builder category and road layout.
 
 
-		## Transparency note
+		**Transparency note**
 
 		The street name database and streetname variations were created with AI assistance (ChatGPT).
 
 		All other code in this mod was written by me.
 
 
-		## Planned future updates
+		**Planned future updates**
 
 		Additional naming styles
 
@@ -86,6 +86,7 @@
 	<Screenshot Value="Properties/Screenshot07.jpg" />
 	<Screenshot Value="Properties/Screenshot08.jpg" />
 	<Screenshot Value="Properties/Screenshot09.jpg" />
+	<Screenshot Value="Properties/Screenshot10.jpg" />
 
 	<!-- Optionale Schlagwörter -->
 	<Tag Value="Code Mod" />
@@ -95,7 +96,7 @@
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="2.2.0" />
+	<ModVersion Value="2.2.1" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -110,8 +111,8 @@
 	<ChangeLog>
 		Latest changes:
 
-		- added a name exclusion list with support for exact names and * wildcards.
-		- added option to use a custom roadname blacklist
+		- added additional safeguards to preserve existing custom names when roads are detected as new.
+		- added an “Overwrite individually named roads” option to explicitly allow these names to be replaced
 	</ChangeLog>
 
 	<ExternalLink Type="github" Url="https://github.com/franky0078/RoadNameGenerator" />

@@ -1,6 +1,6 @@
 <Project>
   <!-- Nur diese Nummer ändern, dann neu kompilieren (Format: Haupt.Neben.Patch). -->
   <PropertyGroup>
-    <RoadNameGeneratorVersion>2.2.1</RoadNameGeneratorVersion>
+    <RoadNameGeneratorVersion>2.3.0</RoadNameGeneratorVersion>
   </PropertyGroup>
 </Project>

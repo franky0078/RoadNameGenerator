@@ -7,7 +7,7 @@
 	<DisplayName Value="Road Name Generator" />
 
 	<!-- Kurze Beschreibung -->
-	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish, Spanish, Australian, Canadian, Polish, Dutch, Swiss, Norwegian, Danish, Portuguese, Mexican road names." />
+	<ShortDescription Value="Automatically generates American, British, German, Italian, French, Swedish, Spanish, Australian, Canadian, Polish, Dutch, Swiss, Norwegian, Danish, Portuguese, Brazilian, Mexican road names." />
 
 	<!-- Ausführliche Beschreibung -->
 	<LongDescription>
@@ -26,7 +26,8 @@
 		- Australian road names
 		- Canadian road names
 		- Polish road names
-		- Portuguese road names (Portugal)
+		- Portuguese road names
+		- Brazilian road names 
 		- Dutch road names
 		- Swiss road names (german, french, italian, romansh)
 		- Norwegian road names
@@ -65,14 +66,6 @@
 		The street name database and streetname variations were created with AI assistance (ChatGPT).
 
 		All other code in this mod was written by me.
-
-
-		**Planned future updates**
-
-		Additional naming styles
-
-		- Greek road names
-		- Austrian road names
 	</LongDescription>
 
 	<!-- Vorschaubild -->
@@ -96,7 +89,7 @@
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="2.2.1" />
+	<ModVersion Value="2.3.0" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -111,8 +104,7 @@
 	<ChangeLog>
 		Latest changes:
 
-		- added additional safeguards to preserve existing custom names when roads are detected as new.
-		- added an “Overwrite individually named roads” option to explicitly allow these names to be replaced
+		- added brazilian portuguese roadnames
 	</ChangeLog>
 
 	<ExternalLink Type="github" Url="https://github.com/franky0078/RoadNameGenerator" />

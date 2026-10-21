@@ -28,6 +28,7 @@ const namingStyles = [
     { value: 6, key: "French" }, { value: 7, key: "German" },
     { value: 8, key: "Italian" }, { value: 9, key: "Mexican" },
     { value: 10, key: "Norwegian" }, { value: 11, key: "Polish" },
+    { value: 19, key: "PortugueseBrazil" },
     { value: 18, key: "PortuguesePortugal" },
     { value: 12, key: "Spanish" }, { value: 13, key: "Swedish" },
     { value: 15, key: "Swiss" }, { value: 14, key: "SwissFrench" },

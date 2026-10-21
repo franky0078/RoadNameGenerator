@@ -1,5 +1,6 @@
 const path = require("path");
-const MOD = require("./mod.json");
+require("./tools/sync-version").syncVersion();
+const MOD = JSON.parse(require("fs").readFileSync(path.join(__dirname, "mod.json"), "utf8").replace(/^\uFEFF/, ""));
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CSSPresencePlugin } = require("./tools/css-presence");
 const TerserPlugin = require("terser-webpack-plugin");

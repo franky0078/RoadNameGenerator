@@ -29,7 +29,7 @@ namespace RoadNameGenerator.Localization
                 { m_Setting.GetOptionGroupLocaleID(Setting.kExistingRoadsGroup),
                     "Strade esistenti" },
                 { m_Setting.GetOptionGroupLocaleID(Setting.kDiagnosticsGroup),
-                    "Versione 2.2.1" },
+                    "Versione " + ModVersion.Current },
 
                 { m_Setting.GetOptionLabelLocaleID(nameof(Setting.SelectedNamingStyle)),
                     "Stile dei nomi" },
@@ -60,6 +60,7 @@ namespace RoadNameGenerator.Localization
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Polish]", "Polacco" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Dutch]", "Olandese" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[Swiss]", "Svizzera (tedesco)" },
+                { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[PortugueseBrazil]", "Portoghese (Brasile)" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[PortuguesePortugal]", "Portoghese (Portogallo)" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissFrench]", "Svizzera (francese)" },
                 { "Options.RoadNameGenerator.RoadNameGenerator.Mod.NAMINGSTYLE[SwissItalian]", "Svizzera (italiano)" },

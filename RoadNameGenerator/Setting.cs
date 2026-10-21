@@ -75,7 +75,8 @@ namespace RoadNameGenerator
                 NamingStyle.French, NamingStyle.German,
                 NamingStyle.Italian, NamingStyle.Mexican,
                 NamingStyle.Norwegian, NamingStyle.Polish,
-                NamingStyle.PortuguesePortugal, NamingStyle.Spanish,
+                NamingStyle.PortugueseBrazil, NamingStyle.PortuguesePortugal,
+                NamingStyle.Spanish,
                 NamingStyle.Swedish, NamingStyle.Swiss,
                 NamingStyle.SwissFrench, NamingStyle.SwissItalian,
                 NamingStyle.SwissRomansh

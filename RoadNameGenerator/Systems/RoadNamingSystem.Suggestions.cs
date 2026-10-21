@@ -96,6 +96,7 @@ namespace RoadNameGenerator.Systems
             NamingStyle.Canadian => new CanadianRoadNameGenerator(),
             NamingStyle.Australian => new AustralianRoadNameGenerator(),
             NamingStyle.Polish => new PolishRoadNameGenerator(),
+            NamingStyle.PortugueseBrazil => new BrazilianRoadNameGenerator(),
             NamingStyle.PortuguesePortugal => new PortugueseRoadNameGenerator(),
             NamingStyle.Dutch => new DutchRoadNameGenerator(),
             NamingStyle.Swiss => new SwissRegionalRoadNameGenerator(NamingStyle.Swiss),

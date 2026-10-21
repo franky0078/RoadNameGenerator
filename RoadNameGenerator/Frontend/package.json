@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "prebuild": "node tools/sync-version.js",
     "build": "webpack",
     "typecheck": "tsc --noEmit"
   },

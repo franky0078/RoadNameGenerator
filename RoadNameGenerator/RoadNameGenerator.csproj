@@ -23,6 +23,23 @@
     <!-- Imports must be after the PropertyGroup block -->
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
 	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+    <Import Project="ModVersion.props" />
+    <PropertyGroup>
+        <Version>$(RoadNameGeneratorVersion)</Version>
+        <AssemblyVersion>$(RoadNameGeneratorVersion).0</AssemblyVersion>
+        <FileVersion>$(RoadNameGeneratorVersion).0</FileVersion>
+        <InformationalVersion>$(RoadNameGeneratorVersion)</InformationalVersion>
+        <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    </PropertyGroup>
+
+    <!-- Sync before compilation and before any publisher reads its configuration. -->
+    <Target Name="SyncRoadNameGeneratorVersion"
+            BeforeTargets="PrepareForBuild;Publish;ModPublisherConfig;RunModPublisher"
+            Condition="'$(DesignTimeBuild)' != 'true'">
+        <Exec Command="node &quot;$(MSBuildProjectDirectory)\Frontend\tools\sync-version.js&quot;"
+              WorkingDirectory="$(MSBuildProjectDirectory)" />
+    </Target>
+
 	<ItemGroup>
 		<Reference Include="Game">
 			<Private>false</Private>

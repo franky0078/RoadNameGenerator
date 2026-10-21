@@ -14,6 +14,7 @@ Road Name Generator automatically assigns road names based on the selected namin
 - Canadian road names
 - Polish road names
 - Portuguese road names (Portugal)
+- Portuguese road names (Brazil)
 - Dutch road names
 - Swiss road names (german, french, italian, romansh)
 - Norwegian road names
@@ -52,11 +53,3 @@ Road Builder roads are detected and classified very reliably in most cases, base
 The street name database and streetname variations were created with AI assistance (ChatGPT).
 
 All other code in this mod was written by me.
-
-
-**Planned future updates**
-
-Additional naming styles
-
-- Greek road names
-- Austrian road names

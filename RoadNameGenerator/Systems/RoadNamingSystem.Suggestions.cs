@@ -54,9 +54,10 @@ namespace RoadNameGenerator.Systems
             HashSet<string> usedNames = GetCurrentRoadNames();
             // Suggestions for a ramp must keep its motorway. Offering unrelated
             // A-numbers would turn a slip road into an independent highway.
-            if (IsHighwayRampCandidate(road) &&
-                TryGetRampParent(road, out string motorway, out _ , out _))
+            if (IsHighwayRampCandidate(road))
             {
+                if (!TryGetRampParent(road, out string motorway, out _, out _))
+                    return suggestions; // Not connected to a motorway yet.
                 NamingStyle rampStyle = Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American;
                 string label = GetRampLabel(rampStyle, RampDirection.Unknown);
                 for (int number = 1; number <= 4096 && suggestions.Count < 5; number++)

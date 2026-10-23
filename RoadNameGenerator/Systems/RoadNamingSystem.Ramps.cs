@@ -13,6 +13,7 @@ namespace RoadNameGenerator.Systems
     {
         private enum RampDirection { Unknown, Exit, Entrance }
         private readonly HashSet<Entity> m_PendingRampNames = new();
+        private int m_PendingRampCursor;
 
         private readonly struct HighwayRampConnection
         {
@@ -379,9 +380,20 @@ namespace RoadNameGenerator.Systems
                 m_PendingRampNames.Count == 0)
                 return;
 
+            // Work in bounded batches to avoid traversing the full road network
+            // every update when many ramps have not yet been connected.
+            int start = m_PendingRampCursor % m_PendingRampNames.Count;
+            int index = 0;
+            int attempted = 0;
             var completed = new List<Entity>();
             foreach (Entity road in m_PendingRampNames)
             {
+                if (index++ < start)
+                    continue;
+                if (attempted >= 32)
+                    break;
+                attempted++;
+
                 if (!IsUsableEntity(road) || !IsRoadAggregate(road))
                 {
                     completed.Add(road);
@@ -418,6 +430,11 @@ namespace RoadNameGenerator.Systems
 
             foreach (Entity road in completed)
                 m_PendingRampNames.Remove(road);
+
+            // A removed entry can shift HashSet enumeration. We intentionally
+            // rotate by a small batch instead of rescanning from the beginning.
+            m_PendingRampCursor = m_PendingRampNames.Count == 0 ? 0 :
+                (start + attempted) % m_PendingRampNames.Count;
         }
 
         private bool TryCreateRampName(Entity aggregate, out string name)

@@ -414,6 +414,16 @@ namespace RoadNameGenerator.Localization
             for (int i = 0; i < compactKeys.Length; i++)
                 entries["RoadNameGenerator.UI." + compactKeys[i]] = compactText[i];
 
+            entries["RoadNameGenerator.UI.UseExclusions"] = language switch
+            {
+                "de" => "Ausschlussliste verwenden",
+                "fr" => "Utiliser la liste d’exclusion",
+                "es" => "Usar lista de exclusiones",
+                "it" => "Usa elenco di esclusione",
+                "pl" => "Używaj listy wykluczeń",
+                _ => "Use exclusion list"
+            };
+
             return entries;
         }
     }

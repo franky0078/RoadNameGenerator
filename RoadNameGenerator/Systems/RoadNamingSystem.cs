@@ -620,6 +620,9 @@ namespace RoadNameGenerator.Systems
             {
 
                 CheckForNewRoads();
+                // Retry ramps that were built before their motorway was
+                // connected or were named by an older version of the mod.
+                ProcessPendingRampNames();
 
                 if (existingRoadScanRequested)
                 {
@@ -868,8 +871,8 @@ namespace RoadNameGenerator.Systems
                     {
                         if (!TryCreateRampName(aggregateEntity, out newName))
                         {
-                            // No motorway is connected (yet). Do not invent a
-                            // separate motorway name for a possible ramp.
+                            // The motorway may be connected later; retry.
+                            m_PendingRampNames.Add(aggregateEntity);
                             RegisterExistingNameInAllGenerators(currentName);
                             continue;
                         }
@@ -1291,6 +1294,12 @@ namespace RoadNameGenerator.Systems
                         m_NameSystem.GetRenderedLabelName(aggregateEntity);
 
                     RegisterExistingNameInAllGenerators(existingName);
+
+                    // Recover one-lane freeways incorrectly given independent
+                    // motorway numbers by an earlier ramp-naming build.
+                    if (IsHighwayRampCandidate(aggregateEntity) &&
+                        IsAutomaticallyAssignedName(aggregateEntity, existingName))
+                        m_PendingRampNames.Add(aggregateEntity);
                 }
                 catch (Exception exception)
                 {
@@ -1329,6 +1338,9 @@ namespace RoadNameGenerator.Systems
             m_KnownRoads.RemoveWhere(
                 roadEntity => !existingRoads.Contains(roadEntity)
             );
+            m_PendingRampNames.RemoveWhere(
+                roadEntity => !existingRoads.Contains(roadEntity)
+            );
         }
 
         private bool IsRoadAggregate(Entity aggregateEntity)
@@ -1342,6 +1354,7 @@ namespace RoadNameGenerator.Systems
         protected override void OnDestroy()
         {
             m_KnownRoads.Clear();
+            m_PendingRampNames.Clear();
             m_UnknownRoadPrefabs.Clear();
             m_RoadBuilderCategoryCache.Clear();
 

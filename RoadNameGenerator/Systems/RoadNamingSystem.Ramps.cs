@@ -7,6 +7,7 @@ using Game.Net;
 using Game.UI;
 using RoadNameGenerator.Naming;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace RoadNameGenerator.Systems
 {
@@ -33,8 +34,9 @@ namespace RoadNameGenerator.Systems
             }
         }
 
-        // CS2 vanilla ramps are usually narrow one-way highways; custom assets
-        // may explicitly identify themselves as ramps.
+        // A one-lane freeway is a potential slip road. A two-lane one-way
+        // highway must additionally be the side branch of a motorway split.
+        // The name alone cannot distinguish a 2-lane mainline from an exit.
         private bool IsHighwayRampCandidate(Entity aggregate)
         {
             if (!IsUsableEntity(aggregate) || !IsRoadAggregate(aggregate))
@@ -51,15 +53,117 @@ namespace RoadNameGenerator.Systems
             if (DetectRoadCategory(aggregate) != RoadCategory.Highway)
                 return false;
 
-            bool narrow = ContainsAny(lower, "1 lane", "1-lane", "one lane", "one-lane",
-                "1lane", "1l1w", "1l 1w", "single lane", "single-lane");
-            bool oneWay = ContainsAny(lower, "one way", "one-way", "oneway", "1w");
+            bool oneLane = ContainsAny(lower, "1 lane", "1-lane", "one lane",
+                "one-lane", "1lane", "1l1w", "1l 1w", "single lane", "single-lane");
+            if (oneLane)
+                return true;
 
-            // Vanilla CS2 uses "Freeway 1 Lane" without "Oneway" in the
-            // prefab name. A one-lane highway can serve as a connecting ramp,
-            // but must be physically attached to a real motorway before naming.
-            bool freeway = ContainsAny(lower, "freeway", "highway", "motorway", "expressway");
-            return narrow && (oneWay || freeway);
+            bool twoLanes = ContainsAny(lower, "2 lanes", "2 lane", "2-lane", "2lane");
+            bool oneWay = ContainsAny(lower, "one way", "one-way", "oneway", "1w",
+                "freeway", "expressway");
+            return twoLanes && oneWay && IsTwoLaneMotorwaySideBranch(aggregate);
+        }
+
+        // Return the horizontal direction AWAY from the shared junction.
+        // CS2 edges contain a cubic Bezier4x3. The first/last control points
+        // are more reliable here than global roads' aggregate orientation.
+        private bool TryGetOutwardTangent(Entity roadEdge, Entity node, out float3 tangent)
+        {
+            tangent = float3.zero;
+            if (!IsUsableEntity(roadEdge) ||
+                !EntityManager.HasComponent<Edge>(roadEdge) ||
+                !EntityManager.HasComponent<Curve>(roadEdge))
+                return false;
+
+            Edge edge = EntityManager.GetComponentData<Edge>(roadEdge);
+            Curve curve = EntityManager.GetComponentData<Curve>(roadEdge);
+            float3 vector;
+            if (edge.m_Start == node)
+            {
+                vector = curve.m_Bezier.b - curve.m_Bezier.a;
+            }
+            else if (edge.m_End == node)
+            {
+                vector = curve.m_Bezier.c - curve.m_Bezier.d;
+            }
+            else
+            {
+                return false;
+            }
+
+            vector.y = 0f;
+            float squared = math.lengthsq(vector);
+            if (squared < 0.0001f)
+                return false;
+
+            tangent = vector * math.rsqrt(squared);
+            return true;
+        }
+
+        // At a three-way motorway junction the two mainline edges usually
+        // continue almost straight, while the side road departs at an angle.
+        // Only the SIDE edge qualifies, not either mainline edge. Standalone
+        // two-lane highways therefore keep their own generated names.
+        private bool IsTwoLaneMotorwaySideBranch(Entity aggregate)
+        {
+            if (!EntityManager.HasBuffer<AggregateElement>(aggregate))
+                return false;
+
+            var parts = EntityManager.GetBuffer<AggregateElement>(aggregate, true);
+            for (int p = 0; p < parts.Length; p++)
+            {
+                Entity candidate = parts[p].m_Edge;
+                if (!IsUsableEntity(candidate) ||
+                    !EntityManager.HasComponent<Edge>(candidate))
+                    continue;
+
+                Edge edge = EntityManager.GetComponentData<Edge>(candidate);
+                Entity[] nodes = { edge.m_Start, edge.m_End };
+                foreach (Entity node in nodes)
+                {
+                    if (!IsUsableEntity(node) || !EntityManager.HasBuffer<ConnectedEdge>(node) ||
+                        !TryGetOutwardTangent(candidate, node, out float3 candidateVector))
+                        continue;
+
+                    var otherVectors = new List<float3>(4);
+                    var adjacent = EntityManager.GetBuffer<ConnectedEdge>(node, true);
+                    for (int i = 0; i < adjacent.Length && otherVectors.Count < 8; i++)
+                    {
+                        Entity otherEdge = adjacent[i].m_Edge;
+                        if (otherEdge == candidate || !IsUsableEntity(otherEdge) ||
+                            !EntityManager.HasComponent<Road>(otherEdge) ||
+                            !EntityManager.HasComponent<Aggregated>(otherEdge))
+                            continue;
+
+                        Entity otherAggregate =
+                            EntityManager.GetComponentData<Aggregated>(otherEdge).m_Aggregate;
+                        if (!IsUsableEntity(otherAggregate) ||
+                            !IsRoadAggregate(otherAggregate) ||
+                            DetectRoadCategory(otherAggregate) != RoadCategory.Highway ||
+                            !TryGetOutwardTangent(otherEdge, node, out float3 vector))
+                            continue;
+
+                        otherVectors.Add(vector);
+                    }
+
+                    for (int i = 0; i < otherVectors.Count; i++)
+                    {
+                        for (int j = i + 1; j < otherVectors.Count; j++)
+                        {
+                            float continuation = math.dot(otherVectors[i], otherVectors[j]);
+                            float branchMatch = math.min(
+                                math.dot(candidateVector, otherVectors[i]),
+                                math.dot(candidateVector, otherVectors[j]));
+
+                            // A strong straight-through continuation, visibly
+                            // straighter than either pairing with the candidate.
+                            if (continuation < -0.96f && branchMatch > continuation + 0.025f)
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         private IEnumerable<(Entity Edge, Entity Junction)> GetAdjacentRoadEdges(Entity aggregate)

@@ -160,7 +160,7 @@ function NameSourceDropdown({ label, hint, items, selected, onSelect }: {
                         top: `${offset / items.length * 100}%` }} />
                 </div>
             </div>
-        </div>, document.body)}</SettingsErrorBoundary>}
+        </div>, document.body)}
     </>;
 }
 
@@ -400,7 +400,7 @@ function RoadNamesPanel() {
                         onChange={next => trigger(group, "setDetailedLogging", next ? 1 : 0)} />
                 </div>
             </div>
-        </div>, document.body)}
+        </div>, document.body)}</SettingsErrorBoundary>}
     </>;
 }
 

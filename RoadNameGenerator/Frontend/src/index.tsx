@@ -164,6 +164,21 @@ function NameSourceDropdown({ label, hint, items, selected, onSelect }: {
     </>;
 }
 
+// CS2's draggable Panel works reliably as the main window. The options
+// window uses a separate lightweight floating surface instead of mounting
+// a second game Panel into the same React component tree.
+function SettingsToggle({ label, checked, onChange }: {
+    label: string; checked: boolean; onChange: (next: boolean) => void;
+}) {
+    return <button type="button" role="switch" aria-checked={checked}
+        className={styles.toggleRow} onClick={() => onChange(!checked)}>
+        <span>{label}</span>
+        <span className={`${styles.toggleTrack} ${checked ? styles.toggleActive : ""}`}>
+            <span className={styles.toggleKnob} />
+        </span>
+    </button>;
+}
+
 function RoadNamesPanel() {
     const show = useValue(showButton$);
     const open = useValue(open$);
@@ -184,6 +199,12 @@ function RoadNamesPanel() {
     const detailedLogging = useValue(detailedLogging$);
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [confirmScan, setConfirmScan] = useState(false);
+    const [settingsPosition, setSettingsPosition] = useState(() => ({
+        left: Math.round(window.innerWidth * 0.43),
+        top: Math.round(window.innerHeight * 0.16)
+    }));
+    const settingsRef = useRef<HTMLDivElement>(null);
+    const settingsDrag = useRef<{ mouseX: number; mouseY: number; left: number; top: number } | null>(null);
     const suggestions = [useValue(suggestion0$), useValue(suggestion1$),
         useValue(suggestion2$), useValue(suggestion3$), useValue(suggestion4$)].filter(Boolean);
     const { translate } = useLocalization();
@@ -199,6 +220,28 @@ function RoadNamesPanel() {
     useEffect(() => {
         if (!open) { setSettingsOpen(false); setConfirmScan(false); }
     }, [open]);
+    useEffect(() => {
+        const move = (event: MouseEvent) => {
+            const drag = settingsDrag.current;
+            if (!drag) return;
+            const bounds = settingsRef.current?.getBoundingClientRect();
+            const width = bounds?.width ?? 340;
+            const height = bounds?.height ?? 400;
+            setSettingsPosition({
+                left: Math.max(8, Math.min(window.innerWidth - width - 8,
+                    drag.left + event.clientX - drag.mouseX)),
+                top: Math.max(8, Math.min(window.innerHeight - height - 8,
+                    drag.top + event.clientY - drag.mouseY))
+            });
+        };
+        const stop = () => { settingsDrag.current = null; };
+        window.addEventListener("mousemove", move);
+        window.addEventListener("mouseup", stop);
+        return () => {
+            window.removeEventListener("mousemove", move);
+            window.removeEventListener("mouseup", stop);
+        };
+    }, []);
     if (!show || !open) return null;
 
     return <>
@@ -258,28 +301,48 @@ function RoadNamesPanel() {
                 </div>
             </div>
         </Panel>
-        {settingsOpen && <Panel className={styles.settingsPanel} draggable
-            initialPosition={{ x: 0.42, y: 0.2 }}
-            header={t("SettingsTitle")} onClose={() => setSettingsOpen(false)}>
+        {settingsOpen && createPortal(<div ref={settingsRef} className={styles.settingsFloating}
+            style={{ left: settingsPosition.left, top: settingsPosition.top }}
+            onMouseDown={event => event.stopPropagation()}
+            onClick={event => event.stopPropagation()}>
+            <div className={styles.settingsHeader}
+                onMouseDown={event => {
+                    if (event.button !== 0) return;
+                    const rect = settingsRef.current?.getBoundingClientRect();
+                    if (!rect) return;
+                    settingsDrag.current = {
+                        mouseX: event.clientX, mouseY: event.clientY,
+                        left: rect.left, top: rect.top
+                    };
+                    event.preventDefault();
+                    event.stopPropagation();
+                }}>
+                <span>{t("SettingsTitle")}</span>
+                <button type="button" className={styles.settingsClose}
+                    aria-label={t("Cancel")} onMouseDown={event => event.stopPropagation()}
+                    onClick={() => { settingsDrag.current = null; setSettingsOpen(false); }}>×</button>
+            </div>
             <div className={styles.settingsContent}>
                 <div className={styles.sectionTitle}>{t("AutomaticNamingSection")}</div>
-                <label className={styles.checkRow}>
-                    <input type="checkbox" checked={autoNaming}
-                        onChange={event => trigger(group, "setAutoNaming", event.currentTarget.checked ? 1 : 0)} />
-                    <span>{t("AutomaticNaming")}</span>
-                </label>
+                <SettingsToggle checked={autoNaming} label={t("AutomaticNaming")}
+                    onChange={next => trigger(group, "setAutoNaming", next ? 1 : 0)} />
                 <div className={styles.settingsSection}>
                     <div className={styles.sectionTitle}>{t("ExistingRoadsSection")}</div>
                     <div className={styles.compactLabel}>{t("ScanMode")}</div>
-                    <select className={styles.select} value={existingMode}
-                        onChange={event => { trigger(group, "setExistingMode", Number(event.currentTarget.value)); setConfirmScan(false); }}>
-                        {scanModes.map((name, index) => <option key={index} value={index}>{name}</option>)}
-                    </select>
-                    <label className={styles.checkRow}>
-                        <input type="checkbox" checked={overwriteNames}
-                            onChange={event => trigger(group, "setOverwriteNames", event.currentTarget.checked ? 1 : 0)} />
-                        <span>{t("OverwriteNames")}</span>
-                    </label>
+                    <div className={styles.modeChoices}>
+                        {scanModes.map((name, index) =>
+                            <button key={index} type="button"
+                                aria-pressed={existingMode === index}
+                                className={`${styles.modeChoice} ${existingMode === index ? styles.modeSelected : ""}`}
+                                onClick={() => {
+                                    trigger(group, "setExistingMode", index);
+                                    setConfirmScan(false);
+                                }}>
+                                {name}
+                            </button>)}
+                    </div>
+                    <SettingsToggle checked={overwriteNames} label={t("OverwriteNames")}
+                        onChange={next => trigger(group, "setOverwriteNames", next ? 1 : 0)} />
                     <div className={styles.hint}>{t("ScanExplanation")}</div>
                 </div>
                 <div className={styles.settingsSection}>
@@ -290,11 +353,8 @@ function RoadNamesPanel() {
                         <button className={styles.button} onClick={() => trigger(group, "openFolder")}>{t("OpenFolder")}</button>
                         <button className={styles.button} onClick={() => trigger(group, "reloadList")}>{t("ReloadList")}</button>
                     </div>
-                    <label className={styles.checkRow}>
-                        <input type="checkbox" checked={exclusionsEnabled}
-                            onChange={event => trigger(group, "setExclusions", event.currentTarget.checked ? 1 : 0)} />
-                        <span>{t("UseExclusions")}</span>
-                    </label>
+                    <SettingsToggle checked={exclusionsEnabled} label={t("UseExclusions")}
+                        onChange={next => trigger(group, "setExclusions", next ? 1 : 0)} />
                     <div className={styles.compactLabel}>{excludedCount > 0
                         ? `${t("ExclusionList")} (${excludedCount})` : t("NoExclusions")}</div>
                     {exclusionError && <div className={styles.error}>{t("ListError")}</div>}
@@ -305,14 +365,11 @@ function RoadNamesPanel() {
                     </div>
                 </div>
                 <div className={styles.settingsSection}>
-                    <label className={styles.checkRow}>
-                        <input type="checkbox" checked={detailedLogging}
-                            onChange={event => trigger(group, "setDetailedLogging", event.currentTarget.checked ? 1 : 0)} />
-                        <span>{t("DetailedLogging")}</span>
-                    </label>
+                    <SettingsToggle checked={detailedLogging} label={t("DetailedLogging")}
+                        onChange={next => trigger(group, "setDetailedLogging", next ? 1 : 0)} />
                 </div>
             </div>
-        </Panel>}
+        </div>, document.body)}
     </>;
 }
 

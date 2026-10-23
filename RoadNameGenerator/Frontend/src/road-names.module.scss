@@ -17,13 +17,47 @@
     &:hover { background-color: rgba(95, 201, 235, 0.95); }
 }
 .icon { width: 28rem; height: 28rem; }
-.panel { width: 380rem; }
-.content { padding: 12rem; color: #fff; }
-.styleRow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10rem; }
+.panel { width: 348rem; position: relative; }
+.settingsPanel { width: 340rem; }
+.settingsContent { padding: 11rem 12rem; color: #fff; max-height: 590rem; overflow-y: auto; }
+.settingsSection { border-top: 1rem solid rgba(255,255,255,.16); margin-top: 12rem; padding-top: 10rem; }
+.sectionTitle { font-size: 15rem; font-weight: 600; margin-bottom: 9rem; color: #a3e5f5; }
+.compactLabel { font-size: 12rem; opacity: .76; margin-top: 5rem; margin-bottom: 4rem; }
+.gearButton {
+    flex-shrink: 0; width: 32rem; height: 32rem; display: flex;
+    justify-content: center; align-items: center; border-radius: 4rem;
+    color: #c5e9f2; background-color: rgba(255,255,255,.09);
+    border: 1rem solid rgba(255,255,255,.16); cursor: pointer;
+    &:hover { background-color: rgba(76,188,226,.38); }
+}
+.fullButton { width: 100%; }
+.scanSection { margin-top: 9rem; padding-top: 9rem; border-top: 1rem solid rgba(255,255,255,.13); }
+.scanButton {
+    width: 100%; min-height: 31rem; padding: 5rem 9rem;
+    border-radius: 4rem; color: #fff;
+    font-size: 14rem; background-color: rgba(65,145,168,.48);
+    &:hover { background-color: rgba(76,188,226,.58); }
+}
+.confirmBox { margin-top: 8rem; padding: 8rem; border-radius: 4rem;
+    background: rgba(17,32,38,.75); }
+.confirmBox .buttons > button { flex: 1; }
+.checkRow {
+    display: flex; gap: 9rem; align-items: center; cursor: pointer;
+    font-size: 14rem; line-height: 1.35; margin: 8rem 0;
+    input { width: 17rem; height: 17rem; flex-shrink: 0; accent-color: #4cbce2; }
+}
+.select {
+    width: 100%; height: 32rem; margin-bottom: 5rem;
+    border: 1rem solid rgba(255,255,255,.23); border-radius: 4rem;
+    color: #fff; background: #152b31; padding: 3rem 7rem;
+    font-size: 13rem;
+}
+.content { padding: 9rem 11rem 10rem; color: #fff; }
+.styleRow { display: flex; align-items: center; justify-content: space-between; gap: 6rem; margin-bottom: 7rem; }
 .styleRow > span { margin-bottom: 0; margin-right: 8rem; }
 // Explicit theme classes avoid the unthemed white dropdown defaults.
 .styleToggle {
-    width: 210rem; height: 32rem; padding: 6rem 10rem;
+    width: 190rem; height: 32rem; padding: 6rem 8rem;
     display: flex; align-items: center; justify-content: space-between;
     border: 1rem solid rgba(255, 255, 255, 0.25); border-radius: 4rem;
     background-color: rgba(16, 29, 35, 0.85); color: #fff;
@@ -52,17 +86,17 @@
 
 }
 .styleSelected { background-color: rgba(76, 188, 226, 0.45); }
-.label { font-size: 14rem; opacity: 0.75; margin-bottom: 6rem; }
-.currentName { font-size: 19rem; margin-bottom: 12rem; overflow-wrap: break-word; }
+.label { font-size: 13rem; opacity: 0.8; margin-bottom: 4rem; }
+.currentName { font-size: 17rem; margin-bottom: 7rem; overflow-wrap: break-word; }
 .suggestion {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 4rem;
-    padding: 6rem 9rem;
-    font-size: 15rem;
-    line-height: 20rem;
+    margin-bottom: 3rem;
+    padding: 4rem 8rem;
+    font-size: 14rem;
+    line-height: 19rem;
     border-radius: 4rem;
     background-color: rgba(255, 255, 255, 0.08);
     color: #fff;

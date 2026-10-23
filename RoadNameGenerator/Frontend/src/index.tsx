@@ -1,4 +1,4 @@
-import { Component, ReactNode, useEffect, useRef, useState } from "react";
+import { Component, ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ModRegistrar } from "cs2/modding";
 import { bindValue, trigger, useValue } from "cs2/api";
@@ -23,7 +23,6 @@ const customMode$ = bindValue<number>(group, "customMode", 0);
 const autoNaming$ = bindValue<boolean>(group, "autoNaming", true);
 const existingMode$ = bindValue<number>(group, "existingMode", 0);
 const overwriteNames$ = bindValue<boolean>(group, "overwriteNames", false);
-const detailedLogging$ = bindValue<boolean>(group, "detailedLogging", false);
 // Explicit values match the existing saved C# enum; keep Swiss variants together.
 const namingStyles = [
     { value: 0, key: "American" }, { value: 1, key: "Australian" },
@@ -223,13 +222,10 @@ function RoadNamesPanel() {
     const autoNaming = useValue(autoNaming$);
     const existingMode = useValue(existingMode$);
     const overwriteNames = useValue(overwriteNames$);
-    const detailedLogging = useValue(detailedLogging$);
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [confirmScan, setConfirmScan] = useState(false);
-    const [settingsPosition, setSettingsPosition] = useState(() => ({
-        left: Math.round(window.innerWidth * 0.43),
-        top: Math.round(window.innerHeight * 0.16)
-    }));
+    const [settingsPosition, setSettingsPosition] = useState({ left: 8, top: 8 });
+    const mainContentRef = useRef<HTMLDivElement>(null);
     const settingsRef = useRef<HTMLDivElement>(null);
     const settingsDrag = useRef<{ mouseX: number; mouseY: number; left: number; top: number } | null>(null);
     const suggestions = [useValue(suggestion0$), useValue(suggestion1$),
@@ -244,6 +240,28 @@ function RoadNamesPanel() {
     const sourceItems = [{ value: -1, label: t("CustomSource") },
         ...namingStyles.map(style => ({ value: style.value, label: styleName(style.key) }))];
     const scanModes = [t("ScanGameOnly"), t("ScanNonMatching"), t("ScanAll")];
+    // Measure the mounted windows in screen pixels so UI scaling and the
+    // main panel's current drag position are respected on every opening.
+    useLayoutEffect(() => {
+        if (!settingsOpen || !open || !show) return;
+        const panel = mainContentRef.current?.closest(`.${styles.panel}`);
+        const settings = settingsRef.current;
+        if (!panel || !settings) return;
+        const main = panel.getBoundingClientRect();
+        const width = settings.getBoundingClientRect().width;
+        const margin = 8;
+        const gap = 12 * (main.width / 348);
+        const right = main.right + gap;
+        const left = right + width <= window.innerWidth - margin
+            ? right : main.left - gap - width;
+        setSettingsPosition({
+            left: Math.max(margin, Math.min(window.innerWidth - width - margin, left)),
+            // Keep the headers aligned; the existing maxHeight/scrolling
+            // handles settings content below the bottom of the screen.
+            top: Math.max(margin, Math.min(window.innerHeight - 160 - margin, main.top))
+        });
+        settingsDrag.current = null;
+    }, [settingsOpen, open, show]);
     useEffect(() => {
         if (!open || !show) { setSettingsOpen(false); setConfirmScan(false); }
     }, [open, show]);
@@ -294,7 +312,7 @@ function RoadNamesPanel() {
                 setConfirmScan(false);
                 trigger(group, "close");
             }}>
-            <div className={styles.content}>
+            <div ref={mainContentRef} className={styles.content}>
                 <div className={styles.styleRow}>
                     <span className={styles.label}>{t("NamingStyle")}</span>
                     <NameSourceDropdown label={sourceName} hint={t("NamingStyleHint")}
@@ -417,10 +435,6 @@ function RoadNamesPanel() {
                         <button className={styles.button} disabled={!exclusionsEnabled || excludedCount === 0}
                             onClick={() => trigger(group, "removeExclusions")}>{t("RemoveExclusions")}</button>
                     </div>
-                </div>
-                <div className={styles.settingsSection}>
-                    <SettingsToggle checked={detailedLogging} label={t("DetailedLogging")}
-                        onChange={next => trigger(group, "setDetailedLogging", next ? 1 : 0)} />
                 </div>
             </div>
         </div>, document.body)}</SettingsErrorBoundary>}

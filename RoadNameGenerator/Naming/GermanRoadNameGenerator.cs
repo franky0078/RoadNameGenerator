@@ -170,11 +170,11 @@ namespace RoadNameGenerator.Naming
             // German Bundesautobahnen are numbered with A.
             // Keep some named motorways for variety, but never generate B/L/K
             // road numbers for a Highway prefab.
-            // Distribution: 90 % Autobahn numbers, 10 % named motorways.
+            // Distribution: 95 % Autobahn numbers, 5 % named motorways.
             for (int attempt = 0; attempt < 200; attempt++)
             {
                 string result;
-                if (m_Random.Next(100) < 90)
+                if (m_Random.Next(100) < 95)
                 {
                     int range = m_Random.Next(100);
                     int number = range < 15

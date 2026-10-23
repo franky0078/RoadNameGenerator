@@ -34,6 +34,8 @@ Road Name Generator automatically assigns road names based on the selected namin
 
 The naming style and other options can be configured in the game settings.
 
+The in-game panel also offers a gear button for its settings window. To rename or check existing roads, click the action button once, then click it again to confirm within five seconds. Escape, closing the panel or changing the naming options cancels the pending confirmation.
+
 
 ## Important notice
 

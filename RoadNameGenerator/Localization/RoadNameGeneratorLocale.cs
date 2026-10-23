@@ -414,6 +414,16 @@ namespace RoadNameGenerator.Localization
             for (int i = 0; i < compactKeys.Length; i++)
                 entries["RoadNameGenerator.UI." + compactKeys[i]] = compactText[i];
 
+            entries["RoadNameGenerator.UI.ConfirmAgain"] = language switch
+            {
+                "de" => "Zum Bestätigen erneut klicken",
+                "fr" => "Cliquer à nouveau pour confirmer",
+                "es" => "Pulsa de nuevo para confirmar",
+                "it" => "Clicca di nuovo per confermare",
+                "pl" => "Kliknij ponownie, aby potwierdzić",
+                _ => "Click again to confirm"
+            };
+
             entries["RoadNameGenerator.UI.UseExclusions"] = language switch
             {
                 "de" => "Ausschlussliste verwenden",
@@ -428,3 +438,4 @@ namespace RoadNameGenerator.Localization
         }
     }
 }
+

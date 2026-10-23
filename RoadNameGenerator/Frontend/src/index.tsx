@@ -245,8 +245,23 @@ function RoadNamesPanel() {
         ...namingStyles.map(style => ({ value: style.value, label: styleName(style.key) }))];
     const scanModes = [t("ScanGameOnly"), t("ScanNonMatching"), t("ScanAll")];
     useEffect(() => {
-        if (!open) { setSettingsOpen(false); setConfirmScan(false); }
-    }, [open]);
+        if (!open || !show) { setSettingsOpen(false); setConfirmScan(false); }
+    }, [open, show]);
+    useEffect(() => {
+        setConfirmScan(false);
+    }, [existingMode, overwriteNames, namingStyle, customMode, exclusionsEnabled, excludedCount, count]);
+    useEffect(() => {
+        if (!confirmScan) return;
+        const timeout = window.setTimeout(() => setConfirmScan(false), 5000);
+        const cancel = (event: KeyboardEvent) => {
+            if (event.key === "Escape") setConfirmScan(false);
+        };
+        window.addEventListener("keydown", cancel);
+        return () => {
+            window.clearTimeout(timeout);
+            window.removeEventListener("keydown", cancel);
+        };
+    }, [confirmScan]);
     useEffect(() => {
         const move = (event: MouseEvent) => {
             const drag = settingsDrag.current;
@@ -273,6 +288,7 @@ function RoadNamesPanel() {
 
     return <>
         <Panel className={styles.panel} draggable initialPosition={{ x: 0.65, y: 0.2 }}
+            theme={{ titleBar: styles.windowHeader, title: styles.windowTitle }}
             header={t("Title")} onClose={() => {
                 setSettingsOpen(false);
                 setConfirmScan(false);
@@ -312,19 +328,21 @@ function RoadNamesPanel() {
                 </> : <div className={styles.hint}>{t("SelectRoad")}</div>}
                 {message && <div className={styles.message}>{translate(message) ?? message}</div>}
                 <div className={styles.scanSection}>
-                    <button className={styles.scanButton} onClick={() => setConfirmScan(true)}>
-                        {existingMode === 2 ? t("RenameAll") : t("CheckExisting")}
-                    </button>
-                    {confirmScan && <div className={styles.confirmBox}>
-                        <div className={styles.hint}>{t("ConfirmScan")} {scanModes[existingMode] ?? ""}</div>
-                        <div className={styles.buttons}>
-                            <button className={styles.scanButton} onClick={() => {
-                                trigger(group, "scanExisting");
-                                setConfirmScan(false);
-                            }}>{t("Confirm")}</button>
-                            <button className={styles.button} onClick={() => setConfirmScan(false)}>{t("Cancel")}</button>
-                        </div>
-                    </div>}
+                    <Tooltip tooltip={`${t("ConfirmScan")} ${scanModes[existingMode] ?? ""}`}>
+                        <button type="button"
+                            className={`${styles.scanButton} ${confirmScan ? styles.scanArmed : ""}`}
+                            onClick={() => {
+                                if (confirmScan) {
+                                    setConfirmScan(false);
+                                    trigger(group, "scanExisting");
+                                } else {
+                                    setConfirmScan(true);
+                                }
+                            }}>
+                            {confirmScan ? t("ConfirmAgain")
+                                : existingMode === 2 ? t("RenameAll") : t("CheckExisting")}
+                        </button>
+                    </Tooltip>
                 </div>
             </div>
         </Panel>
@@ -336,7 +354,7 @@ function RoadNamesPanel() {
             }}
             onMouseDown={event => event.stopPropagation()}
             onClick={event => event.stopPropagation()}>
-            <div className={styles.settingsHeader}
+            <div className={styles.windowHeader}
                 onMouseDown={event => {
                     if (event.button !== 0) return;
                     const rect = settingsRef.current?.getBoundingClientRect();
@@ -348,10 +366,15 @@ function RoadNamesPanel() {
                     event.preventDefault();
                     event.stopPropagation();
                 }}>
-                <span>{t("SettingsTitle")}</span>
+                <span className={styles.windowTitle}>{t("SettingsTitle")}</span>
                 <button type="button" className={styles.settingsClose}
                     aria-label={t("Cancel")} onMouseDown={event => event.stopPropagation()}
-                    onClick={() => { settingsDrag.current = null; setSettingsOpen(false); }}>×</button>
+                    onClick={() => { settingsDrag.current = null; setSettingsOpen(false); }}>
+                    <svg viewBox="0 0 24 24" className={styles.closeIcon}>
+                        <path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor"
+                            strokeWidth="4" strokeLinecap="round" />
+                    </svg>
+                </button>
             </div>
             <div className={styles.settingsContent}>
                 <div className={styles.sectionTitle}>{t("AutomaticNamingSection")}</div>
@@ -409,3 +432,4 @@ const register: ModRegistrar = registry => {
     registry.append("Game", RoadNamesPanel);
 };
 export default register;
+

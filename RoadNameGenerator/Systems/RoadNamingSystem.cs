@@ -903,7 +903,11 @@ namespace RoadNameGenerator.Systems
                     RememberAutomaticallyAssignedName(aggregateEntity, newName);
 
                     if (isRamp)
+                    {
                         m_TrackedRampNames.Add(aggregateEntity);
+                        // Avoid a second assignment from the deferred queue.
+                        m_PendingRampNames.Remove(aggregateEntity);
+                    }
 
                     RegisterExistingNameInAllGenerators(
                         newName
@@ -1034,7 +1038,11 @@ namespace RoadNameGenerator.Systems
                     RememberAutomaticallyAssignedName(aggregateEntity, newName);
 
                     if (isRamp)
+                    {
                         m_TrackedRampNames.Add(aggregateEntity);
+                        // Avoid a second assignment from the deferred queue.
+                        m_PendingRampNames.Remove(aggregateEntity);
+                    }
 
                     RegisterExistingNameInAllGenerators(
                         newName

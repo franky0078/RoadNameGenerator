@@ -288,7 +288,8 @@ namespace RoadNameGenerator.Systems
                                 // ramps connected to the same node. Only
                                 // extend the group along the actual road
                                 // continuation, not into every adjacent ramp.
-                                if (current.Depth < 8 &&
+                                // Only group ramps at an unbranched two-edge node.
+                                if (connected.Length == 2 && current.Depth < 8 &&
                                     TryGetOutwardTangent(rampEdge, node, out float3 fromVector) &&
                                     TryGetOutwardTangent(otherEdge, node, out float3 toVector) &&
                                     math.dot(fromVector, toVector) < -0.60f &&

@@ -20,8 +20,110 @@
 // Preserve the game's native absolute positioning of draggable Panels.
 // position: relative here overrides CS2 Panel positioning and pushes the window off-screen.
 .panel { width: 348rem; }
-.settingsPanel { width: 340rem; }
-.settingsContent { padding: 11rem 12rem; color: #fff; max-height: 590rem; overflow-y: auto; }
+// Standalone settings surface: avoids creating a second native CS2 Panel
+// while retaining a blurred, draggable in-game window.
+.settingsFloating {
+    position: fixed;
+    z-index: 2147482500;
+    width: 340rem;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    border: 1rem solid rgba(192, 216, 223, .32);
+    border-radius: 7rem;
+    background: rgba(43, 60, 63, .94);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 14rem 35rem rgba(0, 0, 0, .38);
+    color: #fff;
+}
+.settingsHeader {
+    min-height: 43rem;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 6rem 11rem;
+    border-bottom: 1rem solid rgba(255,255,255,.16);
+    background: rgba(6, 17, 21, .94);
+    color: #63d6fa;
+    font-size: 14rem;
+    letter-spacing: .4rem;
+    cursor: move;
+    user-select: none;
+}
+.settingsClose {
+    width: 30rem; height: 30rem;
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; border: 0; border-radius: 3rem;
+    font-size: 27rem; color: #fff; cursor: pointer;
+    &:hover { background: rgba(255,255,255,.17); }
+}
+.settingsContent {
+    flex: 1;
+    min-height: 0;
+    padding: 11rem 12rem;
+    color: #fff;
+    overflow-y: auto;
+}
+.toggleRow {
+    display: flex;
+    width: 100%;
+    min-height: 30rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 9rem;
+    border: none;
+    background: transparent;
+    text-align: left;
+    color: #fff;
+    font-size: 13rem;
+    line-height: 1.35;
+    cursor: pointer;
+    padding: 5rem 2rem;
+    &:hover { background: rgba(76,188,226,.1); }
+}
+.toggleTrack {
+    width: 32rem;
+    height: 18rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    border-radius: 10rem;
+    background: rgba(180,192,196,.48);
+}
+.toggleActive { background: rgba(76,188,226,.88); }
+.toggleKnob {
+    width: 14rem;
+    height: 14rem;
+    border-radius: 50%;
+    background: #fff;
+    transform: translateX(0);
+}
+.toggleActive .toggleKnob { transform: translateX(14rem); }
+.modeChoices { display: flex; flex-direction: column; gap: 3rem; }
+.modeChoice {
+    width: 100%;
+    min-height: 27rem;
+    padding: 5rem 9rem;
+    font-size: 12rem;
+    text-align: left;
+    border: 1rem solid transparent;
+    border-radius: 4rem;
+    color: #fff;
+    background: rgba(255,255,255,.06);
+    cursor: pointer;
+    &:hover { background: rgba(76,188,226,.18); }
+}
+.modeSelected {
+    border-color: rgba(105,211,240,.6);
+    background: rgba(76,188,226,.3);
+}
 .settingsSection { border-top: 1rem solid rgba(255,255,255,.16); margin-top: 12rem; padding-top: 10rem; }
 .sectionTitle { font-size: 15rem; font-weight: 600; margin-bottom: 9rem; color: #a3e5f5; }
 .compactLabel { font-size: 12rem; opacity: .76; margin-top: 5rem; margin-bottom: 4rem; }

@@ -12,6 +12,7 @@ namespace RoadNameGenerator.Systems
     public partial class RoadNamingSystem
     {
         private enum RampDirection { Unknown, Exit, Entrance }
+        private readonly HashSet<Entity> m_PendingRampNames = new();
 
         private readonly struct HighwayRampConnection
         {
@@ -50,7 +51,12 @@ namespace RoadNameGenerator.Systems
             bool narrow = ContainsAny(lower, "1 lane", "1-lane", "one lane", "one-lane",
                 "1lane", "1l1w", "1l 1w", "single lane", "single-lane");
             bool oneWay = ContainsAny(lower, "one way", "one-way", "oneway", "1w");
-            return narrow && oneWay;
+
+            // Vanilla CS2 uses "Freeway 1 Lane" without "Oneway" in the
+            // prefab name. A one-lane highway can serve as a connecting ramp,
+            // but must be physically attached to a real motorway before naming.
+            bool freeway = ContainsAny(lower, "freeway", "highway", "motorway", "expressway");
+            return narrow && (oneWay || freeway);
         }
 
         private IEnumerable<(Entity Edge, Entity Junction)> GetAdjacentRoadEdges(Entity aggregate)
@@ -89,10 +95,11 @@ namespace RoadNameGenerator.Systems
             }
         }
 
-        private List<HighwayRampConnection> FindHighwayRampConnections(Entity ramp)
+        private List<HighwayRampConnection> FindHighwayRampConnections(
+            Entity ramp, out HashSet<Entity> visited)
         {
             var result = new List<HighwayRampConnection>();
-            var visited = new HashSet<Entity> { ramp };
+            visited = new HashSet<Entity> { ramp };
             var queue = new List<(Entity Aggregate, int Depth)> { (ramp, 0) };
             int nextIndex = 0;
 
@@ -152,30 +159,82 @@ namespace RoadNameGenerator.Systems
         // direction. Edge.m_Start/m_End alone does NOT reliably express traffic flow.
         private RampDirection GetDirectionAtHighway(Entity rampEdge, Entity junction)
         {
-            // Do not infer traffic direction from Edge.m_Start / m_End:
-            // those fields describe geometry, not which way cars can travel.
-            // Until a verified directional lane API is available we use the
-            // safe generic label rather than calling an on-ramp an off-ramp.
-            return RampDirection.Unknown;
+            if (!IsUsableEntity(rampEdge) ||
+                !EntityManager.HasComponent<Edge>(rampEdge) ||
+                !EntityManager.HasBuffer<SubLane>(rampEdge))
+                return RampDirection.Unknown;
+
+            Edge edge = EntityManager.GetComponentData<Edge>(rampEdge);
+            bool atStart = edge.m_Start == junction;
+            bool atEnd = edge.m_End == junction;
+            if (atStart == atEnd)
+                return RampDirection.Unknown;
+
+            bool forward = false;
+            bool backward = false;
+            var subLanes = EntityManager.GetBuffer<SubLane>(rampEdge, true);
+            for (int i = 0; i < subLanes.Length; i++)
+            {
+                Entity subLane = subLanes[i].m_SubLane;
+                if (!IsUsableEntity(subLane) ||
+                    !EntityManager.HasComponent<CarLane>(subLane) ||
+                    !EntityManager.HasComponent<Lane>(subLane))
+                    continue;
+
+                Lane lane = EntityManager.GetComponentData<Lane>(subLane);
+                int startOwner = lane.m_StartNode.GetOwnerIndex();
+                int endOwner = lane.m_EndNode.GetOwnerIndex();
+
+                // Vehicle lane PathNodes encode direction, while Edge.m_Start
+                // and m_End only describe how the road geometry was created.
+                if (startOwner == edge.m_Start.Index && endOwner == edge.m_End.Index)
+                    forward = true;
+                else if (startOwner == edge.m_End.Index && endOwner == edge.m_Start.Index)
+                    backward = true;
+                else if (startOwner == rampEdge.Index && endOwner == rampEdge.Index)
+                {
+                    float delta = lane.m_EndNode.GetCurvePos() - lane.m_StartNode.GetCurvePos();
+                    if (delta > 0.5f) forward = true;
+                    else if (delta < -0.5f) backward = true;
+                }
+            }
+
+            if (forward == backward)
+                return RampDirection.Unknown;
+
+            // Driving away from the motorway is an exit, towards it an entry.
+            bool awayFromMotorway = atStart ? forward : backward;
+            return awayFromMotorway ? RampDirection.Exit : RampDirection.Entrance;
         }
 
-        private bool TryGetRampParent(Entity road, out string highwayName, out RampDirection direction)
+        private bool TryGetRampParent(Entity road, out string highwayName,
+            out RampDirection direction, out HashSet<Entity> group)
         {
             highwayName = string.Empty;
             direction = RampDirection.Unknown;
+            group = new HashSet<Entity>();
             if (!IsHighwayRampCandidate(road))
                 return false;
 
-            var connections = FindHighwayRampConnections(road);
+            var connections = FindHighwayRampConnections(road, out group);
             if (connections.Count == 0)
                 return false;
 
-            // Choose the nearest main highway; do not use an arbitrary road at the
-            // opposite end of a multi-highway interchange.
+            // If the ramp touches more than one motorway, prefer the highway
+            // the traffic LEAVES (exit) instead of the one it enters. We only
+            // fall back to distance if lane direction cannot be determined.
             connections.Sort((a, b) =>
             {
-                int byDepth = a.Depth.CompareTo(b.Depth);
-                return byDepth != 0 ? byDepth : a.Highway.Index.CompareTo(b.Highway.Index);
+                RampDirection flowA = GetDirectionAtHighway(a.RampEdge, a.Junction);
+                RampDirection flowB = GetDirectionAtHighway(b.RampEdge, b.Junction);
+                int rankA = flowA == RampDirection.Exit ? 0 :
+                    flowA == RampDirection.Entrance ? 1 : 2;
+                int rankB = flowB == RampDirection.Exit ? 0 :
+                    flowB == RampDirection.Entrance ? 1 : 2;
+                int ranked = rankA.CompareTo(rankB);
+                if (ranked != 0) return ranked;
+                int depth = a.Depth.CompareTo(b.Depth);
+                return depth != 0 ? depth : a.Highway.Index.CompareTo(b.Highway.Index);
             });
 
             HighwayRampConnection selected = connections[0];
@@ -183,30 +242,32 @@ namespace RoadNameGenerator.Systems
             if (string.IsNullOrWhiteSpace(selectedName))
                 return false;
 
-            highwayName = selectedName.Trim();
-            RampDirection detected = RampDirection.Unknown;
-            bool ambiguous = false;
+            selectedName = selectedName.Trim();
+            RampDirection selectedDirection =
+                GetDirectionAtHighway(selected.RampEdge, selected.Junction);
 
-            foreach (HighwayRampConnection connection in connections)
+            // Multiple equidistant highway names without usable directional
+            // evidence are ambiguous. Do not attach a ramp to a random road.
+            if (selectedDirection == RampDirection.Unknown)
             {
-                string connectedName = m_NameSystem.GetRenderedLabelName(connection.Highway);
-                if (!string.Equals(connectedName?.Trim(), highwayName, StringComparison.OrdinalIgnoreCase))
+                foreach (HighwayRampConnection connection in connections)
                 {
-                    ambiguous = true;
-                    continue;
+                    if (connection.Depth != selected.Depth)
+                        continue;
+                    string otherName = m_NameSystem.GetRenderedLabelName(connection.Highway);
+                    if (!string.IsNullOrWhiteSpace(otherName) &&
+                        !string.Equals(otherName.Trim(), selectedName,
+                            StringComparison.OrdinalIgnoreCase))
+                    {
+                        Mod.LogDetailed($"Ramp {road.Index}: conflicting motorway connections; " +
+                            "waiting for an unambiguous parent instead of assigning the wrong name.");
+                        return false;
+                    }
                 }
-
-                // Direction is only reliable at the actual connection, not on a
-                // different segment further down the ramp chain.
-                RampDirection current = GetDirectionAtHighway(connection.RampEdge, connection.Junction);
-                if (current == RampDirection.Unknown)
-                    continue;
-                if (detected != RampDirection.Unknown && current != detected)
-                    ambiguous = true;
-                detected = current;
             }
 
-            direction = ambiguous ? RampDirection.Unknown : detected;
+            highwayName = selectedName;
+            direction = selectedDirection;
             return true;
         }
 
@@ -283,14 +344,96 @@ namespace RoadNameGenerator.Systems
             };
         }
 
+        private static bool HasRampName(string candidate, string motorway, string label)
+        {
+            string prefix = motorway + " " + label + " ";
+            return candidate.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) &&
+                int.TryParse(candidate.Substring(prefix.Length), out int number) &&
+                number > 0;
+        }
+
+        // Existing pieces of the SAME physical ramp should reuse its number,
+        // even if CS2 splits the aggregate while editing a junction.
+        private bool TryGetGroupRampName(Entity current, HashSet<Entity> group,
+            string motorwayName, string label, out string existingName)
+        {
+            existingName = string.Empty;
+            foreach (Entity member in group)
+            {
+                if (member == current || !IsUsableEntity(member))
+                    continue;
+                string candidate = m_NameSystem.GetRenderedLabelName(member);
+                if (HasRampName(candidate, motorwayName, label) &&
+                    IsAutomaticallyAssignedName(member, candidate))
+                {
+                    existingName = candidate;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ProcessPendingRampNames()
+        {
+            if (!(Mod.Settings?.AutomaticallyRenameNewRoads ?? true) ||
+                m_PendingRampNames.Count == 0)
+                return;
+
+            var completed = new List<Entity>();
+            foreach (Entity road in m_PendingRampNames)
+            {
+                if (!IsUsableEntity(road) || !IsRoadAggregate(road))
+                {
+                    completed.Add(road);
+                    continue;
+                }
+
+                string previous = m_NameSystem.GetRenderedLabelName(road);
+                bool hasCustom = EntityManager.HasComponent<CustomName>(road);
+                if (hasCustom && !IsAutomaticallyAssignedName(road, previous))
+                {
+                    completed.Add(road);
+                    continue;
+                }
+
+                if (!IsHighwayRampCandidate(road))
+                {
+                    completed.Add(road);
+                    continue;
+                }
+
+                if (!TryCreateRampName(road, out string newName))
+                    continue;
+
+                if (!string.Equals(newName, previous, StringComparison.Ordinal))
+                {
+                    m_NameSystem.SetCustomName(road, newName);
+                    RememberAutomaticallyAssignedName(road, newName);
+                    RegisterExistingNameInAllGenerators(newName);
+                    Mod.LogDetailed($"Deferred ramp named: Entity {road.Index}, " +
+                        $"Old name: \"{previous}\", new name: \"{newName}\".");
+                }
+                completed.Add(road);
+            }
+
+            foreach (Entity road in completed)
+                m_PendingRampNames.Remove(road);
+        }
+
         private bool TryCreateRampName(Entity aggregate, out string name)
         {
             name = string.Empty;
-            if (!TryGetRampParent(aggregate, out string highwayName, out RampDirection direction))
+            if (!TryGetRampParent(aggregate, out string highwayName,
+                    out RampDirection direction, out HashSet<Entity> group))
                 return false;
 
             NamingStyle style = Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American;
             string label = GetRampLabel(style, direction);
+            if (TryGetGroupRampName(aggregate, group, highwayName, label, out string existing))
+            {
+                name = existing;
+                return true;
+            }
             for (int number = 1; number <= 4096; number++)
             {
                 string suffix = $" {label} {number}";

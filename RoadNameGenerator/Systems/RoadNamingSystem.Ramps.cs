@@ -543,6 +543,40 @@ namespace RoadNameGenerator.Systems
             return false;
         }
 
+        private static bool TryExtractRampNumber(
+            string roadName, NamingStyle style, out int number)
+        {
+            number = 0;
+            if (string.IsNullOrWhiteSpace(roadName))
+                return false;
+
+            // Preserve the existing numbered exit after an automatic
+            // motorway rename, without giving a fresh random number.
+            RampDirection[] kinds =
+            {
+                RampDirection.Unknown,
+                RampDirection.Exit,
+                RampDirection.Entrance
+            };
+
+            foreach (RampDirection kind in kinds)
+            {
+                string token = " " + GetRampLabel(style, kind) + " ";
+                int position = roadName.LastIndexOf(token, StringComparison.OrdinalIgnoreCase);
+                if (position < 1)
+                    continue;
+
+                string suffix = roadName.Substring(position + token.Length);
+                if (int.TryParse(suffix, out int parsed) && parsed > 0 && parsed <= 4096)
+                {
+                    number = parsed;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void ScheduleTrackedRampRefresh()
         {
             // Renamed motorways should propagate their new names to ramps.
@@ -651,6 +685,23 @@ namespace RoadNameGenerator.Systems
                 name = existing;
                 return true;
             }
+
+            if (IsAutomaticallyAssignedName(aggregate, currentName) &&
+                TryExtractRampNumber(currentName, style, out int previousNumber))
+            {
+                string previousSuffix = $" {label} {previousNumber}";
+                if (highwayName.Length + previousSuffix.Length <= 128)
+                {
+                    string retained = highwayName + previousSuffix;
+                    if (!m_UsedRoadNames.Contains(retained) &&
+                        !RoadNameExclusionList.IsExcluded(retained))
+                    {
+                        name = retained;
+                        return true;
+                    }
+                }
+            }
+
             for (int number = 1; number <= 4096; number++)
             {
                 string suffix = $" {label} {number}";

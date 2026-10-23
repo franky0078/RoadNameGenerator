@@ -14,6 +14,7 @@ namespace RoadNameGenerator.Systems
         private enum RampDirection { Unknown, Exit, Entrance }
         private readonly HashSet<Entity> m_PendingRampNames = new();
         private int m_PendingRampCursor;
+        private readonly HashSet<Entity> m_AmbiguousRampsLogged = new();
 
         private readonly struct HighwayRampConnection
         {
@@ -260,15 +261,20 @@ namespace RoadNameGenerator.Systems
                         !string.Equals(otherName.Trim(), selectedName,
                             StringComparison.OrdinalIgnoreCase))
                     {
-                        Mod.LogDetailed($"Ramp {road.Index}: conflicting motorway connections; " +
-                            "waiting for an unambiguous parent instead of assigning the wrong name.");
+                        if (m_AmbiguousRampsLogged.Add(road))
+                            Mod.LogDetailed($"Ramp {road.Index}: conflicting motorway connections; " +
+                                "waiting for an unambiguous parent instead of assigning the wrong name.");
                         return false;
                     }
                 }
             }
 
+            m_AmbiguousRampsLogged.Remove(road);
             highwayName = selectedName;
             direction = selectedDirection;
+            Mod.LogDetailed($"Ramp {road.Index}: linked to motorway " +
+                $"{selected.Highway.Index} (\"{highwayName}\"), " +
+                $"direction: {direction}, group segments: {group.Count}.");
             return true;
         }
 

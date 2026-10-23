@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Component, ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ModRegistrar } from "cs2/modding";
 import { bindValue, trigger, useValue } from "cs2/api";
@@ -160,7 +160,7 @@ function NameSourceDropdown({ label, hint, items, selected, onSelect }: {
                         top: `${offset / items.length * 100}%` }} />
                 </div>
             </div>
-        </div>, document.body)}
+        </div>, document.body)}</SettingsErrorBoundary>}
     </>;
 }
 
@@ -177,6 +177,33 @@ function SettingsToggle({ label, checked, onChange }: {
             <span className={styles.toggleKnob} />
         </span>
     </button>;
+}
+
+// Isolate rendering failures in the optional settings surface. The main
+// road-naming panel must remain available even if the options UI throws.
+class SettingsErrorBoundary extends Component<
+    { children: ReactNode; onDismiss: () => void },
+    { failed: boolean }
+> {
+    state = { failed: false };
+
+    static getDerivedStateFromError() {
+        return { failed: true };
+    }
+
+    componentDidCatch(error: Error) {
+        console.error("[RoadNameGenerator] Settings UI failed:", error);
+    }
+
+    render() {
+        if (this.state.failed) {
+            return <div className={styles.settingsFallback}>
+                <span>Road Name Generator: Settings UI error</span>
+                <button type="button" onClick={this.props.onDismiss}>Close</button>
+            </div>;
+        }
+        return this.props.children;
+    }
 }
 
 function RoadNamesPanel() {
@@ -301,7 +328,7 @@ function RoadNamesPanel() {
                 </div>
             </div>
         </Panel>
-        {settingsOpen && createPortal(<div ref={settingsRef} className={styles.settingsFloating}
+        {settingsOpen && <SettingsErrorBoundary onDismiss={() => setSettingsOpen(false)}>{createPortal(<div ref={settingsRef} className={styles.settingsFloating}
             style={{
                 left: settingsPosition.left,
                 top: settingsPosition.top,

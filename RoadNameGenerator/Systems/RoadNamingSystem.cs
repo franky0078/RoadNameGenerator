@@ -821,6 +821,10 @@ namespace RoadNameGenerator.Systems
                 int renamedRoadCount = 0;
                 int registeredWithoutRenameCount = 0;
 
+                // Main motorways must receive their names before their ramps.
+                unknownRoads.Sort((a, b) =>
+                    IsHighwayRampCandidate(a).CompareTo(IsHighwayRampCandidate(b)));
+
                 foreach (Entity aggregateEntity in unknownRoads)
                 {
                     m_KnownRoads.Add(aggregateEntity);
@@ -858,8 +862,22 @@ namespace RoadNameGenerator.Systems
                     RoadCategory category =
                         DetectRoadCategory(aggregateEntity);
 
-                    string newName =
-                        nameGenerator.Generate(category);
+                    bool isRamp = IsHighwayRampCandidate(aggregateEntity);
+                    string newName;
+                    if (isRamp)
+                    {
+                        if (!TryCreateRampName(aggregateEntity, out newName))
+                        {
+                            // No motorway is connected (yet). Do not invent a
+                            // separate motorway name for a possible ramp.
+                            RegisterExistingNameInAllGenerators(currentName);
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        newName = nameGenerator.Generate(category);
+                    }
 
                     if (string.IsNullOrWhiteSpace(newName))
                     {
@@ -970,8 +988,20 @@ namespace RoadNameGenerator.Systems
                         continue;
                     }
 
-                    string newName =
-                        nameGenerator.Generate(category);
+                    bool isRamp = IsHighwayRampCandidate(aggregateEntity);
+                    string newName;
+                    if (isRamp)
+                    {
+                        if (!TryCreateRampName(aggregateEntity, out newName))
+                        {
+                            preservedRoadCount++;
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        newName = nameGenerator.Generate(category);
+                    }
 
                     if (string.IsNullOrWhiteSpace(newName))
                     {

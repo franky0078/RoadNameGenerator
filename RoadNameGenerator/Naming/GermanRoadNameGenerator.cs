@@ -277,16 +277,23 @@ namespace RoadNameGenerator.Naming
             };
         }
 
+        // Reuse arrays rather than allocating suffix candidates each time.
+        private static readonly string[] s_DirtSuffixes = { "weg", "weg", "pfad" };
+        private static readonly string[] s_AlleySuffixes = { "gasse", "gasse", "gang" };
+        private static readonly string[] s_ResidentialSuffixes = { "weg", "weg", "straße", "ring" };
+        private static readonly string[] s_StandardSuffixes = { "straße", "straße", "straße", "weg" };
+        private static readonly string[] s_AvenueSuffixes = { "allee", "allee", "ring" };
+
         private static string GetNaturalGermanSuffix(
             RoadCategory category, string baseName, string[] suffixes, Random random)
         {
             string[] natural = category switch
             {
-                RoadCategory.Dirt => new[] { "weg", "weg", "pfad" },
-                RoadCategory.Alley => new[] { "gasse", "gasse", "gang" },
-                RoadCategory.Residential => new[] { "weg", "weg", "straße", "ring" },
-                RoadCategory.Standard => new[] { "straße", "straße", "straße", "weg" },
-                RoadCategory.Avenue => new[] { "allee", "allee", "ring" },
+                RoadCategory.Dirt => s_DirtSuffixes,
+                RoadCategory.Alley => s_AlleySuffixes,
+                RoadCategory.Residential => s_ResidentialSuffixes,
+                RoadCategory.Standard => s_StandardSuffixes,
+                RoadCategory.Avenue => s_AvenueSuffixes,
                 _ => suffixes
             };
 

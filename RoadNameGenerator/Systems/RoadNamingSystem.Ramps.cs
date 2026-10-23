@@ -93,14 +93,14 @@ namespace RoadNameGenerator.Systems
         {
             var result = new List<HighwayRampConnection>();
             var visited = new HashSet<Entity> { ramp };
-            var queue = new Queue<(Entity Aggregate, int Depth)>();
-            queue.Enqueue((ramp, 0));
+            var queue = new List<(Entity Aggregate, int Depth)> { (ramp, 0) };
+            int nextIndex = 0;
 
             // Follow a small connected group of ramp aggregates (some junctions split one
             // physical ramp into several road names). Never traverse an ordinary highway.
-            while (queue.Count != 0 && visited.Count <= 48)
+            while (nextIndex < queue.Count && visited.Count <= 48)
             {
-                var current = queue.Dequeue();
+                var current = queue[nextIndex++];
                 if (!EntityManager.HasBuffer<AggregateElement>(current.Aggregate))
                     continue;
 
@@ -135,7 +135,7 @@ namespace RoadNameGenerator.Systems
                             if (IsHighwayRampCandidate(adjacent))
                             {
                                 if (current.Depth < 8 && visited.Add(adjacent))
-                                    queue.Enqueue((adjacent, current.Depth + 1));
+                                    queue.Add((adjacent, current.Depth + 1));
                             }
                             else if (DetectRoadCategory(adjacent) == RoadCategory.Highway)
                             {

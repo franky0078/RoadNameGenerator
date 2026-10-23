@@ -123,8 +123,12 @@ namespace RoadNameGenerator.Naming
             {
                 string result;
 
+                // Prefer curated, natural German street names. Random
+                // compounds remain available for large cities, but avoid
+                // implausible combinations like "Sonnenunterganghof".
+                int curatedChance = category == RoadCategory.Avenue ? 92 : 88;
                 if (specialNames.Length > 0 &&
-                    m_Random.Next(100) < 45)
+                    m_Random.Next(100) < curatedChance)
                 {
                     result =
                         specialNames[
@@ -143,11 +147,7 @@ namespace RoadNameGenerator.Naming
                         ];
 
                     string suffix =
-                        GetCompatibleSuffix(
-                            baseName,
-                            suffixes,
-                            m_Random
-                        );
+                        GetNaturalGermanSuffix(category, baseName, suffixes, m_Random);
 
                     result =
                         ComposeGermanRoadName(
@@ -187,8 +187,8 @@ namespace RoadNameGenerator.Naming
                 }
                 else
                 {
-                    result = GermanRoadNames.NamedHighwayNames[
-                        m_Random.Next(GermanRoadNames.NamedHighwayNames.Length)
+                    result = s_RealisticMotorwayNames[
+                        m_Random.Next(s_RealisticMotorwayNames.Length)
                     ];
                 }
 
@@ -276,6 +276,31 @@ namespace RoadNameGenerator.Naming
                     GermanRoadNames.StandardSpecialNames
             };
         }
+
+        private static string GetNaturalGermanSuffix(
+            RoadCategory category, string baseName, string[] suffixes, Random random)
+        {
+            string[] natural = category switch
+            {
+                RoadCategory.Dirt => new[] { "weg", "weg", "pfad" },
+                RoadCategory.Alley => new[] { "gasse", "gasse", "gang" },
+                RoadCategory.Residential => new[] { "weg", "weg", "straße", "ring" },
+                RoadCategory.Standard => new[] { "straße", "straße", "straße", "weg" },
+                RoadCategory.Avenue => new[] { "allee", "allee", "ring" },
+                _ => suffixes
+            };
+
+            return GetCompatibleSuffix(baseName, natural, random);
+        }
+
+        private static readonly string[] s_RealisticMotorwayNames =
+        {
+            "Berliner Ring", "Münchner Ring", "Ruhrschnellweg", "Sauerlandlinie",
+            "Hansalinie", "Eifelautobahn", "Moseltalautobahn", "Rheintalautobahn",
+            "Bodenseeautobahn", "Elbtalautobahn", "Donautalautobahn",
+            "Mainfrankenautobahn", "Thüringer-Wald-Autobahn", "Frankenwaldautobahn",
+            "Schwarzwaldautobahn", "Harzautobahn", "Rhönautobahn"
+        };
 
         private static string ComposeGermanRoadName(
             string baseName,

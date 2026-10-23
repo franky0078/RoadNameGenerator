@@ -19,10 +19,13 @@
 .icon { width: 28rem; height: 28rem; }
 // Preserve the game's native absolute positioning of draggable Panels.
 // position: relative here overrides CS2 Panel positioning and pushes the window off-screen.
-// Both windows use the same game-themed surface, including Cohtml's blur.
+// Keep literal values here: the standalone portal cannot rely on the game's
+// scoped theme variables or CSS var() fallbacks in Cohtml. Share this surface
+// with the main panel so both windows retain the same tint and blur.
 .panel, .settingsFloating {
-    background-color: var(--panelColorNormal, rgba(53, 65, 66, .65));
-    backdrop-filter: blur(var(--panelBlur, 8rem));
+    background-color: rgba(53, 65, 66, .65);
+    backdrop-filter: blur(12rem);
+    -webkit-backdrop-filter: blur(12rem);
     border: 0;
     border-radius: 12rem;
     color: #fff;
@@ -76,14 +79,14 @@
     box-sizing: border-box;
     padding: 0 42rem;
     border-radius: 12rem 12rem 0 0;
-    background-color: var(--panelColorDark, rgba(6, 17, 21, .94));
+    background-color: rgba(6, 17, 21, .98);
     cursor: move;
     user-select: none;
 }
 .windowTitle {
     flex: 1;
     text-align: center;
-    color: var(--accentColorNormal, #4cbce2);
+    color: #4cbce2;
     font-size: 14rem;
     font-weight: normal;
     text-transform: uppercase;

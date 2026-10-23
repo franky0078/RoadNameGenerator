@@ -102,10 +102,12 @@ namespace RoadNameGenerator.Systems
             return true;
         }
 
-        // At a three-way motorway junction the two mainline edges usually
-        // continue almost straight, while the side road departs at an angle.
-        // Only the SIDE edge qualifies, not either mainline edge. Standalone
-        // two-lane highways therefore keep their own generated names.
+        // Identify the SIDE edge of a two-lane motorway fork or merge.
+        // Prefer CS2's road aggregation: the two uninterrupted mainline
+        // edges normally share an aggregate, while the slip road does not.
+        // A geometry-only fallback handles junctions split across aggregates.
+        // In both cases we reject a candidate that continues on its own
+        // aggregate at the same node (the mainline must remain a mainline).
         private bool IsTwoLaneMotorwaySideBranch(Entity aggregate)
         {
             if (!EntityManager.HasBuffer<AggregateElement>(aggregate))
@@ -123,16 +125,21 @@ namespace RoadNameGenerator.Systems
                 Entity[] nodes = { edge.m_Start, edge.m_End };
                 foreach (Entity node in nodes)
                 {
-                    if (!IsUsableEntity(node) || !EntityManager.HasBuffer<ConnectedEdge>(node) ||
+                    if (!IsUsableEntity(node) ||
+                        !EntityManager.HasBuffer<ConnectedEdge>(node) ||
                         !TryGetOutwardTangent(candidate, node, out float3 candidateVector))
                         continue;
 
-                    var otherVectors = new List<float3>(4);
+                    var directions = new List<(Entity Road, float3 Tangent)>(4);
+                    var seen = new HashSet<Entity>();
                     var adjacent = EntityManager.GetBuffer<ConnectedEdge>(node, true);
-                    for (int i = 0; i < adjacent.Length && otherVectors.Count < 8; i++)
+                    bool selfContinuation = false;
+
+                    for (int i = 0; i < adjacent.Length; i++)
                     {
                         Entity otherEdge = adjacent[i].m_Edge;
                         if (otherEdge == candidate || !IsUsableEntity(otherEdge) ||
+                            !seen.Add(otherEdge) ||
                             !EntityManager.HasComponent<Road>(otherEdge) ||
                             !EntityManager.HasComponent<Aggregated>(otherEdge))
                             continue;
@@ -141,30 +148,56 @@ namespace RoadNameGenerator.Systems
                             EntityManager.GetComponentData<Aggregated>(otherEdge).m_Aggregate;
                         if (!IsUsableEntity(otherAggregate) ||
                             !IsRoadAggregate(otherAggregate) ||
-                            DetectRoadCategory(otherAggregate) != RoadCategory.Highway ||
-                            !TryGetOutwardTangent(otherEdge, node, out float3 vector))
+                            DetectRoadCategory(otherAggregate) != RoadCategory.Highway)
                             continue;
 
-                        otherVectors.Add(vector);
+                        if (otherAggregate == aggregate)
+                        {
+                            selfContinuation = true;
+                            break;
+                        }
+
+                        if (TryGetOutwardTangent(otherEdge, node, out float3 vector))
+                            directions.Add((otherAggregate, vector));
                     }
 
-                    for (int i = 0; i < otherVectors.Count; i++)
-                    {
-                        for (int j = i + 1; j < otherVectors.Count; j++)
-                        {
-                            float continuation = math.dot(otherVectors[i], otherVectors[j]);
-                            float branchMatch = math.min(
-                                math.dot(candidateVector, otherVectors[i]),
-                                math.dot(candidateVector, otherVectors[j]));
+                    // A mainline normally has another edge of the SAME aggregate
+                    // continuing through the junction. Never rename it as a ramp.
+                    if (selfContinuation || directions.Count < 2)
+                        continue;
 
-                            // A strong straight-through continuation, visibly
-                            // straighter than either pairing with the candidate.
-                            if (continuation < -0.96f && branchMatch > continuation + 0.025f)
+                    for (int i = 0; i < directions.Count; i++)
+                    {
+                        for (int j = i + 1; j < directions.Count; j++)
+                        {
+                            float straight = -math.dot(
+                                directions[i].Tangent, directions[j].Tangent);
+                            float candidatePairStraightness = math.max(
+                                -math.dot(candidateVector, directions[i].Tangent),
+                                -math.dot(candidateVector, directions[j].Tangent));
+
+                            bool sameMainlineAggregate =
+                                directions[i].Road == directions[j].Road;
+
+                            // Aggregation is decisive when the highway is visibly
+                            // straight through. Without it, require the mainline
+                            // to be distinctly straighter than both alternatives.
+                            if (sameMainlineAggregate)
+                            {
+                                if (straight > 0.65f &&
+                                    straight > candidatePairStraightness + 0.005f)
+                                    return true;
+                            }
+                            else if (straight > 0.86f &&
+                                     straight > candidatePairStraightness + 0.10f)
+                            {
                                 return true;
+                            }
                         }
                     }
                 }
             }
+
             return false;
         }
 

@@ -167,60 +167,29 @@ namespace RoadNameGenerator.Naming
 
         private string GenerateHighwayName()
         {
-            /* Verteilung:
-            * 70 % Routennummern
-            * 30 % benannte Fernstraßen
-            */
+            // German Bundesautobahnen are numbered with A.
+            // Keep some named motorways for variety, but never generate B/L/K
+            // road numbers for a Highway prefab.
+            // Distribution: 95 % Autobahn numbers, 5 % named motorways.
             for (int attempt = 0; attempt < 200; attempt++)
             {
                 string result;
-
-                if (m_Random.Next(100) < 70)
+                if (m_Random.Next(100) < 95)
                 {
-                    int routeType =
-                        m_Random.Next(100);
+                    int range = m_Random.Next(100);
+                    int number = range < 15
+                        ? m_Random.Next(1, 10)
+                        : range < 85
+                            ? m_Random.Next(10, 100)
+                            : m_Random.Next(100, 1000);
 
-                    if (routeType < 50)
-                    {
-
-                        // Autobahnen.
-
-                        result =
-                            $"A{m_Random.Next(1, 100)}";
-                    }
-                    else if (routeType < 82)
-                    {
-
-                        // Bundesstraßen.
-
-                        result =
-                            $"B{m_Random.Next(1, 1000)}";
-                    }
-                    else if (routeType < 95)
-                    {
-
-                        // Landstraßen.
-
-                        result =
-                            $"L{m_Random.Next(1, 1000)}";
-                    }
-                    else
-                    {
-
-                        // Kreisstraßen.
-
-                        result =
-                            $"K{m_Random.Next(1, 1000)}";
-                    }
+                    result = $"A{number}";
                 }
                 else
                 {
-                    result =
-                        GermanRoadNames.NamedHighwayNames[
-                            m_Random.Next(
-                                GermanRoadNames.NamedHighwayNames.Length
-                            )
-                        ];
+                    result = GermanRoadNames.NamedHighwayNames[
+                        m_Random.Next(GermanRoadNames.NamedHighwayNames.Length)
+                    ];
                 }
 
                 if (m_UsedNames.Add(result))
@@ -229,9 +198,8 @@ namespace RoadNameGenerator.Naming
                 }
             }
 
-            return GenerateFallbackName(
-                RoadCategory.Highway
-            );
+            // If all normal attempts collide, retain the existing A-numbered fallback.
+            return GenerateFallbackName(RoadCategory.Highway);
         }
 
         private static string[] GetBaseNames(

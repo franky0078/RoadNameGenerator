@@ -89,7 +89,7 @@
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="2.3.0" />
+	<ModVersion Value="2.4.0" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />

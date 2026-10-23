@@ -39,8 +39,9 @@ namespace RoadNameGenerator.Systems
                 return false;
 
             var data = EntityManager.GetComponentData<AutomaticallyAssignedRoadName>(road);
-            if (EntityManager.HasComponent<CustomName>(road) &&
-                string.Equals(data.Name.ToString(), currentName, StringComparison.Ordinal))
+            // NameSystem can update the label before CustomName is visible.
+            // Keep the mod marker as long as its recorded label still matches.
+            if (string.Equals(data.Name.ToString(), currentName, StringComparison.Ordinal))
                 return true;
 
             ForgetAutomaticallyAssignedName(road);

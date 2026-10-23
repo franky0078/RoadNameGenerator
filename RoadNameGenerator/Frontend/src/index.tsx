@@ -20,6 +20,10 @@ const excludedCount$ = bindValue<number>(group, "excludedCount", 0);
 const exclusionError$ = bindValue<boolean>(group, "exclusionError", false);
 const namingStyle$ = bindValue<number>(group, "namingStyle", 0);
 const customMode$ = bindValue<number>(group, "customMode", 0);
+const autoNaming$ = bindValue<boolean>(group, "autoNaming", true);
+const existingMode$ = bindValue<number>(group, "existingMode", 0);
+const overwriteNames$ = bindValue<boolean>(group, "overwriteNames", false);
+const detailedLogging$ = bindValue<boolean>(group, "detailedLogging", false);
 // Explicit values match the existing saved C# enum; keep Swiss variants together.
 const namingStyles = [
     { value: 0, key: "American" }, { value: 1, key: "Australian" },
@@ -174,7 +178,12 @@ function RoadNamesPanel() {
     const exclusionsEnabled = useValue(exclusionsEnabled$);
     const exclusionError = useValue(exclusionError$);
     const customMode = useValue(customMode$);
-    // Keep hooks unconditional when the selected road or window changes.
+    const autoNaming = useValue(autoNaming$);
+    const existingMode = useValue(existingMode$);
+    const overwriteNames = useValue(overwriteNames$);
+    const detailedLogging = useValue(detailedLogging$);
+    const [settingsOpen, setSettingsOpen] = useState(false);
+    const [confirmScan, setConfirmScan] = useState(false);
     const suggestions = [useValue(suggestion0$), useValue(suggestion1$),
         useValue(suggestion2$), useValue(suggestion3$), useValue(suggestion4$)].filter(Boolean);
     const { translate } = useLocalization();
@@ -186,55 +195,122 @@ function RoadNamesPanel() {
         ? t("MixedSource") : styleName(selectedStyle.key);
     const sourceItems = [{ value: -1, label: t("CustomSource") },
         ...namingStyles.map(style => ({ value: style.value, label: styleName(style.key) }))];
+    const scanModes = [t("ScanGameOnly"), t("ScanNonMatching"), t("ScanAll")];
+    useEffect(() => {
+        if (!open) { setSettingsOpen(false); setConfirmScan(false); }
+    }, [open]);
     if (!show || !open) return null;
 
-    return <Panel className={styles.panel} draggable initialPosition={{ x: 0.65, y: 0.2 }}
-        header={t("Title")} onClose={() => trigger(group, "close")}>
-        <div className={styles.content}>
-            <div className={styles.styleRow}>
-                <span className={styles.label}>{t("NamingStyle")}</span>
-                <NameSourceDropdown label={sourceName} hint={t("NamingStyleHint")}
-                    items={sourceItems} selected={customMode === 1 ? -1 : customMode === 0 ? namingStyle : -2}
-                    onSelect={value => value === -1 ? trigger(group, "setCustomMode", 1)
-                        : trigger(group, "setNamingStyle", value)} />
-            </div>
-            {hasRoad ? <>
-                <div className={styles.label}>{t("CurrentName")}</div>
-                <div className={styles.currentName}>{roadName}</div>
-                <div className={styles.label}>{t("Suggestions")}</div>
-                {suggestions.length > 0 ? suggestions.map(name =>
-                    <Tooltip key={`${token}:${name}`} tooltip={t("ApplyHint")}>
-                        <button className={styles.suggestion} onClick={() => trigger(group, "apply", token, name)}>
-                            <span>{name}</span><span className={styles.apply}>{t("Apply")}</span>
+    return <>
+        <Panel className={styles.panel} draggable initialPosition={{ x: 0.65, y: 0.2 }}
+            header={t("Title")} onClose={() => {
+                setSettingsOpen(false);
+                setConfirmScan(false);
+                trigger(group, "close");
+            }}>
+            <div className={styles.content}>
+                <div className={styles.styleRow}>
+                    <span className={styles.label}>{t("NamingStyle")}</span>
+                    <NameSourceDropdown label={sourceName} hint={t("NamingStyleHint")}
+                        items={sourceItems} selected={customMode === 1 ? -1 : customMode === 0 ? namingStyle : -2}
+                        onSelect={value => value === -1 ? trigger(group, "setCustomMode", 1)
+                            : trigger(group, "setNamingStyle", value)} />
+                    <Tooltip tooltip={t("SettingsTitle")}>
+                        <button className={styles.gearButton} type="button"
+                            aria-label={t("SettingsTitle")} aria-expanded={settingsOpen}
+                            onClick={() => { setSettingsOpen(value => !value); setConfirmScan(false); }}>
+                            <svg viewBox="0 0 24 24" width="20rem" height="20rem"
+                                fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M12 3l1.7 2.1 2.6-.4.9 2.5 2.6.8-.5 2.6 1.6 2-1.6 2 .5 2.6-2.6.8-.9 2.5-2.6-.4L12 22l-1.7-2.1-2.6.4-.9-2.5-2.6-.8.5-2.6L3 12l1.7-2-.5-2.6 2.6-.8.9-2.5 2.6.4L12 3z"/>
+                                <circle cx="12" cy="12" r="3.1" />
+                            </svg>
                         </button>
-                    </Tooltip>) : <div className={styles.hint}>{t(excludedCount > 0 ? "ExclusionsUnavailable" : "NoSuggestions")}</div>}
-                <button className={styles.button} onClick={() => trigger(group, "refresh")}>{t("Refresh")}</button>
-            </> : <div className={styles.hint}>{t("SelectRoad")}</div>}
-            {message && <div className={styles.message}>{translate(message) ?? message}</div>}
-            <div className={styles.customSection}>
-                <div className={styles.label}>{count > 0 ? `${t("CustomList")} (${count})` : t("NoList")}</div>
-                {count > 0 && <div className={styles.hint}>{t("ListHint")}</div>}
-                {listError && <div className={styles.error}>{t("ListError")}</div>}
-                <div className={styles.buttons}>
-                    <button className={styles.button} onClick={() => trigger(group, "openFolder")}>{t("OpenFolder")}</button>
-                    <button className={styles.button} onClick={() => trigger(group, "reloadList")}>{t("ReloadList")}</button>
-                </div>
-            </div>
-            {exclusionsEnabled && <div className={styles.customSection}>
-                <div className={styles.label}>{excludedCount > 0
-                    ? `${t("ExclusionList")} (${excludedCount})` : t("NoExclusions")}</div>
-                <div className={styles.hint}>{t("ExclusionHint")}</div>
-                {exclusionError && <div className={styles.error}>{t("ListError")}</div>}
-                <div className={styles.buttons}>
-                    <button className={styles.button} onClick={() => trigger(group, "reloadExclusions")}>{t("ReloadExclusions")}</button>
-                    <Tooltip tooltip={t("RemoveExclusionsHint")}>
-                        <button className={styles.button} disabled={excludedCount === 0}
-                            onClick={() => trigger(group, "removeExclusions")}>{t("RemoveExclusions")}</button>
                     </Tooltip>
                 </div>
-            </div>}
-        </div>
-    </Panel>;
+                {hasRoad ? <>
+                    <div className={styles.compactLabel}>{t("CurrentName")}</div>
+                    <div className={styles.currentName}>{roadName}</div>
+                    <div className={styles.compactLabel}>{t("Suggestions")}</div>
+                    {suggestions.length > 0 ? suggestions.map(name =>
+                        <Tooltip key={`${token}:${name}`} tooltip={t("ApplyHint")}>
+                            <button className={styles.suggestion} onClick={() => trigger(group, "apply", token, name)}>
+                                <span>{name}</span><span className={styles.apply}>{t("Apply")}</span>
+                            </button>
+                        </Tooltip>) : <div className={styles.hint}>{t(excludedCount > 0 ? "ExclusionsUnavailable" : "NoSuggestions")}</div>}
+                    <button className={styles.button + " " + styles.fullButton}
+                        onClick={() => trigger(group, "refresh")}>{t("Refresh")}</button>
+                </> : <div className={styles.hint}>{t("SelectRoad")}</div>}
+                {message && <div className={styles.message}>{translate(message) ?? message}</div>}
+                <div className={styles.scanSection}>
+                    <button className={styles.scanButton} onClick={() => setConfirmScan(true)}>
+                        {existingMode === 2 ? t("RenameAll") : t("CheckExisting")}
+                    </button>
+                    {confirmScan && <div className={styles.confirmBox}>
+                        <div className={styles.hint}>{t("ConfirmScan")} {scanModes[existingMode] ?? ""}</div>
+                        <div className={styles.buttons}>
+                            <button className={styles.scanButton} onClick={() => {
+                                trigger(group, "scanExisting");
+                                setConfirmScan(false);
+                            }}>{t("Confirm")}</button>
+                            <button className={styles.button} onClick={() => setConfirmScan(false)}>{t("Cancel")}</button>
+                        </div>
+                    </div>}
+                </div>
+            </div>
+        </Panel>
+        {settingsOpen && <Panel className={styles.settingsPanel} draggable
+            initialPosition={{ x: 0.42, y: 0.2 }}
+            header={t("SettingsTitle")} onClose={() => setSettingsOpen(false)}>
+            <div className={styles.settingsContent}>
+                <div className={styles.sectionTitle}>{t("AutomaticNamingSection")}</div>
+                <label className={styles.checkRow}>
+                    <input type="checkbox" checked={autoNaming}
+                        onChange={event => trigger(group, "setAutoNaming", event.currentTarget.checked ? 1 : 0)} />
+                    <span>{t("AutomaticNaming")}</span>
+                </label>
+                <div className={styles.settingsSection}>
+                    <div className={styles.sectionTitle}>{t("ExistingRoadsSection")}</div>
+                    <div className={styles.compactLabel}>{t("ScanMode")}</div>
+                    <select className={styles.select} value={existingMode}
+                        onChange={event => { trigger(group, "setExistingMode", Number(event.currentTarget.value)); setConfirmScan(false); }}>
+                        {scanModes.map((name, index) => <option key={index} value={index}>{name}</option>)}
+                    </select>
+                    <label className={styles.checkRow}>
+                        <input type="checkbox" checked={overwriteNames}
+                            onChange={event => trigger(group, "setOverwriteNames", event.currentTarget.checked ? 1 : 0)} />
+                        <span>{t("OverwriteNames")}</span>
+                    </label>
+                    <div className={styles.hint}>{t("ScanExplanation")}</div>
+                </div>
+                <div className={styles.settingsSection}>
+                    <div className={styles.sectionTitle}>{t("CustomListsSection")}</div>
+                    <div className={styles.compactLabel}>{count > 0 ? `${t("CustomList")} (${count})` : t("NoList")}</div>
+                    {listError && <div className={styles.error}>{t("ListError")}</div>}
+                    <div className={styles.buttons}>
+                        <button className={styles.button} onClick={() => trigger(group, "openFolder")}>{t("OpenFolder")}</button>
+                        <button className={styles.button} onClick={() => trigger(group, "reloadList")}>{t("ReloadList")}</button>
+                    </div>
+                    {exclusionsEnabled && <>
+                        <div className={styles.compactLabel}>{excludedCount > 0
+                            ? `${t("ExclusionList")} (${excludedCount})` : t("NoExclusions")}</div>
+                        {exclusionError && <div className={styles.error}>{t("ListError")}</div>}
+                        <div className={styles.buttons}>
+                            <button className={styles.button} onClick={() => trigger(group, "reloadExclusions")}>{t("ReloadExclusions")}</button>
+                            <button className={styles.button} disabled={excludedCount === 0}
+                                onClick={() => trigger(group, "removeExclusions")}>{t("RemoveExclusions")}</button>
+                        </div>
+                    </>}
+                </div>
+                <div className={styles.settingsSection}>
+                    <label className={styles.checkRow}>
+                        <input type="checkbox" checked={detailedLogging}
+                            onChange={event => trigger(group, "setDetailedLogging", event.currentTarget.checked ? 1 : 0)} />
+                        <span>{t("DetailedLogging")}</span>
+                    </label>
+                </div>
+            </div>
+        </Panel>}
+    </>;
 }
 
 const register: ModRegistrar = registry => {

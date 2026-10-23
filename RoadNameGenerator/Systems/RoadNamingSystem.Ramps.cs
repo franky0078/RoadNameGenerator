@@ -284,8 +284,18 @@ namespace RoadNameGenerator.Systems
 
                             if (IsHighwayRampCandidate(adjacent))
                             {
-                                if (current.Depth < 8 && visited.Add(adjacent))
+                                // An interchange can have several distinct
+                                // ramps connected to the same node. Only
+                                // extend the group along the actual road
+                                // continuation, not into every adjacent ramp.
+                                if (current.Depth < 8 &&
+                                    TryGetOutwardTangent(rampEdge, node, out float3 fromVector) &&
+                                    TryGetOutwardTangent(otherEdge, node, out float3 toVector) &&
+                                    math.dot(fromVector, toVector) < -0.60f &&
+                                    visited.Add(adjacent))
+                                {
                                     queue.Add((adjacent, current.Depth + 1));
+                                }
                             }
                             else if (DetectRoadCategory(adjacent) == RoadCategory.Highway)
                             {

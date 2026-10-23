@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using Game.Common;
 using Game.Net;
-using Game.Pathfind;
 using RoadNameGenerator.Naming;
 using Unity.Entities;
 
@@ -153,43 +152,11 @@ namespace RoadNameGenerator.Systems
         // direction. Edge.m_Start/m_End alone does NOT reliably express traffic flow.
         private RampDirection GetDirectionAtHighway(Entity rampEdge, Entity junction)
         {
-            if (!EntityManager.HasComponent<Edge>(rampEdge) ||
-                !EntityManager.HasBuffer<SubLane>(rampEdge))
-                return RampDirection.Unknown;
-
-            Edge edge = EntityManager.GetComponentData<Edge>(rampEdge);
-            bool highwayAtStart = edge.m_Start == junction;
-            bool highwayAtEnd = edge.m_End == junction;
-            if (!highwayAtStart && !highwayAtEnd)
-                return RampDirection.Unknown;
-
-            bool forward = false;
-            bool reverse = false;
-            var lanes = EntityManager.GetBuffer<SubLane>(rampEdge, true);
-            for (int i = 0; i < lanes.Length; i++)
-            {
-                Entity laneEntity = lanes[i].m_SubLane;
-                if (!IsUsableEntity(laneEntity) ||
-                    !EntityManager.HasComponent<CarLane>(laneEntity) ||
-                    !EntityManager.HasComponent<Lane>(laneEntity))
-                    continue;
-
-                Lane lane = EntityManager.GetComponentData<Lane>(laneEntity);
-                if (lane.m_StartNode.GetOwnerIndex() != rampEdge.Index ||
-                    lane.m_EndNode.GetOwnerIndex() != rampEdge.Index)
-                    continue;
-
-                float delta = lane.m_EndNode.GetCurvePos() - lane.m_StartNode.GetCurvePos();
-                if (delta > 0.5f) forward = true;
-                if (delta < -0.5f) reverse = true;
-            }
-
-            if (forward == reverse)
-                return RampDirection.Unknown;
-
-            // Traffic starts at the motorway: exit. Traffic ends at the motorway: entry.
-            bool movingAway = highwayAtStart ? forward : reverse;
-            return movingAway ? RampDirection.Exit : RampDirection.Entrance;
+            // Do not infer traffic direction from Edge.m_Start / m_End:
+            // those fields describe geometry, not which way cars can travel.
+            // Until a verified directional lane API is available we use the
+            // safe generic label rather than calling an on-ramp an off-ramp.
+            return RampDirection.Unknown;
         }
 
         private bool TryGetRampParent(Entity road, out string highwayName, out RampDirection direction)

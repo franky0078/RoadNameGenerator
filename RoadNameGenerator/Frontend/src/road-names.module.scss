@@ -17,7 +17,9 @@
     &:hover { background-color: rgba(95, 201, 235, 0.95); }
 }
 .icon { width: 28rem; height: 28rem; }
-.panel { width: 348rem; position: relative; }
+// Preserve the game's native absolute positioning of draggable Panels.
+// position: relative here overrides CS2 Panel positioning and pushes the window off-screen.
+.panel { width: 348rem; }
 .settingsPanel { width: 340rem; }
 .settingsContent { padding: 11rem 12rem; color: #fff; max-height: 590rem; overflow-y: auto; }
 .settingsSection { border-top: 1rem solid rgba(255,255,255,.16); margin-top: 12rem; padding-top: 10rem; }
@@ -52,7 +54,7 @@
     color: #fff; background: #152b31; padding: 3rem 7rem;
     font-size: 13rem;
 }
-.content { padding: 9rem 11rem 10rem; color: #fff; }
+.content { padding: 9rem 11rem 10rem; color: #fff; max-height: calc(100vh - 140rem); overflow-y: auto; }
 .styleRow { display: flex; align-items: center; justify-content: space-between; gap: 6rem; margin-bottom: 7rem; }
 .styleRow > span { margin-bottom: 0; margin-right: 8rem; }
 // Explicit theme classes avoid the unthemed white dropdown defaults.

@@ -15,6 +15,8 @@ namespace RoadNameGenerator.Systems
     {
         private enum RampDirection { Unknown, Exit, Entrance }
         private readonly HashSet<Entity> m_PendingRampNames = new();
+        private readonly HashSet<Entity> m_TrackedRampNames = new();
+        private int m_TrackedRampRefreshCounter;
         private int m_PendingRampCursor;
         private readonly HashSet<Entity> m_AmbiguousRampsLogged = new();
 
@@ -487,6 +489,19 @@ namespace RoadNameGenerator.Systems
             return false;
         }
 
+        private void ScheduleTrackedRampRefresh()
+        {
+            // Renamed motorways should propagate their new names to ramps.
+            // Recheck only periodically and work through pending ramps in small
+            // batches; do not scan all road connections every update.
+            if (++m_TrackedRampRefreshCounter < 10)
+                return;
+
+            m_TrackedRampRefreshCounter = 0;
+            foreach (Entity ramp in m_TrackedRampNames)
+                m_PendingRampNames.Add(ramp);
+        }
+
         private void ProcessPendingRampNames()
         {
             if (!(Mod.Settings?.AutomaticallyRenameNewRoads ?? true) ||
@@ -510,6 +525,7 @@ namespace RoadNameGenerator.Systems
                 if (!IsUsableEntity(road) || !IsRoadAggregate(road))
                 {
                     completed.Add(road);
+                    m_TrackedRampNames.Remove(road);
                     continue;
                 }
 
@@ -518,12 +534,14 @@ namespace RoadNameGenerator.Systems
                 if (hasCustom && !IsAutomaticallyAssignedName(road, previous))
                 {
                     completed.Add(road);
+                    m_TrackedRampNames.Remove(road);
                     continue;
                 }
 
                 if (!IsHighwayRampCandidate(road))
                 {
                     completed.Add(road);
+                    m_TrackedRampNames.Remove(road);
                     continue;
                 }
 
@@ -538,6 +556,7 @@ namespace RoadNameGenerator.Systems
                     Mod.LogDetailed($"Deferred ramp named: Entity {road.Index}, " +
                         $"Old name: \"{previous}\", new name: \"{newName}\".");
                 }
+                m_TrackedRampNames.Add(road);
                 completed.Add(road);
             }
 
@@ -559,6 +578,18 @@ namespace RoadNameGenerator.Systems
 
             NamingStyle style = Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American;
             string label = GetRampLabel(style, direction);
+
+            // Idempotency: do not consume a new number every time we refresh
+            // the same already correctly named road.
+            string currentName = m_NameSystem.GetRenderedLabelName(aggregate);
+            if (HasRampName(currentName, highwayName, label) &&
+                IsAutomaticallyAssignedName(aggregate, currentName) &&
+                !RoadNameExclusionList.IsExcluded(currentName))
+            {
+                name = currentName;
+                return true;
+            }
+
             if (TryGetGroupRampName(aggregate, group, highwayName, label, out string existing))
             {
                 name = existing;

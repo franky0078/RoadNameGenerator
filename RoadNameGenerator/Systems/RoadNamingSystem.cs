@@ -622,11 +622,18 @@ namespace RoadNameGenerator.Systems
                 CheckForNewRoads();
                 // Retry ramps that were built before their motorway was
                 // connected or were named by an older version of the mod.
+                ScheduleTrackedRampRefresh();
                 ProcessPendingRampNames();
 
                 if (existingRoadScanRequested)
                 {
                     ScanExistingRoads();
+
+                    // Mainline names can change during a manual full scan.
+                    // Update mod-owned ramp names afterwards.
+                    foreach (Entity ramp in m_TrackedRampNames)
+                        m_PendingRampNames.Add(ramp);
+                    ProcessPendingRampNames();
                 }
             }
             catch (Exception exception)
@@ -895,6 +902,9 @@ namespace RoadNameGenerator.Systems
                     );
                     RememberAutomaticallyAssignedName(aggregateEntity, newName);
 
+                    if (isRamp)
+                        m_TrackedRampNames.Add(aggregateEntity);
+
                     RegisterExistingNameInAllGenerators(
                         newName
                     );
@@ -960,13 +970,17 @@ namespace RoadNameGenerator.Systems
 
             try
             {
-                foreach (Entity aggregateEntity in aggregateEntities)
-                {
-                    if (!IsRoadAggregate(aggregateEntity))
-                    {
-                        continue;
-                    }
+                // Name mainlines before ramps to avoid inheriting obsolete
+                // highway names during a complete existing-road scan.
+                var orderedRoads = new List<Entity>();
+                foreach (Entity road in aggregateEntities)
+                    if (IsRoadAggregate(road))
+                        orderedRoads.Add(road);
+                orderedRoads.Sort((a, b) =>
+                    IsHighwayRampCandidate(a).CompareTo(IsHighwayRampCandidate(b)));
 
+                foreach (Entity aggregateEntity in orderedRoads)
+                {
                     checkedRoadCount++;
 
                     string currentName =
@@ -1018,6 +1032,9 @@ namespace RoadNameGenerator.Systems
                         newName
                     );
                     RememberAutomaticallyAssignedName(aggregateEntity, newName);
+
+                    if (isRamp)
+                        m_TrackedRampNames.Add(aggregateEntity);
 
                     RegisterExistingNameInAllGenerators(
                         newName
@@ -1299,7 +1316,10 @@ namespace RoadNameGenerator.Systems
                     // motorway numbers by an earlier ramp-naming build.
                     if (IsHighwayRampCandidate(aggregateEntity) &&
                         IsAutomaticallyAssignedName(aggregateEntity, existingName))
+                    {
+                        m_TrackedRampNames.Add(aggregateEntity);
                         m_PendingRampNames.Add(aggregateEntity);
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -1341,6 +1361,9 @@ namespace RoadNameGenerator.Systems
             m_PendingRampNames.RemoveWhere(
                 roadEntity => !existingRoads.Contains(roadEntity)
             );
+            m_TrackedRampNames.RemoveWhere(
+                roadEntity => !existingRoads.Contains(roadEntity)
+            );
         }
 
         private bool IsRoadAggregate(Entity aggregateEntity)
@@ -1355,6 +1378,7 @@ namespace RoadNameGenerator.Systems
         {
             m_KnownRoads.Clear();
             m_PendingRampNames.Clear();
+            m_TrackedRampNames.Clear();
             m_UnknownRoadPrefabs.Clear();
             m_RoadBuilderCategoryCache.Clear();
 

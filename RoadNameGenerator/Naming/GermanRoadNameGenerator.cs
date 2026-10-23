@@ -44,7 +44,7 @@ namespace RoadNameGenerator.Naming
             {
                 return IsGermanRouteNumber(trimmedName) ||
                        ContainsName(
-                           GermanRoadNames.NamedHighwayNames,
+                           s_RealisticMotorwayNames,
                            trimmedName
                        );
             }
@@ -416,10 +416,9 @@ namespace RoadNameGenerator.Naming
                     name[0]
                 );
 
-            if (prefix != 'A' &&
-                prefix != 'B' &&
-                prefix != 'L' &&
-                prefix != 'K')
+            // In the Highway category, German federal motorways use A.
+            // B, L and K belong to other road classes.
+            if (prefix != 'A')
             {
                 return false;
             }

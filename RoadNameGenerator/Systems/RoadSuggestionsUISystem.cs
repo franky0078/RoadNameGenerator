@@ -47,6 +47,14 @@ namespace RoadNameGenerator.Systems
                 () => (int)(Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American)));
             AddUpdateBinding(new GetterValueBinding<int>(Group, "customMode",
                 () => (int)(Mod.Settings?.CustomNames ?? CustomNameMode.Disabled)));
+            AddUpdateBinding(new GetterValueBinding<bool>(Group, "autoNaming",
+                () => Mod.Settings?.AutomaticallyRenameNewRoads ?? true));
+            AddUpdateBinding(new GetterValueBinding<int>(Group, "existingMode",
+                () => (int)(Mod.Settings?.ExistingRoadCheckMode ?? ExistingRoadMode.GameGeneratedOnly)));
+            AddUpdateBinding(new GetterValueBinding<bool>(Group, "overwriteNames",
+                () => Mod.Settings?.OverwriteIndividuallyNamedRoads ?? false));
+            AddUpdateBinding(new GetterValueBinding<bool>(Group, "detailedLogging",
+                () => Mod.Settings?.EnableDetailedLogging ?? false));
             AddUpdateBinding(new GetterValueBinding<bool>(Group, "exclusionsEnabled",
                 () => Mod.Settings?.UseNameExclusions ?? true));
             AddUpdateBinding(new GetterValueBinding<int>(Group, "excludedCount",
@@ -78,6 +86,37 @@ namespace RoadNameGenerator.Systems
             AddBinding(new TriggerBinding(Group, "openFolder", CustomRoadNameList.OpenFolder));
             AddBinding(new TriggerBinding<int>(Group, "setNamingStyle", SetNamingStyle));
             AddBinding(new TriggerBinding<int>(Group, "setCustomMode", SetCustomMode));
+            AddBinding(new TriggerBinding<int>(Group, "setAutoNaming", value =>
+            {
+                if (Mod.Settings == null) return;
+                Mod.Settings.AutomaticallyRenameNewRoads = value != 0;
+                Mod.Settings.ApplyAndSave();
+            }));
+            AddBinding(new TriggerBinding<int>(Group, "setExistingMode", value =>
+            {
+                if (Mod.Settings == null ||
+                    !Enum.IsDefined(typeof(ExistingRoadMode), value)) return;
+                Mod.Settings.ExistingRoadCheckMode = (ExistingRoadMode)value;
+                Mod.Settings.ApplyAndSave();
+            }));
+            AddBinding(new TriggerBinding<int>(Group, "setOverwriteNames", value =>
+            {
+                if (Mod.Settings == null) return;
+                Mod.Settings.OverwriteIndividuallyNamedRoads = value != 0;
+                Mod.Settings.ApplyAndSave();
+            }));
+            AddBinding(new TriggerBinding<int>(Group, "setDetailedLogging", value =>
+            {
+                if (Mod.Settings == null) return;
+                Mod.Settings.EnableDetailedLogging = value != 0;
+                Mod.Settings.ApplyAndSave();
+            }));
+            AddBinding(new TriggerBinding(Group, "scanExisting", () =>
+            {
+                if (Mod.Settings == null) return;
+                Mod.RequestExistingRoadScan();
+                m_Message = "RoadNameGenerator.UI.ScanQueued";
+            }));
         }
 
         private void SetNamingStyle(int value)

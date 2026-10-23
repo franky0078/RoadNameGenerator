@@ -302,7 +302,11 @@ function RoadNamesPanel() {
             </div>
         </Panel>
         {settingsOpen && createPortal(<div ref={settingsRef} className={styles.settingsFloating}
-            style={{ left: settingsPosition.left, top: settingsPosition.top }}
+            style={{
+                left: settingsPosition.left,
+                top: settingsPosition.top,
+                maxHeight: Math.max(160, window.innerHeight - settingsPosition.top - 8)
+            }}
             onMouseDown={event => event.stopPropagation()}
             onClick={event => event.stopPropagation()}>
             <div className={styles.settingsHeader}

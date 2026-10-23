@@ -353,6 +353,8 @@ namespace RoadNameGenerator.Systems
 
         private static bool HasRampName(string candidate, string motorway, string label)
         {
+            if (string.IsNullOrWhiteSpace(candidate))
+                return false;
             string prefix = motorway + " " + label + " ";
             return candidate.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) &&
                 int.TryParse(candidate.Substring(prefix.Length), out int number) &&

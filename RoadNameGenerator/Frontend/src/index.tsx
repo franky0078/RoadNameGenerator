@@ -290,16 +290,19 @@ function RoadNamesPanel() {
                         <button className={styles.button} onClick={() => trigger(group, "openFolder")}>{t("OpenFolder")}</button>
                         <button className={styles.button} onClick={() => trigger(group, "reloadList")}>{t("ReloadList")}</button>
                     </div>
-                    {exclusionsEnabled && <>
-                        <div className={styles.compactLabel}>{excludedCount > 0
-                            ? `${t("ExclusionList")} (${excludedCount})` : t("NoExclusions")}</div>
-                        {exclusionError && <div className={styles.error}>{t("ListError")}</div>}
-                        <div className={styles.buttons}>
-                            <button className={styles.button} onClick={() => trigger(group, "reloadExclusions")}>{t("ReloadExclusions")}</button>
-                            <button className={styles.button} disabled={excludedCount === 0}
-                                onClick={() => trigger(group, "removeExclusions")}>{t("RemoveExclusions")}</button>
-                        </div>
-                    </>}
+                    <label className={styles.checkRow}>
+                        <input type="checkbox" checked={exclusionsEnabled}
+                            onChange={event => trigger(group, "setExclusions", event.currentTarget.checked ? 1 : 0)} />
+                        <span>{t("UseExclusions")}</span>
+                    </label>
+                    <div className={styles.compactLabel}>{excludedCount > 0
+                        ? `${t("ExclusionList")} (${excludedCount})` : t("NoExclusions")}</div>
+                    {exclusionError && <div className={styles.error}>{t("ListError")}</div>}
+                    <div className={styles.buttons}>
+                        <button className={styles.button} onClick={() => trigger(group, "reloadExclusions")}>{t("ReloadExclusions")}</button>
+                        <button className={styles.button} disabled={!exclusionsEnabled || excludedCount === 0}
+                            onClick={() => trigger(group, "removeExclusions")}>{t("RemoveExclusions")}</button>
+                    </div>
                 </div>
                 <div className={styles.settingsSection}>
                     <label className={styles.checkRow}>

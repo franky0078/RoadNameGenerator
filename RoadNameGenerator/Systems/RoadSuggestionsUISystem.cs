@@ -105,6 +105,12 @@ namespace RoadNameGenerator.Systems
                 Mod.Settings.OverwriteIndividuallyNamedRoads = value != 0;
                 Mod.Settings.ApplyAndSave();
             }));
+            AddBinding(new TriggerBinding<int>(Group, "setExclusions", value =>
+            {
+                if (Mod.Settings == null) return;
+                Mod.Settings.UseNameExclusions = value != 0;
+                Mod.Settings.ApplyAndSave();
+            }));
             AddBinding(new TriggerBinding<int>(Group, "setDetailedLogging", value =>
             {
                 if (Mod.Settings == null) return;

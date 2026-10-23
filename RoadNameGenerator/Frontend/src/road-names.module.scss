@@ -22,6 +22,29 @@
 .panel { width: 348rem; }
 // Standalone settings surface: avoids creating a second native CS2 Panel
 // while retaining a blurred, draggable in-game window.
+.settingsFallback {
+    position: fixed;
+    left: 25vw;
+    top: 18vh;
+    z-index: 2147482501;
+    display: flex;
+    gap: 12rem;
+    align-items: center;
+    padding: 16rem;
+    background: #15232b;
+    border: 1rem solid #647883;
+    border-radius: 6rem;
+    color: #fff;
+    font-size: 13rem;
+    button {
+        padding: 5rem 8rem;
+        color: #fff;
+        background: #315665;
+        border: 0;
+        border-radius: 4rem;
+        cursor: pointer;
+    }
+}
 .settingsFloating {
     position: fixed;
     z-index: 2147482500;

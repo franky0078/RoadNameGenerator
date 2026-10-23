@@ -19,6 +19,7 @@ namespace RoadNameGenerator.Systems
         private int m_TrackedRampRefreshCounter;
         private int m_PendingRampCursor;
         private readonly HashSet<Entity> m_AmbiguousRampsLogged = new();
+        private readonly Dictionary<Entity, string> m_LastRampLinkLog = new();
 
         private readonly struct HighwayRampConnection
         {
@@ -412,9 +413,19 @@ namespace RoadNameGenerator.Systems
             m_AmbiguousRampsLogged.Remove(road);
             highwayName = selectedName;
             direction = selectedDirection;
-            Mod.LogDetailed($"Ramp {road.Index}: linked to motorway " +
-                $"{selected.Highway.Index} (\"{highwayName}\"), " +
-                $"direction: {direction}, group segments: {group.Count}.");
+
+            // The tracked ramps are checked periodically; write diagnostics
+            // only when the motorway link or direction actually changes.
+            string state = selected.Highway.Index + "|" + highwayName + "|" +
+                direction + "|" + group.Count;
+            if (!m_LastRampLinkLog.TryGetValue(road, out string previousState) ||
+                !string.Equals(previousState, state, StringComparison.Ordinal))
+            {
+                m_LastRampLinkLog[road] = state;
+                Mod.LogDetailed($"Ramp {road.Index}: linked to motorway " +
+                    $"{selected.Highway.Index} (\"{highwayName}\"), " +
+                    $"direction: {direction}, group segments: {group.Count}.");
+            }
             return true;
         }
 
@@ -559,6 +570,8 @@ namespace RoadNameGenerator.Systems
                 {
                     completed.Add(road);
                     m_TrackedRampNames.Remove(road);
+                    m_LastRampLinkLog.Remove(road);
+                    m_AmbiguousRampsLogged.Remove(road);
                     continue;
                 }
 

@@ -1364,6 +1364,16 @@ namespace RoadNameGenerator.Systems
             m_TrackedRampNames.RemoveWhere(
                 roadEntity => !existingRoads.Contains(roadEntity)
             );
+            // Keep diagnostic state bounded when road aggregates are deleted.
+            var obsoleteLogEntities = new List<Entity>();
+            foreach (Entity roadEntity in m_LastRampLinkLog.Keys)
+                if (!existingRoads.Contains(roadEntity))
+                    obsoleteLogEntities.Add(roadEntity);
+            foreach (Entity roadEntity in obsoleteLogEntities)
+            {
+                m_LastRampLinkLog.Remove(roadEntity);
+                m_AmbiguousRampsLogged.Remove(roadEntity);
+            }
         }
 
         private bool IsRoadAggregate(Entity aggregateEntity)
@@ -1379,6 +1389,8 @@ namespace RoadNameGenerator.Systems
             m_KnownRoads.Clear();
             m_PendingRampNames.Clear();
             m_TrackedRampNames.Clear();
+            m_LastRampLinkLog.Clear();
+            m_AmbiguousRampsLogged.Clear();
             m_UnknownRoadPrefabs.Clear();
             m_RoadBuilderCategoryCache.Clear();
 

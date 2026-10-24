@@ -17,11 +17,6 @@
     &:hover { background-color: rgba(95, 201, 235, 0.95); }
 }
 .icon { width: 28rem; height: 28rem; }
-// Preserve the game's native absolute positioning of draggable Panels.
-// position: relative here overrides CS2 Panel positioning and pushes the window off-screen.
-// Keep literal values here: the standalone portal cannot rely on the game's
-// scoped theme variables or CSS var() fallbacks in Cohtml. Share this surface
-// with the main panel so both windows retain the same tint and blur.
 .panel, .settingsFloating {
     background-color: rgba(53, 65, 66, .65);
     backdrop-filter: blur(12rem);
@@ -31,8 +26,6 @@
     color: #fff;
 }
 .panel { width: 348rem; }
-// Standalone settings surface: avoids creating a second native CS2 Panel
-// while retaining a blurred, draggable in-game window.
 .settingsFallback {
     position: fixed;
     left: 25vw;
@@ -200,7 +193,6 @@
 .content { padding: 9rem 11rem 10rem; color: #fff; max-height: calc(100vh - 140rem); overflow-y: auto; }
 .styleRow { display: flex; align-items: center; justify-content: space-between; gap: 6rem; margin-bottom: 7rem; }
 .styleRow > span { margin-bottom: 0; margin-right: 8rem; }
-// Explicit theme classes avoid the unthemed white dropdown defaults.
 .styleToggle {
     width: 190rem; height: 32rem; padding: 6rem 8rem;
     display: flex; align-items: center; justify-content: space-between;

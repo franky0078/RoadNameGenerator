@@ -52,8 +52,7 @@ namespace RoadNameGenerator.Systems
                 return suggestions;
 
             HashSet<string> usedNames = GetCurrentRoadNames();
-            // Suggestions for a ramp must keep its motorway. Offering unrelated
-            // A-numbers would turn a slip road into an independent highway.
+
             if (IsHighwayRampCandidate(road))
             {
                 if (!TryGetRampParent(road, out string motorway, out _, out _))

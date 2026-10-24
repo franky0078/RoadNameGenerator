@@ -853,9 +853,6 @@ namespace RoadNameGenerator.Systems
                         registeredWithoutRenameCount++;
                         continue;
                     }
-
-                    // A newly discovered aggregate may already carry a player-assigned
-                    // or inherited custom name. Automatic naming must preserve it.
                     if (EntityManager.HasComponent<CustomName>(aggregateEntity))
                     {
                         RegisterExistingNameInAllGenerators(currentName);
@@ -974,8 +971,6 @@ namespace RoadNameGenerator.Systems
 
             try
             {
-                // Name mainlines before ramps to avoid inheriting obsolete
-                // highway names during a complete existing-road scan.
                 var orderedRoads = new List<Entity>();
                 foreach (Entity road in aggregateEntities)
                     if (IsRoadAggregate(road))

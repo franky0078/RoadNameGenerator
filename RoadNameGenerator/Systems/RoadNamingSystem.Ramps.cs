@@ -37,9 +37,6 @@ namespace RoadNameGenerator.Systems
             }
         }
 
-        // A one-lane freeway is a potential slip road. A two-lane one-way
-        // highway must additionally be the side branch of a motorway split.
-        // The name alone cannot distinguish a 2-lane mainline from an exit.
         private bool IsHighwayRampCandidate(Entity aggregate)
         {
             if (!IsUsableEntity(aggregate) || !IsRoadAggregate(aggregate))
@@ -67,9 +64,6 @@ namespace RoadNameGenerator.Systems
             return twoLanes && oneWay && IsTwoLaneMotorwaySideBranch(aggregate);
         }
 
-        // Return the horizontal direction AWAY from the shared junction.
-        // CS2 edges contain a cubic Bezier4x3. The first/last control points
-        // are more reliable here than global roads' aggregate orientation.
         private bool TryGetOutwardTangent(Entity roadEdge, Entity node, out float3 tangent)
         {
             tangent = float3.zero;
@@ -103,12 +97,7 @@ namespace RoadNameGenerator.Systems
             return true;
         }
 
-        // Identify the SIDE edge of a two-lane motorway fork or merge.
-        // Prefer CS2's road aggregation: the two uninterrupted mainline
-        // edges normally share an aggregate, while the slip road does not.
-        // A geometry-only fallback handles junctions split across aggregates.
-        // In both cases we reject a candidate that continues on its own
-        // aggregate at the same node (the mainline must remain a mainline).
+
         private bool IsTwoLaneMotorwaySideBranch(Entity aggregate)
         {
             if (!EntityManager.HasBuffer<AggregateElement>(aggregate))
@@ -162,8 +151,7 @@ namespace RoadNameGenerator.Systems
                             directions.Add((otherAggregate, vector));
                     }
 
-                    // A mainline normally has another edge of the SAME aggregate
-                    // continuing through the junction. Never rename it as a ramp.
+
                     if (selfContinuation || directions.Count < 2)
                         continue;
 
@@ -180,9 +168,6 @@ namespace RoadNameGenerator.Systems
                             bool sameMainlineAggregate =
                                 directions[i].Road == directions[j].Road;
 
-                            // Aggregation is decisive when the highway is visibly
-                            // straight through. Without it, require the mainline
-                            // to be distinctly straighter than both alternatives.
                             if (sameMainlineAggregate)
                             {
                                 if (straight > 0.65f &&

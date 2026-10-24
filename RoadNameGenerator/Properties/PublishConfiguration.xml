@@ -27,7 +27,7 @@
 		- Canadian road names
 		- Polish road names
 		- Portuguese road names
-		- Brazilian road names 
+		- Brazilian road names
 		- Dutch road names
 		- Swiss road names (german, french, italian, romansh)
 		- Norwegian road names
@@ -41,6 +41,7 @@
 		- Can rename existing roads
 		- Several naming styles and road categories
 		- Avoids duplicate road names
+		- Supports single-lane and two-lane highway ramps.
 		- Custom road names: Create your own name list
 		- Flexible name sources: Use a predefined naming style, your custom list, or a mix of both
 		- Customize any naming style by excluding unwanted road names.
@@ -102,9 +103,17 @@
 
 	<!-- Änderungen dieser Version -->
 	<ChangeLog>
-		Latest changes:
+		**Latest changes:**
 
-		- added brazilian roadnames
+		- added automatic highway ramp detection and naming.
+		- highway ramps now inherit the name of their connected highway (e.g. A73 Ramp 1, A73 Ramp 2).
+		- added support for single-lane and two-lane highway ramps, including complex interchanges.
+		- added a compact, redesigned road naming interface
+		- added an in-game option to rename existing roads with configurable scan modes and confirmation.
+		- improved german road name generation with more natural and realistic names.
+		- improved road name suggestions to recognize highway ramps and preserve their parent highway names.
+		- improved stability and performance of automatic road naming.
+		- reduced unnecessary diagnostic logging
 	</ChangeLog>
 
 	<ExternalLink Type="github" Url="https://github.com/franky0078/RoadNameGenerator" />

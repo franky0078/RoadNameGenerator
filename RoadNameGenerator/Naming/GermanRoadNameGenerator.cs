@@ -122,10 +122,6 @@ namespace RoadNameGenerator.Naming
             for (int attempt = 0; attempt < 200; attempt++)
             {
                 string result;
-
-                // Prefer curated, natural German street names. Random
-                // compounds remain available for large cities, but avoid
-                // implausible combinations like "Sonnenunterganghof".
                 int curatedChance = category == RoadCategory.Avenue ? 92 : 88;
                 if (specialNames.Length > 0 &&
                     m_Random.Next(100) < curatedChance)
@@ -167,9 +163,6 @@ namespace RoadNameGenerator.Naming
 
         private string GenerateHighwayName()
         {
-            // German Bundesautobahnen are numbered with A.
-            // Keep some named motorways for variety, but never generate B/L/K
-            // road numbers for a Highway prefab.
             // Distribution: 95 % Autobahn numbers, 5 % named motorways.
             for (int attempt = 0; attempt < 200; attempt++)
             {

@@ -400,7 +400,42 @@ namespace RoadNameGenerator.Localization
             };
             entries[setting.GetOptionLabelLocaleID(nameof(Setting.OverwriteIndividuallyNamedRoads))] = protection[0];
             entries[setting.GetOptionDescLocaleID(nameof(Setting.OverwriteIndividuallyNamedRoads))] = protection[1];
+            // Compact in-game panel and its separate options window.
+            string[] compactKeys = { "SettingsTitle", "RenameAll", "CheckExisting", "ConfirmScan", "Confirm", "Cancel", "AutomaticNamingSection", "AutomaticNaming", "ExistingRoadsSection", "ScanMode", "ScanGameOnly", "ScanNonMatching", "ScanAll", "OverwriteNames", "ScanExplanation", "CustomListsSection", "DetailedLogging", "ScanQueued" };
+            string[] compactText = language switch
+            {
+                "de" => new[] { "Einstellungen", "Alle umbenennen", "Bestehende prüfen", "Diesen Scan wirklich starten? Modus:", "Jetzt ausführen", "Abbrechen", "Automatische Benennung", "Neue Straßen automatisch benennen", "Bestehende Straßen", "Prüfmodus", "Nur Spielnamen", "Nicht passende Namen", "Alle Straßen", "Individuelle Namen überschreiben", "Manuell vergebene Namen bleiben geschützt, sofern das Überschreiben ausgeschaltet ist.", "Namenslisten", "Detailliertes Logging", "Prüfung bestehender Straßen angefordert." },
+                "fr" => new[] { "Paramètres", "Renommer toutes les routes", "Vérifier les routes", "Lancer l’analyse en mode :", "Lancer", "Annuler", "Nommage automatique", "Nommer automatiquement les nouvelles routes", "Routes existantes", "Mode d’analyse", "Noms générés par le jeu", "Noms hors du style choisi", "Toutes les routes", "Écraser les noms personnalisés", "Les noms attribués manuellement sont protégés sauf si leur remplacement est activé.", "Listes de noms", "Journal détaillé", "Analyse des routes demandée." },
+                "es" => new[] { "Ajustes", "Renombrar todas las vías", "Revisar vías existentes", "¿Iniciar la revisión en modo:", "Iniciar", "Cancelar", "Nombres automáticos", "Nombrar automáticamente vías nuevas", "Vías existentes", "Modo de revisión", "Solo nombres del juego", "Nombres fuera del estilo", "Todas las vías", "Sobrescribir nombres individuales", "Los nombres asignados manualmente están protegidos salvo que se permita sobrescribirlos.", "Listas de nombres", "Registro detallado", "Revisión de vías solicitada." },
+                "it" => new[] { "Impostazioni", "Rinomina tutte le strade", "Controlla strade esistenti", "Avviare il controllo in modalità:", "Avvia", "Annulla", "Denominazione automatica", "Assegna nomi alle nuove strade", "Strade esistenti", "Modalità di controllo", "Solo nomi del gioco", "Nomi fuori dallo stile", "Tutte le strade", "Sovrascrivi nomi personalizzati", "I nomi assegnati manualmente sono protetti se la sovrascrittura è disattivata.", "Elenchi nomi", "Registro dettagliato", "Controllo delle strade richiesto." },
+                "pl" => new[] { "Ustawienia", "Zmień nazwy wszystkich dróg", "Sprawdź istniejące drogi", "Uruchomić skanowanie w trybie:", "Uruchom", "Anuluj", "Automatyczne nazwy", "Automatycznie nazywaj nowe drogi", "Istniejące drogi", "Tryb skanowania", "Tylko nazwy z gry", "Nazwy niezgodne ze stylem", "Wszystkie drogi", "Nadpisuj nazwy własne", "Nazwy nadane ręcznie są chronione, chyba że włączono nadpisywanie.", "Listy nazw", "Szczegółowe logowanie", "Zlecono sprawdzenie istniejących dróg." },
+                _ => new[] { "Settings", "Rename all roads", "Check existing roads", "Start road scan with mode:", "Start scan", "Cancel", "Automatic naming", "Automatically name new roads", "Existing roads", "Scan mode", "Game-generated names only", "Names outside selected style", "All roads", "Overwrite individually named roads", "Player-assigned names are protected unless overwriting is enabled.", "Name lists", "Detailed logging", "Existing-road scan requested." }
+            };
+            for (int i = 0; i < compactKeys.Length; i++)
+                entries["RoadNameGenerator.UI." + compactKeys[i]] = compactText[i];
+
+            entries["RoadNameGenerator.UI.ConfirmAgain"] = language switch
+            {
+                "de" => "Zum Bestätigen erneut klicken",
+                "fr" => "Cliquer à nouveau pour confirmer",
+                "es" => "Pulsa de nuevo para confirmar",
+                "it" => "Clicca di nuovo per confermare",
+                "pl" => "Kliknij ponownie, aby potwierdzić",
+                _ => "Click again to confirm"
+            };
+
+            entries["RoadNameGenerator.UI.UseExclusions"] = language switch
+            {
+                "de" => "Ausschlussliste verwenden",
+                "fr" => "Utiliser la liste d’exclusion",
+                "es" => "Usar lista de exclusiones",
+                "it" => "Usa elenco di esclusione",
+                "pl" => "Używaj listy wykluczeń",
+                _ => "Use exclusion list"
+            };
+
             return entries;
         }
     }
 }
+

@@ -44,7 +44,7 @@ namespace RoadNameGenerator.Naming
             {
                 return IsGermanRouteNumber(trimmedName) ||
                        ContainsName(
-                           GermanRoadNames.NamedHighwayNames,
+                           s_RealisticMotorwayNames,
                            trimmedName
                        );
             }
@@ -122,9 +122,9 @@ namespace RoadNameGenerator.Naming
             for (int attempt = 0; attempt < 200; attempt++)
             {
                 string result;
-
+                int curatedChance = category == RoadCategory.Avenue ? 92 : 88;
                 if (specialNames.Length > 0 &&
-                    m_Random.Next(100) < 45)
+                    m_Random.Next(100) < curatedChance)
                 {
                     result =
                         specialNames[
@@ -143,11 +143,7 @@ namespace RoadNameGenerator.Naming
                         ];
 
                     string suffix =
-                        GetCompatibleSuffix(
-                            baseName,
-                            suffixes,
-                            m_Random
-                        );
+                        GetNaturalGermanSuffix(category, baseName, suffixes, m_Random);
 
                     result =
                         ComposeGermanRoadName(
@@ -167,9 +163,6 @@ namespace RoadNameGenerator.Naming
 
         private string GenerateHighwayName()
         {
-            // German Bundesautobahnen are numbered with A.
-            // Keep some named motorways for variety, but never generate B/L/K
-            // road numbers for a Highway prefab.
             // Distribution: 95 % Autobahn numbers, 5 % named motorways.
             for (int attempt = 0; attempt < 200; attempt++)
             {
@@ -187,8 +180,8 @@ namespace RoadNameGenerator.Naming
                 }
                 else
                 {
-                    result = GermanRoadNames.NamedHighwayNames[
-                        m_Random.Next(GermanRoadNames.NamedHighwayNames.Length)
+                    result = s_RealisticMotorwayNames[
+                        m_Random.Next(s_RealisticMotorwayNames.Length)
                     ];
                 }
 
@@ -276,6 +269,38 @@ namespace RoadNameGenerator.Naming
                     GermanRoadNames.StandardSpecialNames
             };
         }
+
+        // Reuse arrays rather than allocating suffix candidates each time.
+        private static readonly string[] s_DirtSuffixes = { "weg", "weg", "pfad" };
+        private static readonly string[] s_AlleySuffixes = { "gasse", "gasse", "gang" };
+        private static readonly string[] s_ResidentialSuffixes = { "weg", "weg", "straße", "ring" };
+        private static readonly string[] s_StandardSuffixes = { "straße", "straße", "straße", "weg" };
+        private static readonly string[] s_AvenueSuffixes = { "allee", "allee", "ring" };
+
+        private static string GetNaturalGermanSuffix(
+            RoadCategory category, string baseName, string[] suffixes, Random random)
+        {
+            string[] natural = category switch
+            {
+                RoadCategory.Dirt => s_DirtSuffixes,
+                RoadCategory.Alley => s_AlleySuffixes,
+                RoadCategory.Residential => s_ResidentialSuffixes,
+                RoadCategory.Standard => s_StandardSuffixes,
+                RoadCategory.Avenue => s_AvenueSuffixes,
+                _ => suffixes
+            };
+
+            return GetCompatibleSuffix(baseName, natural, random);
+        }
+
+        private static readonly string[] s_RealisticMotorwayNames =
+        {
+            "Berliner Ring", "Münchner Ring", "Ruhrschnellweg", "Sauerlandlinie",
+            "Hansalinie", "Eifelautobahn", "Moseltalautobahn", "Rheintalautobahn",
+            "Bodenseeautobahn", "Elbtalautobahn", "Donautalautobahn",
+            "Mainfrankenautobahn", "Thüringer-Wald-Autobahn", "Frankenwaldautobahn",
+            "Schwarzwaldautobahn", "Harzautobahn", "Rhönautobahn"
+        };
 
         private static string ComposeGermanRoadName(
             string baseName,
@@ -391,10 +416,9 @@ namespace RoadNameGenerator.Naming
                     name[0]
                 );
 
-            if (prefix != 'A' &&
-                prefix != 'B' &&
-                prefix != 'L' &&
-                prefix != 'K')
+            // In the Highway category, German federal motorways use A.
+            // B, L and K belong to other road classes.
+            if (prefix != 'A')
             {
                 return false;
             }

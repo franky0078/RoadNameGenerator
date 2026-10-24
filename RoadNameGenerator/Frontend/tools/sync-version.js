@@ -25,8 +25,6 @@ function syncVersion(projectRoot = path.resolve(__dirname, "../..")) {
         throw new Error("Expected exactly one version in mod.json and one ModVersion Value in PublishConfiguration.xml.");
     }
 
-    // Validate both files before modifying either; preserve descriptions,
-    // changelogs, BOMs, indentation and line endings byte-for-byte.
     const outputs = [
         [uiFile, ui, ui.replace(uiPattern, (_, before, after) => before + version + after)],
         [publishFile, publish, publish.replace(publishPattern, (_, before, after) => before + version + after)]

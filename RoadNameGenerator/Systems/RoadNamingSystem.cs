@@ -620,8 +620,6 @@ namespace RoadNameGenerator.Systems
             {
 
                 CheckForNewRoads();
-                // Retry ramps that were built before their motorway was
-                // connected or were named by an older version of the mod.
                 ScheduleTrackedRampRefresh();
                 ProcessPendingRampNames();
 
@@ -767,7 +765,6 @@ namespace RoadNameGenerator.Systems
                     }
 
                     currentRoads.Add(aggregateEntity);
-                    // Drop automatic ownership after an external/manual name change.
                     if (EntityManager.HasComponent<AutomaticallyAssignedRoadName>(aggregateEntity))
                         IsAutomaticallyAssignedName(aggregateEntity,
                             m_NameSystem.GetRenderedLabelName(aggregateEntity));
@@ -1010,10 +1007,7 @@ namespace RoadNameGenerator.Systems
                     {
                         if (!TryCreateRampName(aggregateEntity, out newName))
                         {
-                            // This scan was explicitly requested and the name
-                            // protection check above already granted permission.
-                            // Missing/ambiguous motorway links must not silently
-                            // defeat "All roads" or custom-name overwriting.
+
                             newName = nameGenerator.Generate(category);
                             Mod.LogDetailed($"Ramp {aggregateEntity.Index}: no unambiguous motorway name; " +
                                 "using a generated road name for the requested existing-road scan.");
@@ -1320,8 +1314,6 @@ namespace RoadNameGenerator.Systems
 
                     RegisterExistingNameInAllGenerators(existingName);
 
-                    // Recover one-lane freeways incorrectly given independent
-                    // motorway numbers by an earlier ramp-naming build.
                     if (IsHighwayRampCandidate(aggregateEntity) &&
                         IsAutomaticallyAssignedName(aggregateEntity, existingName))
                     {

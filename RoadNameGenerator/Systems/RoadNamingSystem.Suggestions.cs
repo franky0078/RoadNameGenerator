@@ -53,10 +53,9 @@ namespace RoadNameGenerator.Systems
 
             HashSet<string> usedNames = GetCurrentRoadNames();
 
-            if (IsHighwayRampCandidate(road))
+            if (IsHighwayRampCandidate(road) &&
+                TryGetRampParent(road, out string motorway, out _, out _))
             {
-                if (!TryGetRampParent(road, out string motorway, out _, out _))
-                    return suggestions; // Not connected to a motorway yet.
                 NamingStyle rampStyle = Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American;
                 string label = GetRampLabel(rampStyle, RampDirection.Unknown);
                 for (int number = 1; number <= 4096 && suggestions.Count < 5; number++)
@@ -67,8 +66,13 @@ namespace RoadNameGenerator.Systems
                         !RoadNameExclusionList.IsExcluded(candidate))
                         suggestions.Add(candidate);
                 }
-                return suggestions;
+                if (suggestions.Count > 0)
+                    return suggestions;
             }
+            // An unresolved motorway connection is not an exhausted name list.
+            // Offer ordinary road names for manual selection, just as the
+            // requested existing-road scan does for unresolved ramps. Also
+            // use this fallback when every numbered ramp suggestion is blocked.
             IRoadNameGenerator generator = CreatePreviewGenerator(
                 Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American);
             foreach (string name in usedNames)
@@ -127,3 +131,4 @@ namespace RoadNameGenerator.Systems
         };
     }
 }
+

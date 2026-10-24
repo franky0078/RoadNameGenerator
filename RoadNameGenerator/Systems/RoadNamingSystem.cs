@@ -1010,8 +1010,13 @@ namespace RoadNameGenerator.Systems
                     {
                         if (!TryCreateRampName(aggregateEntity, out newName))
                         {
-                            preservedRoadCount++;
-                            continue;
+                            // This scan was explicitly requested and the name
+                            // protection check above already granted permission.
+                            // Missing/ambiguous motorway links must not silently
+                            // defeat "All roads" or custom-name overwriting.
+                            newName = nameGenerator.Generate(category);
+                            Mod.LogDetailed($"Ramp {aggregateEntity.Index}: no unambiguous motorway name; " +
+                                "using a generated road name for the requested existing-road scan.");
                         }
                     }
                     else
@@ -1403,3 +1408,4 @@ namespace RoadNameGenerator.Systems
         }
     }
 }
+

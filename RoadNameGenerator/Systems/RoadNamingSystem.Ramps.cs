@@ -20,6 +20,7 @@ namespace RoadNameGenerator.Systems
         private int m_PendingRampCursor;
         private readonly HashSet<Entity> m_AmbiguousRampsLogged = new();
         private readonly Dictionary<Entity, string> m_LastRampLinkLog = new();
+        private const float MaxRampLengthMeters = 1000f;
 
         private readonly struct HighwayRampConnection
         {
@@ -48,7 +49,7 @@ namespace RoadNameGenerator.Systems
 
             string lower = prefab.ToLowerInvariant();
             if (ContainsAny(lower, "ramp", "slip road", "sliproad", "auffahrt", "abfahrt"))
-                return true;
+                return IsWithinRampLengthLimit(aggregate);
 
             if (DetectRoadCategory(aggregate) != RoadCategory.Highway)
                 return false;
@@ -56,12 +57,61 @@ namespace RoadNameGenerator.Systems
             bool oneLane = ContainsAny(lower, "1 lane", "1-lane", "one lane",
                 "one-lane", "1lane", "1l1w", "1l 1w", "single lane", "single-lane");
             if (oneLane)
-                return true;
+                return IsWithinRampLengthLimit(aggregate);
 
             bool twoLanes = ContainsAny(lower, "2 lanes", "2 lane", "2-lane", "2lane");
             bool oneWay = ContainsAny(lower, "one way", "one-way", "oneway", "1w",
                 "freeway", "expressway");
-            return twoLanes && oneWay && IsTwoLaneMotorwaySideBranch(aggregate);
+            return twoLanes && oneWay && IsWithinRampLengthLimit(aggregate);
+        }
+
+        private bool IsWithinRampLengthLimit(Entity aggregate)
+        {
+            float length = GetRoadLengthMeters(aggregate, MaxRampLengthMeters);
+            return length > 0f && length <= MaxRampLengthMeters;
+        }
+
+        private float GetRoadLengthMeters(Entity aggregate, float stopAfter = float.MaxValue)
+        {
+            if (!EntityManager.HasBuffer<AggregateElement>(aggregate))
+                return 0f;
+
+            // Measure the entire named road, not just its first segment or
+            // the distance between its endpoints (which misses curved ramps).
+            float length = 0f;
+            var seen = new HashSet<Entity>();
+            var elements = EntityManager.GetBuffer<AggregateElement>(aggregate, true);
+            for (int i = 0; i < elements.Length; i++)
+            {
+                Entity roadEdge = elements[i].m_Edge;
+                if (!IsUsableEntity(roadEdge) || !seen.Add(roadEdge))
+                    continue;
+                if (!EntityManager.HasComponent<Road>(roadEdge))
+                    continue;
+                if (!EntityManager.HasComponent<Curve>(roadEdge))
+                    return 0f; // Incomplete geometry cannot prove a short ramp.
+
+                var bezier = EntityManager.GetComponentData<Curve>(roadEdge).m_Bezier;
+                float3 previous = bezier.a;
+                // Approximate each cubic curve in world metres. This also
+                // includes elevation and avoids depending on extra game APIs.
+                for (int step = 1; step <= 32; step++)
+                {
+                    float t = step / 32f;
+                    float u = 1f - t;
+                    float3 point = u * u * u * bezier.a +
+                        3f * u * u * t * bezier.b +
+                        3f * u * t * t * bezier.c + t * t * t * bezier.d;
+                    float segmentLength = math.length(point - previous);
+                    if (float.IsNaN(segmentLength) || float.IsInfinity(segmentLength))
+                        return 0f;
+                    length += segmentLength;
+                    if (length > stopAfter)
+                        return length;
+                    previous = point;
+                }
+            }
+            return length;
         }
 
         private bool TryGetOutwardTangent(Entity roadEdge, Entity node, out float3 tangent)
@@ -97,95 +147,6 @@ namespace RoadNameGenerator.Systems
             return true;
         }
 
-
-        private bool IsTwoLaneMotorwaySideBranch(Entity aggregate)
-        {
-            if (!EntityManager.HasBuffer<AggregateElement>(aggregate))
-                return false;
-
-            var parts = EntityManager.GetBuffer<AggregateElement>(aggregate, true);
-            for (int p = 0; p < parts.Length; p++)
-            {
-                Entity candidate = parts[p].m_Edge;
-                if (!IsUsableEntity(candidate) ||
-                    !EntityManager.HasComponent<Edge>(candidate))
-                    continue;
-
-                Edge edge = EntityManager.GetComponentData<Edge>(candidate);
-                Entity[] nodes = { edge.m_Start, edge.m_End };
-                foreach (Entity node in nodes)
-                {
-                    if (!IsUsableEntity(node) ||
-                        !EntityManager.HasBuffer<ConnectedEdge>(node) ||
-                        !TryGetOutwardTangent(candidate, node, out float3 candidateVector))
-                        continue;
-
-                    var directions = new List<(Entity Road, float3 Tangent)>(4);
-                    var seen = new HashSet<Entity>();
-                    var adjacent = EntityManager.GetBuffer<ConnectedEdge>(node, true);
-                    bool selfContinuation = false;
-
-                    for (int i = 0; i < adjacent.Length; i++)
-                    {
-                        Entity otherEdge = adjacent[i].m_Edge;
-                        if (otherEdge == candidate || !IsUsableEntity(otherEdge) ||
-                            !seen.Add(otherEdge) ||
-                            !EntityManager.HasComponent<Road>(otherEdge) ||
-                            !EntityManager.HasComponent<Aggregated>(otherEdge))
-                            continue;
-
-                        Entity otherAggregate =
-                            EntityManager.GetComponentData<Aggregated>(otherEdge).m_Aggregate;
-                        if (!IsUsableEntity(otherAggregate) ||
-                            !IsRoadAggregate(otherAggregate) ||
-                            DetectRoadCategory(otherAggregate) != RoadCategory.Highway)
-                            continue;
-
-                        if (otherAggregate == aggregate)
-                        {
-                            selfContinuation = true;
-                            break;
-                        }
-
-                        if (TryGetOutwardTangent(otherEdge, node, out float3 vector))
-                            directions.Add((otherAggregate, vector));
-                    }
-
-
-                    if (selfContinuation || directions.Count < 2)
-                        continue;
-
-                    for (int i = 0; i < directions.Count; i++)
-                    {
-                        for (int j = i + 1; j < directions.Count; j++)
-                        {
-                            float straight = -math.dot(
-                                directions[i].Tangent, directions[j].Tangent);
-                            float candidatePairStraightness = math.max(
-                                -math.dot(candidateVector, directions[i].Tangent),
-                                -math.dot(candidateVector, directions[j].Tangent));
-
-                            bool sameMainlineAggregate =
-                                directions[i].Road == directions[j].Road;
-
-                            if (sameMainlineAggregate)
-                            {
-                                if (straight > 0.65f &&
-                                    straight > candidatePairStraightness + 0.005f)
-                                    return true;
-                            }
-                            else if (straight > 0.86f &&
-                                     straight > candidatePairStraightness + 0.10f)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
 
         private IEnumerable<(Entity Edge, Entity Junction)> GetAdjacentRoadEdges(Entity aggregate)
         {
@@ -359,9 +320,18 @@ namespace RoadNameGenerator.Systems
             if (connections.Count == 0)
                 return false;
 
+            // Read each possible parent only once, outside the sort comparator.
+            // Existing ramps can connect two named highways. When traffic flow
+            // is unavailable, prefer the longer highway instead of abandoning
+            // ramp naming merely because the two highway names differ.
+            var highwayLengths = new Dictionary<Entity, float>();
+            foreach (HighwayRampConnection connection in connections)
+                if (!highwayLengths.ContainsKey(connection.Highway))
+                    highwayLengths[connection.Highway] = GetRoadLengthMeters(connection.Highway);
+
             // If the ramp touches more than one motorway, prefer the highway
             // the traffic LEAVES (exit) instead of the one it enters. We only
-            // fall back to distance if lane direction cannot be determined.
+            // fall back to graph distance and highway length when flow is unknown.
             connections.Sort((a, b) =>
             {
                 RampDirection flowA = GetDirectionAtHighway(a.RampEdge, a.Junction);
@@ -373,7 +343,9 @@ namespace RoadNameGenerator.Systems
                 int ranked = rankA.CompareTo(rankB);
                 if (ranked != 0) return ranked;
                 int depth = a.Depth.CompareTo(b.Depth);
-                return depth != 0 ? depth : a.Highway.Index.CompareTo(b.Highway.Index);
+                if (depth != 0) return depth;
+                int length = highwayLengths[b.Highway].CompareTo(highwayLengths[a.Highway]);
+                return length != 0 ? length : a.Highway.Index.CompareTo(b.Highway.Index);
             });
 
             HighwayRampConnection selected = connections[0];
@@ -384,27 +356,6 @@ namespace RoadNameGenerator.Systems
             selectedName = selectedName.Trim();
             RampDirection selectedDirection =
                 GetDirectionAtHighway(selected.RampEdge, selected.Junction);
-
-            // Multiple equidistant highway names without usable directional
-            // evidence are ambiguous. Do not attach a ramp to a random road.
-            if (selectedDirection == RampDirection.Unknown)
-            {
-                foreach (HighwayRampConnection connection in connections)
-                {
-                    if (connection.Depth != selected.Depth)
-                        continue;
-                    string otherName = m_NameSystem.GetRenderedLabelName(connection.Highway);
-                    if (!string.IsNullOrWhiteSpace(otherName) &&
-                        !string.Equals(otherName.Trim(), selectedName,
-                            StringComparison.OrdinalIgnoreCase))
-                    {
-                        if (m_AmbiguousRampsLogged.Add(road))
-                            Mod.LogDetailed($"Ramp {road.Index}: conflicting motorway connections; " +
-                                "waiting for an unambiguous parent instead of assigning the wrong name.");
-                        return false;
-                    }
-                }
-            }
 
             m_AmbiguousRampsLogged.Remove(road);
             highwayName = selectedName;
@@ -420,7 +371,9 @@ namespace RoadNameGenerator.Systems
                 m_LastRampLinkLog[road] = state;
                 Mod.LogDetailed($"Ramp {road.Index}: linked to motorway " +
                     $"{selected.Highway.Index} (\"{highwayName}\"), " +
-                    $"direction: {direction}, group segments: {group.Count}.");
+                    $"direction: {direction}, group segments: {group.Count}, " +
+                    $"parent length: {highwayLengths[selected.Highway]:F0} m, " +
+                    $"selection: {(direction == RampDirection.Unknown ? "connection depth / length" : "traffic direction")}.");
             }
             return true;
         }
@@ -708,3 +661,4 @@ namespace RoadNameGenerator.Systems
         }
     }
 }
+

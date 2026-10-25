@@ -26,6 +26,7 @@ namespace RoadNameGenerator.Systems
         private int m_ListRevision;
         private int m_ExclusionRevision;
         private bool m_ExclusionsEnabled;
+        private bool m_NumberRamps;
 
         public override GameMode gameMode => GameMode.Game;
 
@@ -49,6 +50,8 @@ namespace RoadNameGenerator.Systems
                 () => (int)(Mod.Settings?.CustomNames ?? CustomNameMode.Disabled)));
             AddUpdateBinding(new GetterValueBinding<bool>(Group, "autoNaming",
                 () => Mod.Settings?.AutomaticallyRenameNewRoads ?? true));
+            AddUpdateBinding(new GetterValueBinding<bool>(Group, "numberRamps",
+                () => Mod.Settings?.NumberRamps ?? true));
             AddUpdateBinding(new GetterValueBinding<int>(Group, "existingMode",
                 () => (int)(Mod.Settings?.ExistingRoadCheckMode ?? ExistingRoadMode.GameGeneratedOnly)));
             AddUpdateBinding(new GetterValueBinding<bool>(Group, "overwriteNames",
@@ -90,6 +93,12 @@ namespace RoadNameGenerator.Systems
             {
                 if (Mod.Settings == null) return;
                 Mod.Settings.AutomaticallyRenameNewRoads = value != 0;
+                Mod.Settings.ApplyAndSave();
+            }));
+            AddBinding(new TriggerBinding<int>(Group, "setNumberRamps", value =>
+            {
+                if (Mod.Settings == null) return;
+                Mod.Settings.NumberRamps = value != 0;
                 Mod.Settings.ApplyAndSave();
             }));
             AddBinding(new TriggerBinding<int>(Group, "setExistingMode", value =>
@@ -177,6 +186,7 @@ namespace RoadNameGenerator.Systems
             m_CustomMode = Mod.Settings?.CustomNames ?? CustomNameMode.Disabled;
             m_ListRevision = CustomRoadNameList.Revision;
             m_ExclusionRevision = RoadNameExclusionList.Revision;
+            m_NumberRamps = Mod.Settings?.NumberRamps ?? true;
             m_ExclusionsEnabled = Mod.Settings?.UseNameExclusions ?? true;
             m_Suggestions = m_NamingSystem.GetSuggestions(m_Road);
             m_Token = $"{m_Road.Index}:{m_Road.Version}:{++m_Revision}";
@@ -191,6 +201,7 @@ namespace RoadNameGenerator.Systems
             if (m_NamingSystem.ResolveRoad(m_SelectedInfo.selectedEntity) != m_Road ||
                 m_Style != (Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American) ||
                 m_CustomMode != (Mod.Settings?.CustomNames ?? CustomNameMode.Disabled) ||
+                m_NumberRamps != (Mod.Settings?.NumberRamps ?? true) ||
                 m_ListRevision != CustomRoadNameList.Revision ||
                 m_ExclusionRevision != RoadNameExclusionList.Revision ||
                 m_ExclusionsEnabled != (Mod.Settings?.UseNameExclusions ?? true))
@@ -212,6 +223,7 @@ namespace RoadNameGenerator.Systems
                 if (selectedRoad != m_Road || m_NamingSystem.GetRoadName(m_Road) != m_RoadName ||
                     m_Style != (Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American) ||
                     m_CustomMode != (Mod.Settings?.CustomNames ?? CustomNameMode.Disabled) ||
+                    m_NumberRamps != (Mod.Settings?.NumberRamps ?? true) ||
                     m_ListRevision != CustomRoadNameList.Revision ||
                     m_ExclusionRevision != RoadNameExclusionList.Revision ||
                     m_ExclusionsEnabled != (Mod.Settings?.UseNameExclusions ?? true))

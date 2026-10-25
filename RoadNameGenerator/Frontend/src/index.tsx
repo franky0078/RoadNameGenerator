@@ -20,6 +20,7 @@ const excludedCount$ = bindValue<number>(group, "excludedCount", 0);
 const exclusionError$ = bindValue<boolean>(group, "exclusionError", false);
 const namingStyle$ = bindValue<number>(group, "namingStyle", 0);
 const customMode$ = bindValue<number>(group, "customMode", 0);
+const numberRamps$ = bindValue<boolean>(group, "numberRamps", true);
 const autoNaming$ = bindValue<boolean>(group, "autoNaming", true);
 const existingMode$ = bindValue<number>(group, "existingMode", 0);
 const overwriteNames$ = bindValue<boolean>(group, "overwriteNames", false);
@@ -219,6 +220,7 @@ function RoadNamesPanel() {
     const exclusionsEnabled = useValue(exclusionsEnabled$);
     const exclusionError = useValue(exclusionError$);
     const customMode = useValue(customMode$);
+    const numberRamps = useValue(numberRamps$);
     const autoNaming = useValue(autoNaming$);
     const existingMode = useValue(existingMode$);
     const overwriteNames = useValue(overwriteNames$);
@@ -267,7 +269,7 @@ function RoadNamesPanel() {
     }, [open, show]);
     useEffect(() => {
         setConfirmScan(false);
-    }, [existingMode, overwriteNames, namingStyle, customMode, exclusionsEnabled, excludedCount, count]);
+    }, [existingMode, overwriteNames, numberRamps, namingStyle, customMode, exclusionsEnabled, excludedCount, count]);
     useEffect(() => {
         if (!confirmScan) return;
         const timeout = window.setTimeout(() => setConfirmScan(false), 5000);
@@ -396,6 +398,8 @@ function RoadNamesPanel() {
             </div>
             <div className={styles.settingsContent}>
                 <div className={styles.sectionTitle}>{t("AutomaticNamingSection")}</div>
+                <SettingsToggle checked={numberRamps} label={t("NumberRamps")}
+                    onChange={next => trigger(group, "setNumberRamps", next ? 1 : 0)} />
                 <SettingsToggle checked={autoNaming} label={t("AutomaticNaming")}
                     onChange={next => trigger(group, "setAutoNaming", next ? 1 : 0)} />
                 <div className={styles.settingsSection}>

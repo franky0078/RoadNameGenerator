@@ -168,6 +168,9 @@ namespace RoadNameGenerator
             set;
         }
 
+        [SettingsUISection(kMainSection, kAutomaticNamingGroup)]
+        public bool NumberRamps { get; set; }
+
         public override void SetDefaults()
         {
             SelectedNamingStyle =
@@ -179,6 +182,7 @@ namespace RoadNameGenerator
             ExistingRoadCheckMode =
                 ExistingRoadMode.GameGeneratedOnly;
 
+            NumberRamps = true;
             OverwriteIndividuallyNamedRoads = false;
 
             CustomNames = CustomNameMode.Disabled;

@@ -58,6 +58,12 @@ namespace RoadNameGenerator.Systems
             {
                 NamingStyle rampStyle = Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American;
                 string label = GetRampLabel(rampStyle, RampDirection.Unknown);
+                if (!(Mod.Settings?.NumberRamps ?? true))
+                {
+                    if (TryCreateRampName(road, out string unnumbered))
+                        suggestions.Add(unnumbered);
+                    return suggestions;
+                }
                 for (int number = 1; number <= 4096 && suggestions.Count < 5; number++)
                 {
                     string candidate = motorway + " " + label + " " + number;
@@ -69,10 +75,8 @@ namespace RoadNameGenerator.Systems
                 if (suggestions.Count > 0)
                     return suggestions;
             }
-            // An unresolved motorway connection is not an exhausted name list.
-            // Offer ordinary road names for manual selection, just as the
-            // requested existing-road scan does for unresolved ramps. Also
-            // use this fallback when every numbered ramp suggestion is blocked.
+
+            // fallback when every numbered ramp suggestion is blocked.
             IRoadNameGenerator generator = CreatePreviewGenerator(
                 Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American);
             foreach (string name in usedNames)
@@ -95,7 +99,14 @@ namespace RoadNameGenerator.Systems
         public bool TryApplySuggestion(Entity road, string name)
         {
             if (road == Entity.Null || ResolveRoad(road) != road || string.IsNullOrWhiteSpace(name) ||
-                name.Length > 128 || RoadNameExclusionList.IsExcluded(name) || GetCurrentRoadNames().Contains(name.Trim()))
+                name.Length > 128 || RoadNameExclusionList.IsExcluded(name))
+                return false;
+
+            // Shared names are allowed only for the current unnumbered ramp name.
+            bool sharedRampName = !(Mod.Settings?.NumberRamps ?? true) &&
+                TryCreateRampName(road, out string rampName) &&
+                string.Equals(name, rampName, StringComparison.Ordinal);
+            if (!sharedRampName && GetCurrentRoadNames().Contains(name.Trim()))
                 return false;
 
             m_NameSystem.SetCustomName(road, name);

@@ -90,7 +90,7 @@
 	<ForumLink Value="https://forum.paradoxplaza.com/forum/threads/mod-roadname-generator.1940848/" />
 
 	<!-- Versionsnummer der Mod -->
-	<ModVersion Value="2.4.0" />
+	<ModVersion Value="2.4.1" />
 
 	<!-- Empfohlene Spielversion -->
 	<GameVersion Value="1.6.*" />
@@ -105,15 +105,7 @@
 	<ChangeLog>
 		**Latest changes:**
 
-		- added automatic highway ramp detection and naming.
-		- highway ramps now inherit the name of their connected highway (e.g. A73 Ramp 1, A73 Ramp 2).
-		- added support for single-lane and two-lane highway ramps, including complex interchanges.
-		- added a compact, redesigned road naming interface
-		- added an in-game option to rename existing roads with configurable scan modes and confirmation.
-		- improved german road name generation with more natural and realistic names.
-		- improved road name suggestions to recognize highway ramps and preserve their parent highway names.
-		- improved stability and performance of automatic road naming.
-		- reduced unnecessary diagnostic logging
+		- added a “number ramps” option to the mod options and in-game setting
 	</ChangeLog>
 
 	<ExternalLink Type="github" Url="https://github.com/franky0078/RoadNameGenerator" />

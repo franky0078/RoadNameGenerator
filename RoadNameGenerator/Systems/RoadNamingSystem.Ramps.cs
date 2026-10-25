@@ -17,6 +17,7 @@ namespace RoadNameGenerator.Systems
         private readonly HashSet<Entity> m_PendingRampNames = new();
         private readonly HashSet<Entity> m_TrackedRampNames = new();
         private int m_TrackedRampRefreshCounter;
+        private bool m_LastNumberRamps = true;
         private int m_PendingRampCursor;
         private readonly HashSet<Entity> m_AmbiguousRampsLogged = new();
         private readonly Dictionary<Entity, string> m_LastRampLinkLog = new();
@@ -76,8 +77,7 @@ namespace RoadNameGenerator.Systems
             if (!EntityManager.HasBuffer<AggregateElement>(aggregate))
                 return 0f;
 
-            // Measure the entire named road, not just its first segment or
-            // the distance between its endpoints (which misses curved ramps).
+            // Measure the entire named road, not just its first segment or the distance between its endpoints (which misses curved ramps).
             float length = 0f;
             var seen = new HashSet<Entity>();
             var elements = EntityManager.GetBuffer<AggregateElement>(aggregate, true);
@@ -93,8 +93,7 @@ namespace RoadNameGenerator.Systems
 
                 var bezier = EntityManager.GetComponentData<Curve>(roadEdge).m_Bezier;
                 float3 previous = bezier.a;
-                // Approximate each cubic curve in world metres. This also
-                // includes elevation and avoids depending on extra game APIs.
+                // Approximate each cubic curve in world metres.
                 for (int step = 1; step <= 32; step++)
                 {
                     float t = step / 32f;
@@ -489,7 +488,10 @@ namespace RoadNameGenerator.Systems
         private void ScheduleTrackedRampRefresh()
         {
 
-            if (++m_TrackedRampRefreshCounter < 10)
+            bool numberRamps = Mod.Settings?.NumberRamps ?? true;
+            bool numberingChanged = numberRamps != m_LastNumberRamps;
+            m_LastNumberRamps = numberRamps;
+            if (++m_TrackedRampRefreshCounter < 10 && !numberingChanged)
                 return;
 
             m_TrackedRampRefreshCounter = 0;
@@ -572,6 +574,23 @@ namespace RoadNameGenerator.Systems
             NamingStyle style = Mod.Settings?.SelectedNamingStyle ?? NamingStyle.American;
             // Direction selects the origin highway; retain the generic ramp label.
             string label = GetRampLabel(style, RampDirection.Unknown);
+
+            if (!(Mod.Settings?.NumberRamps ?? true))
+            {
+                string suffix = " " + label;
+                int limit = 128 - suffix.Length;
+                if (limit <= 0)
+                    return false;
+                string baseName = highwayName.Length > limit
+                    ? highwayName.Substring(0, limit).TrimEnd() : highwayName;
+                string candidate = baseName + suffix;
+                if (RoadNameExclusionList.IsExcluded(candidate))
+                    return false;
+
+                // Separate ramps may intentionally share this name when numbering is off.
+                name = candidate;
+                return true;
+            }
 
             string currentName = m_NameSystem.GetRenderedLabelName(aggregate);
             if (HasRampName(currentName, highwayName, label) &&

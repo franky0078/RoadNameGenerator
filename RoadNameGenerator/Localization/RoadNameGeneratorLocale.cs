@@ -389,6 +389,19 @@ namespace RoadNameGenerator.Localization
             entries[setting.GetOptionLabelLocaleID(nameof(Setting.ReloadExcludedNames))] = exclusions[9];
             entries[setting.GetOptionDescLocaleID(nameof(Setting.ReloadExcludedNames))] = exclusions[10];
 
+            string[] rampNumbering = language switch
+            {
+                "de" => new[] { "Rampen nummerieren", "Fügt Rampennamen eine laufende Nummer hinzu, z. B. A35 Rampe 1. Ausgeschaltet: A35 Rampe. Die Autobahnnummer bleibt erhalten. Automatisch benannte Rampen werden bei aktiver automatischer Benennung aktualisiert; manuelle Namen bleiben geschützt." },
+                "fr" => new[] { "Numéroter les bretelles", "Ajoute un numéro aux noms des bretelles, par exemple A35 Bretelle 1. Sans cette option : A35 Bretelle. Le numéro de l’autoroute est conservé. Les noms automatiques sont actualisés si le nommage automatique est actif ; les noms manuels restent protégés." },
+                "it" => new[] { "Numera le rampe", "Aggiunge un numero ai nomi delle rampe, ad esempio A35 Rampa 1. Se disattivato: A35 Rampa. Il numero dell’autostrada resta invariato. I nomi automatici vengono aggiornati se la denominazione automatica è attiva; i nomi manuali restano protetti." },
+                "es" => new[] { "Numerar las rampas", "Añade un número a los nombres de las rampas, por ejemplo A35 Enlace 1. Desactivado: A35 Enlace. Se conserva el número de la autopista. Los nombres automáticos se actualizan si la asignación automática está activa; los nombres manuales permanecen protegidos." },
+                "pl" => new[] { "Numeruj łącznice", "Dodaje numer do nazw łącznic. Po wyłączeniu pozostaje nazwa autostrady i określenie łącznicy, bez kolejnego numeru. Numer autostrady pozostaje bez zmian. Automatyczne nazwy są aktualizowane, gdy automatyczne nadawanie nazw jest włączone; ręczne nazwy pozostają chronione." },
+                _ => new[] { "Number ramps", "Adds a sequential number to ramp names, for example A35 Ramp 1. When disabled: A35 Ramp. The motorway number is retained. Automatically named ramps are updated while automatic naming is enabled; manual names remain protected." },
+            };
+            entries[setting.GetOptionLabelLocaleID(nameof(Setting.NumberRamps))] = rampNumbering[0];
+            entries[setting.GetOptionDescLocaleID(nameof(Setting.NumberRamps))] = rampNumbering[1];
+            entries["RoadNameGenerator.UI.NumberRamps"] = rampNumbering[0];
+
             string[] protection = language switch
             {
                 "de" => new[] { "Einzeln benannte Straßen überschreiben", "Erlaubt der Bestandsprüfung, einzeln eingegebene oder über Namensvorschläge gewählte Namen zu ersetzen. Standardmäßig bleiben sie geschützt, auch bei „Alle Straßen“. Automatisch durch diese Version vergebene Namen können weiterhin geändert werden. Namen aus älteren Versionen ohne Herkunftskennzeichnung gelten als geschützt. Der gewählte Prüfmodus gilt weiterhin; „Nur vom Spiel generierte Namen“ überspringt alle benutzerdefinierten Namen." },
